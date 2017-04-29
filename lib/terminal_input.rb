@@ -1,6 +1,3 @@
-# require 'coltrane'
-# require 'paint'
-
 # def get_user_input(message)
 #   puts message
 #   gets

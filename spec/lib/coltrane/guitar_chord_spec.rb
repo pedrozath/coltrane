@@ -1,22 +1,18 @@
-RSpec.describe GuitarNoteSet do
+RSpec.describe GuitarChord do
 
   let :pitch { 'F4' }
 
   let :guitar_note_set do
-    GuitarNoteSet.new(pitch).guitar_notes.collect(&:position)
+    GuitarChord.new(pitch).guitar_notes.collect(&:position)
   end
 
-  describe '#initialize' do
-    context 'When created from pitch' do
-      it 'can be created from a pitch' do
-        expect(guitar_note_set)
-          .to include({fret:6, guitar_string_index: 1})
-      end
-    end
+  it 'can be created from a pitch' do
+    expect(guitar_note_set)
+      .to include({fret:6, guitar_string_index: 1})
   end
 
   it 'returns correct pitches' do
-    guitar_note_set = GuitarNoteSet.new [
+    guitar_note_set = GuitarChord.new [
       { guitar_string_index: 2, fret: 6 },
       { guitar_string_index: 3, fret: 5 },
       { guitar_string_index: 4, fret: 7 },

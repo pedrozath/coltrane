@@ -4,7 +4,7 @@ class GuitarScale
   end
 
   def string_offsets
-    [0,5,10,15,19,24]
+    [0, 5, 10, 15, 19, 24]
   end
 
   def print
@@ -19,7 +19,7 @@ class GuitarScale
 
   def render_string(string_offset)
     frets = @interval_sequence.to_frets(string_offset)
-    output = 24.times.map do |x|
+    output = Array.new(24) do |x|
       render_fret frets.include?(x)
     end.join(' ')
   end
@@ -27,5 +27,4 @@ class GuitarScale
   def render_fret(status)
     status ? Paint['•', :red] : Paint['—', :black]
   end
-
 end

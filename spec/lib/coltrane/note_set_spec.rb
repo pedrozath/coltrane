@@ -1,13 +1,8 @@
 RSpec.describe NoteSet do
-  let :note_set { NoteSet.new(%w{C# D# A#}) }
+  let :note_set { NoteSet.new(%w{A# D F G#}) }
 
-  it 'can transpose' do
-    expect(note_set.transpose_to('C').collect(&:name))
-      .to contain_exactly('C', 'D', 'A')
-  end
-
-  it 'can return intervals format' do
-    expect(note_set.intervals)
-      .to eq([0,2,9])
+  it 'can return named intervals' do
+    expect(note_set.interval_sequence.names)
+      .to eq(%w[1P 3M 5P 7m])
   end
 end

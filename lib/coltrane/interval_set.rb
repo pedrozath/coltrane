@@ -10,10 +10,10 @@ class IntervalSet
     @intervals.to_s
   end
 
-  def to_frets(offset=0)
+  def to_frets(offset = 0)
     frets = [-offset]
     i = 0
-    while(frets.last < @number_of_frets) do
+    while frets.last < @number_of_frets
       frets << frets.last + @intervals[i % @intervals.length]
       i += 1
     end

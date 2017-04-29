@@ -1,0 +1,8 @@
+#!/usr/bin/env ruby
+
+# $0 = 'pry'
+
+$LOAD_PATH << "#{Dir.pwd}/lib"
+
+puts $LOAD_PATH
+require 'coltrane'

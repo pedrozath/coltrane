@@ -15,7 +15,7 @@ class Pitch
   end
 
   def name
-    "#{note.name}#{number/12}"
+    "#{note.name}#{number / 12}"
   end
 
   def note

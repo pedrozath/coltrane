@@ -1,8 +1,10 @@
 # frozen_string_literal: true
-source "https://rubygems.org"
 
-gem 'rspec'
+source 'https://rubygems.org'
+
 gem 'guard'
 gem 'guard-rspec'
-gem 'pry'
 gem 'paint'
+gem 'pry'
+gem 'rspec'
+gem 'rubocop'
