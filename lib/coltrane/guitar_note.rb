@@ -6,7 +6,7 @@ class GuitarNote
   end
 
   def note
-    Pitch.note.name
+    pitch.note
   end
 
   def guitar_string_index

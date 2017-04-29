@@ -2,30 +2,34 @@ class ChordQuality
   attr_reader :name
 
   CHORD_QUALITIES = {
-    'C E G'      => 'M',
-    'C Eb G'     => 'm',
-    'C E G#'     => '+',
-    'C E Gb'     => 'dim',
-    'C Eb Gb B'  => 'dim7',
-    'C Eb Gb Bb' => 'm7b5',
-    'C Eb G Bb'  => 'min7',
-    'C Eb G B'   => 'mM7',
-    'C E G Bb'   => '7',
-    'C Eb G# Bb' => '+7',
-    'C E G# B'   => '+M7'
+    [0,4,7]    => 'M',
+    [0,3,7]    => 'm',
+    [0,4,8]    => '+',
+    [0,4,6]    => 'dim',
+    [0,3,6,11] => 'dim7',
+    [0,3,6,10] => 'm7b5',
+    [0,3,7,10] => 'min7',
+    [0,3,7,11] => 'mM7',
+    [0,4,7,10] => '7',
+    [0,3,8,10] => '+7',
+    [0,4,8,11] => '+M7'
   }
 
-  def initialize(notes_transposed_to_c)
-    @name = CHORD_QUALITIES[notes_transposed_to_c.join(' ')]
+  def initialize(note_intervals)
+    @name = CHORD_QUALITIES[note_intervals] || "(#{note_intervals.join(' ')})"
   end
 
-  def self.new_from_notes(note_array)
-    notes                 = NoteSet.new(note_array) unless notes.class == NoteSet
-    notes_transposed_to_c = notes.transpose_to('C').collect(&:name)
-    self.new notes_transposed_to_c
+  def self.new_from_notes(notes)
+    notes = NoteSet.new(notes) unless notes.class == NoteSet
+    self.new(notes.intervals)
   end
 
   def self.new_from_pitches(*pitches)
-    self.new_from_notes pitches.sort_by(&:number).collect(&:note).collect(&:name).uniq
+    notes = pitches.sort_by(&:number)
+                     .collect(&:note)
+                     .collect(&:name)
+                     .uniq
+
+    self.new_from_notes(notes)
   end
 end

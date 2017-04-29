@@ -8,6 +8,6 @@ RSpec.describe ChordQuality do
     y = Pitch.new('F2')
     z = Pitch.new('G#2')
     q = Pitch.new('G#4')
-    expect(ChordQuality.from_pitches(y,x,z,q)).to eq('M')
+    expect(ChordQuality.new_from_pitches(y,x,z,q).name).to eq('M')
   end
 end

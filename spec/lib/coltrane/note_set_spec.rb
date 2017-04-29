@@ -5,4 +5,9 @@ RSpec.describe NoteSet do
     expect(note_set.transpose_to('C').collect(&:name))
       .to contain_exactly('C', 'D', 'A')
   end
+
+  it 'can return intervals format' do
+    expect(note_set.intervals)
+      .to eq([0,2,9])
+  end
 end

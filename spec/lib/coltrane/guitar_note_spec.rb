@@ -4,7 +4,7 @@ RSpec.describe GuitarNote do
 
   describe '#note' do
     it 'returns the note' do
-      expect(guitar_note.note).to eq('G')
+      expect(guitar_note.note.name).to eq('G')
     end
   end
 end

@@ -29,4 +29,8 @@ class NoteSet
       note.transpose_by(interval)
     end
   end
+
+  def intervals
+    transpose_to('C').collect(&:number).uniq.sort
+  end
 end

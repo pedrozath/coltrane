@@ -8,14 +8,14 @@ class Chord
   end
 
   def root_note
-    pitches.first.class
+    pitches.sort_by(&:number).first.note
   end
 
   def quality
-    quality = ChordQuality.from_pitches(pitches)
+    quality = ChordQuality.new_from_pitches(*pitches).name
   end
 
   def name
-    "#{root_note}#{quality}"
+    "#{root_note.name}#{quality}"
   end
 end
