@@ -4,7 +4,7 @@ RSpec.describe GuitarChordFinder do
   # end
 
   it 'can return guitar chords from chord' do
-    expect(GuitarChordFinder.by_chord(Chord.new('C#m')).map(&:frets_in_sequence))
+    expect(GuitarChordFinder.by_chord_name('C#m').map(&:frets_in_sequence))
       .to include(GuitarChord.new(9,9,9,11,11,9).frets_in_sequence)
   end
 
