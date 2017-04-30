@@ -8,6 +8,15 @@ RSpec.describe GuitarChord do
                   { guitar_string_index:5, fret: 5 })
   end
 
+  it 'can be created from guitar notes' do
+    expect(GuitarChord.new_from_notes([
+      GuitarNote.new(guitar_string_index: 2, fret: 6),
+      GuitarNote.new(guitar_string_index: 3, fret: 5),
+      GuitarNote.new(guitar_string_index: 4, fret: 7),
+      GuitarNote.new(guitar_string_index: 5, fret: 5)
+    ]).frets_in_sequence).to eq([nil,nil,6,5,7,5])
+  end
+
   it 'cant have more than one guitar note per string' do
     pending
     expect(GuitarChord.new [

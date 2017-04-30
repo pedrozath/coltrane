@@ -2,12 +2,6 @@ module Coltrane
   class GuitarNoteSet
     attr_reader :guitar_notes
 
-    class << self
-      def new_from_notes(note_array)
-        self.new(note_array)
-      end
-    end
-
     def initialize(arg)
       arg = [arg] unless arg.class == Array
       @guitar_notes = arg.reduce([]) do |memo, arg_item|
