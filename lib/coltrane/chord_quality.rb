@@ -1,53 +1,60 @@
-class ChordQuality
-  attr_reader :name
+module Coltrane
+  # It describe the quality of a chord, like maj7 or dim.
+  class ChordQuality
+    attr_reader :name
 
-  CHORD_QUALITIES = {
-    [0, 4, 7]    => 'M',
-    [0, 3, 7]    => 'm',
-    [0, 4, 8]    => '+',
-    [0, 4, 6]    => 'dim',
-    [0, 3, 6, 11] => 'dim7',
-    [0, 3, 6, 10] => 'm7b5',
-    [0, 3, 7, 10] => 'min7',
-    [0, 3, 7, 11] => 'mM7',
-    [0, 4, 7, 10] => '7',
-    [0, 3, 8, 10] => '+7',
-    [0, 4, 8, 11] => '+M7'
-  }.freeze
+    CHORD_QUALITIES = {
+      'M'    => [0, 4, 7],
+      ''     => [0, 4, 7],
+      'm'    => [0, 3, 7],
+      '+'    => [0, 4, 8],
+      'dim'  => [0, 4, 6],
+      'dim7' => [0, 3, 6, 11],
+      'm7b5' => [0, 3, 6, 10],
+      'min7' => [0, 3, 7, 10],
+      'mM7'  => [0, 3, 7, 11],
+      '7'    => [0, 4, 7, 10],
+      '+7'   => [0, 3, 8, 10],
+      '+M7'  => [0, 4, 8, 11]
+    }.freeze
 
-  def initialize(interval_sequence)
-    if interval_sequence.class != IntervalSequence
-      interval_sequence = IntervalSequence.new(interval_sequence)
+    def initialize(interval_sequence)
+      if interval_sequence.class != IntervalSequence
+        interval_sequence = IntervalSequence.new(interval_sequence)
+      end
+      @name = find_chord_name(interval_sequence)
     end
 
-    @name = find_chord_name(interval_sequence)
-  end
+    def self.new_from_notes(notes)
+      note_set = NoteSet.new(notes) unless notes.class == NoteSet
+      new(note_set.interval_sequence)
+    end
 
-  def self.new_from_notes(notes)
-    note_set = NoteSet.new(notes) unless notes.class == NoteSet
-    new(note_set.interval_sequence)
-  end
+    def self.new_from_pitches(*pitches)
+      notes = pitches.sort_by(&:number)
+                     .collect(&:note)
+                     .collect(&:name)
+                     .uniq
 
-  def self.new_from_pitches(*pitches)
-    notes = pitches.sort_by(&:number)
-                   .collect(&:note)
-                   .collect(&:name)
-                   .uniq
+      new_from_notes(notes)
+    end
 
-    new_from_notes(notes)
-  end
+    def self.new_from_string(quality_string)
+      new(CHORD_QUALITIES[quality_string])
+    end
 
-  def self.new_from_string(quality_string)
-    new(CHORD_QUALITIES.key(quality_string))
-  end
+    def intervals
+      CHORD_QUALITIES[name]
+    end
 
-  protected
+    protected
 
-  def find_chord_name(note_intervals, inversion = 0)
-    inversion >= note_intervals.all.size && return
-    CHORD_QUALITIES[note_intervals.numbers] ||
-      CHORD_QUALITIES[note_intervals.numbers.sort] ||
-      find_chord_name(note_intervals.next_inversion, inversion + 1) ||
-      "(#{note_intervals.numbers.sort.join(' ')})"
+    def find_chord_name(note_intervals, inversion = 0)
+      inversion >= note_intervals.all.size && return
+      CHORD_QUALITIES.key(note_intervals.numbers) ||
+        CHORD_QUALITIES.key(note_intervals.numbers.sort) ||
+        find_chord_name(note_intervals.next_inversion, inversion + 1) ||
+        "(#{note_intervals.numbers.sort.join(' ')})"
+    end
   end
 end

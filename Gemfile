@@ -7,4 +7,4 @@ gem 'guard-rspec'
 gem 'paint'
 gem 'pry'
 gem 'rspec'
-gem 'rubocop'
+gem 'rubocop', require: false

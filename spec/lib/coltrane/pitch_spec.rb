@@ -1,5 +1,5 @@
 RSpec.describe Pitch do
-  let :pitch { Pitch.new('E2') }
+  let(:pitch) { Pitch.new('E2') }
 
   describe '#initialize' do
     it 'can be initialized by a pitch string' do

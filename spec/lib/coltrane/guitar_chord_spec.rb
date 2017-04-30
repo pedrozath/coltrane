@@ -1,26 +1,22 @@
 RSpec.describe GuitarChord do
-
-  let :pitch { 'F4' }
-
-  let :guitar_note_set do
-    GuitarChord.new(pitch).guitar_notes.collect(&:position)
+  it 'can be created by describing frets in sequence' do
+    # pending
+    expect(GuitarChord.new(nil,nil,6,5,7,5).guitar_notes.map(&:position))
+      .to include({ guitar_string_index:2, fret: 6 },
+                  { guitar_string_index:3, fret: 5 },
+                  { guitar_string_index:4, fret: 7 },
+                  { guitar_string_index:5, fret: 5 })
   end
 
-  it 'can be created from a pitch' do
-    expect(guitar_note_set)
-      .to include({fret:6, guitar_string_index: 1})
-  end
-
-  it 'returns correct pitches' do
-    guitar_note_set = GuitarChord.new [
-      { guitar_string_index: 2, fret: 6 },
-      { guitar_string_index: 3, fret: 5 },
-      { guitar_string_index: 4, fret: 7 },
-      { guitar_string_index: 5, fret: 5 }
-    ]
-
-    expect(guitar_note_set.guitar_notes.collect(&:pitch).collect(&:name))
-      .to contain_exactly("A2", "C#4", "E3", "G3")
-
+  it 'cant have more than one guitar note per string' do
+    pending
+    expect(GuitarChord.new [
+      GuitarNote.new(guitar_string_index: 4, fret: 0),
+      GuitarNote.new(guitar_string_index: 3, fret: 0),
+      GuitarNote.new(guitar_string_index: 2, fret: 6),
+      GuitarNote.new(guitar_string_index: 1, fret: 5),
+      GuitarNote.new(guitar_string_index: 1, fret: 7),
+      GuitarNote.new(guitar_string_index: 0, fret: 5)
+    ]).to raise_exception
   end
 end
