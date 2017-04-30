@@ -23,4 +23,11 @@ RSpec.describe GuitarString do
     expect(guitar_string.guitar_notes_for_note(note).map(&:pitch).map(&:name))
       .to eq(%w[E2 E3])
   end
+
+  it 'can provide guitar notes for a given note in a region, including fret 0' do
+    expect(guitar_string.guitar_notes_for_note_in_region(note, 10..12).map(&:pitch).map(&:name))
+      .to eq(%w[E2 E3])
+  end
+
+
 end
