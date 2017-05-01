@@ -18,49 +18,36 @@ module Coltrane
       end
 
       def chords_for_region(region, notes:, g_strings:)
-        guitar_notes = notes.reduce([]) do |memo_1, note|
+        gnotes = notes.reduce([]) do |memo_1, note|
           memo_1 + g_strings.reduce([]) do |memo_2, gs|
             memo_2 + gs.guitar_notes_for_note_in_region(note, region)
           end
         end
-        combine_gnotes_into_chords(hashify_gnotes(guitar_notes))
+        combine_gnotes_into_chords(gnotes)
       end
 
-      def combine_gnotes_into_chords(hash, chord_notes=[], chords=[])
-        hash.each do |note, strings|
-          strings.each do |string, guitar_notes|
-            guitar_notes.each do |guitar_note|
-              hash = delete_note_in_hash(hash, note)
-              hash = delete_string_in_hash(hash, string)
-              chord_notes << guitar_note
-              if hash.empty?
-                chords << GuitarChord.new_from_notes(chord_notes)
-              else
-                chords = combine_gnotes_into_chords(hash, chord_notes, chords)
-              end
-            end
+      def combine_gnotes_into_chords(gnotes_left, chord_notes=[])
+        if gnotes_left.empty?
+          return [GuitarChord.new_from_notes(chord_notes)]
+        else
+          note = gnotes_left.map(&:note).first
+
+          gnotes_to_search = gnotes_left.dup.delete_if do |g|
+            g.note.name != note.name
           end
-        end
-        chords
-      end
 
-      def delete_note_in_hash(hash, note)
-        hash.delete(note)
-        return hash
-      end
+          chords = []
 
-      def delete_string_in_hash(hash, string)
-        hash.each do |note, strings|
-          hash[note].delete(string)
-        end
-        return hash
-      end
+          gnotes_to_search.each do |gnote|
+            new_gnl = gnotes_left.dup.delete_if do |g|
+              g.note.name == gnote.note.name ||
+              g.guitar_string_index == gnote.guitar_string_index
+            end
 
-      def hashify_gnotes(guitar_notes)
-        guitar_notes.each_with_object({}) do |g, memo|
-          memo[g.note.name] ||= {}
-          memo[g.note.name][g.guitar_string_index] ||= []
-          memo[g.note.name][g.guitar_string_index] << g
+            chords += combine_gnotes_into_chords(new_gnl, chord_notes + [gnote])
+          end
+
+          return chords.compact
         end
       end
 

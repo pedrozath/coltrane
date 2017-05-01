@@ -4,6 +4,7 @@ module Coltrane
 
     class << self
       def new_from_notes(guitar_notes)
+        puts guitar_notes.map(&:position).to_s
         new(*frets_in_sequence(guitar_notes))
       end
 
@@ -27,6 +28,10 @@ module Coltrane
 
     def frets_in_sequence
       self.class.frets_in_sequence(guitar_notes)
+    end
+
+    def to_s
+      frets_in_sequence.map { |f| f.nil? ? 'X' : f }.join('')
     end
   end
 end
