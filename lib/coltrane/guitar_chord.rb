@@ -4,17 +4,12 @@ module Coltrane
 
     class << self
       def new_from_notes(guitar_notes)
-        puts guitar_notes.map(&:position).to_s
         new(*frets_in_sequence(guitar_notes))
       end
 
       def frets_in_sequence(guitar_notes)
-       gns = guitar_notes.sort_by(&:guitar_string_index)
-                   .map(&:position)
-                   .map{|g| g[:fret]}
-
-        (0..5).to_a.reverse.map do |i|
-          gns[i]
+        guitar_notes.each_with_object([]) do |gn, memo|
+          memo[gn.guitar_string_index] = gn.fret
         end
       end
     end
@@ -31,7 +26,10 @@ module Coltrane
     end
 
     def to_s
-      frets_in_sequence.map { |f| f.nil? ? 'X' : f }.join('')
+      fs = frets_in_sequence
+      (0...6).map { |x|
+        fs[x].nil? ? 'X ' : fs[x].to_s.ljust(2,' ')
+      }.join(' ')
     end
   end
 end
