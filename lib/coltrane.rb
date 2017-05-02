@@ -6,6 +6,7 @@ Bundler.require
 
 require 'coltrane/cadence'
 
+require 'coltrane/qualities'
 require 'coltrane/chord_quality'
 require 'coltrane/chord'
 

@@ -28,14 +28,14 @@ RSpec.describe GuitarChord do
       GuitarNote.new(guitar_string_index: 3, fret: 5),
       GuitarNote.new(guitar_string_index: 4, fret: 7),
       GuitarNote.new(guitar_string_index: 5, fret: 5)
-    ]).to_s).to eq('X  X  6  5  7  5 ')
+    ]).to_s).to eq('5  7  5  6  X  X ')
 
     expect(GuitarChord.new_from_notes([
       GuitarNote.new(guitar_string_index: 0, fret: 5),
       GuitarNote.new(guitar_string_index: 1, fret: 5),
       GuitarNote.new(guitar_string_index: 2, fret: 6),
       GuitarNote.new(guitar_string_index: 3, fret: 5),
-    ]).to_s).to eq('5  5  6  5  X  X ')
+    ]).to_s).to eq('X  X  5  6  5  5 ')
 
   end
 

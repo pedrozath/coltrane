@@ -27,8 +27,8 @@ module Coltrane
 
     def to_s
       fs = frets_in_sequence
-      (0...6).map { |x|
-        fs[x].nil? ? 'X ' : fs[x].to_s.ljust(2,' ')
+      (0..5).map { |x|
+        fs[5-x].nil? ? 'X ' : fs[5-x].to_s.ljust(2,' ')
       }.join(' ')
     end
   end

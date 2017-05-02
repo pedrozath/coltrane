@@ -1,22 +1,10 @@
+
+
 module Coltrane
   # It describe the quality of a chord, like maj7 or dim.
   class ChordQuality
     attr_reader :name
-
-    CHORD_QUALITIES = {
-      'M'    => [0, 4, 7],
-      ''     => [0, 4, 7],
-      'm'    => [0, 3, 7],
-      '+'    => [0, 4, 8],
-      'dim'  => [0, 4, 6],
-      'dim7' => [0, 3, 6, 11],
-      'm7b5' => [0, 3, 6, 10],
-      'min7' => [0, 3, 7, 10],
-      'mM7'  => [0, 3, 7, 11],
-      '7'    => [0, 4, 7, 10],
-      '+7'   => [0, 3, 8, 10],
-      '+M7'  => [0, 4, 8, 11]
-    }.freeze
+    include Qualities
 
     def initialize(interval_sequence)
       if interval_sequence.class != IntervalSequence
