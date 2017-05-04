@@ -3,13 +3,18 @@ require 'digest'
 module Coltrane
   module GuitarChordFinder
     class << self
+      # TODO Refactor this piece of shit
       def by_chord_name(chord_name)
-        x = by_chord(Chord.new(chord_name))
+        chords = by_chord(Chord.new(chord_name))
+        puts chords
+        chords
       end
 
       def by_chord(chord)
         chords = chords_for_regions notes: chord.notes,
                                     regions: possible_regions(chord)
+        chords = remove_duplicate_chords(chords)
+        chords.sort_by{ |c| -c.guitar_notes.count }
       end
 
       def chords_for_regions(notes:, regions:)
@@ -82,21 +87,22 @@ module Coltrane
       def possible_regions(chord)
         chord.notes.each_with_object([]) do |note, regions|
           note.guitar_notes.map(&:fret).each do |fret|
-            regions << ((fret)..(fret+4)) if fret < 15
+            regions << ((fret)..(fret+3)) if fret < 11
           end
         end.uniq
       end
 
       def remove_duplicate_chords(chords)
-        chords_strings = chords.map(&:to_s)
-        chords.each_with_index do |chord, index|
-          if chords_strings[index].count(chord.to_s) > 1
-            chords.delete_at(index)
-            chords_strings.delete_at(index)
+        chords_to_include = chords.map(&:to_s).uniq
+        chords.each_with_object [] do |chord, new_chords|
+          chord_str = chord.to_s
+          if chords_to_include.include?(chord_str)
+            chords_to_include.delete(chord_str)
+            new_chords << chord
           end
         end
-        chords
       end
+
     end
   end
 end
