@@ -5,7 +5,6 @@ module Coltrane
     class << self
       # TODO Refactor this piece of shit
       def by_chord_name(chord_name)
-        @lol = 0
         # @distance = nil
         x = by_chord(Chord.new(chord_name))
         puts x
@@ -15,7 +14,7 @@ module Coltrane
       def by_chord(chord)
         chords = combine_gnotes_into_chords(gnotes_for_chord(chord.notes))
         chords = remove_duplicate_chords(chords)
-        chords.sort_by{ |c| -c.guitar_notes.count }
+        chords.sort_by{ |c| -c.guitar_notes.count + c.frets_in_sequence.last }
       end
 
       def gnotes_for_chord(notes)
@@ -51,40 +50,28 @@ module Coltrane
                                end
           end
 
+          unless chord_notes.empty?
+            gnotes_to_search.delete_if do |g|
+              first_fret = chord_notes.first.fret
+              @distance = (g.fret - first_fret)
+              @distance = 0 if g.fret == 0 || first_fret == 0
+              next(true) unless @distance.between?(0,4)
+            end
+          end
+
           chords = []
           gnotes_to_search.each do |gnote|
-            @lol2 = 0
-            @lol += 1
             new_chord_notes = chord_notes + [gnote]
             new_gnl = gnotes_left.dup
             new_gnl.delete_if do |g|
-              @lol2 += 1
-              first_fret = new_chord_notes.sort_by(&:fret).first.fret
-              @distance = (g.fret - first_fret)
-              @distance = 0 if g.fret == 0 || first_fret == 0
-              # @lol += 1
               next(true) if g.guitar_string_index == gnote.guitar_string_index
-              next(true) unless @distance.between?(0,4)
               if repeat_notes
                 next(true) if g == gnote
               elsif g.note.name == gnote.note.name
                 color_gnotes << g
                 next(true)
               end
-              binding.pry if @distance < 0
             end
-            # print @lol
-            # print '+'
-            # print new_chord_notes.first.fret
-            # print '-'
-            # print new_chord_notes.map(&:fret).to_s
-            # print "\n"
-
-            # distance = new_chord_notes.last.fret - new_chord_notes.first.fret
-            # puts distance
-            # puts [new_chord_notes.first.fret, new_chord_notes.last.fret].to_s
-            # binding.pry if @lol > 1466
-            # binding.pry if new_chord_notes.first.fret == 21 && color_gnotes.map(&:fret).include?(9)
 
             chords += combine_gnotes_into_chords new_gnl,
                                                  new_chord_notes,
