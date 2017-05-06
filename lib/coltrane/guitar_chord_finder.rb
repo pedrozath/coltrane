@@ -12,15 +12,30 @@ module Coltrane
       end
 
       def by_chord(chord)
-        chords = combine_gnotes_into_chords(gnotes_for_chord(chord.notes))
+        gnotes = gnotes_for_chord(chord.notes)
+        gnotes_to_start = gnotes.dup.delete_if { |g| g.fret.zero? }
+        frets  = gnotes.map(&:fret)
+        gnotes_count = gnotes.count
+        chords = gnotes_to_start.reduce([]) do |memo, gnote_to_start|
+          puts "#{gnotes_count - i} left"
+          gnotes_to_work_with = gnotes.dup
+          gnotes_to_work_with.delete_if do |gnote|
+            distance = gnote.fret - gnote_to_start.fret
+            !distance.between?(0,4) && !gnote.fret.zero?
+          end
+          memo # + combine_gnotes_into_chords(gnotes_to_work_with)
+        end
         chords = remove_duplicate_chords(chords)
-        chords.sort_by{ |c| -c.guitar_notes.count + c.frets_in_sequence.last }
+        chords.sort_by do |c|
+          frets = c.frets_in_sequence
+          frets.count(0)*10 -c.guitar_notes.count + c.frets.last
+        end
       end
 
       def gnotes_for_chord(notes)
         gnotes = notes.reduce([]) do |memo_1, note|
           memo_1 + Guitar.strings.reduce([]) do |memo_2, gs|
-            memo_2 + gs.guitar_notes_for_note(note)
+            memo_2 + gs.guitar_notes_for_note_in_region(note, 0..12)
           end
         end
       end
@@ -31,43 +46,34 @@ module Coltrane
                                      color_gnotes: [])
 
         if chord_notes.size == 6
-          [GuitarChord.new_from_notes(chord_notes)]
+          return [GuitarChord.new_from_notes(chord_notes)]
         elsif gnotes_left.empty?
           if color_gnotes.empty?
-            [GuitarChord.new_from_notes(chord_notes)]
+            return [GuitarChord.new_from_notes(chord_notes)]
           else
-            combine_gnotes_into_chords color_gnotes.uniq,
+            return combine_gnotes_into_chords color_gnotes.uniq,
                                        chord_notes,
                                        repeat_notes: true
           end
         else
-          if repeat_notes
-            gnotes_to_search = gnotes_left.dup
-          else
-            note = gnotes_left.map(&:note).first
-            gnotes_to_search = gnotes_left.dup.delete_if do |g|
-                                 g.note.name != note.name
-                               end
-          end
-
-          unless chord_notes.empty?
-            gnotes_to_search.delete_if do |g|
-              first_fret = chord_notes.first.fret
-              @distance = (g.fret - first_fret)
-              @distance = 0 if g.fret == 0 || first_fret == 0
-              next(true) unless @distance.between?(0,4)
-            end
-          end
+          # if repeat_notes
+          #   gnotes_to_search = gnotes_left.dup
+          # else
+          #   note = gnotes_left.map(&:note).first
+          #   gnotes_to_search = gnotes_left.dup.delete_if do |g|
+          #                        g.note.name != note.name
+          #                      end
+          # end
 
           chords = []
-          gnotes_to_search.each do |gnote|
+
+          gnotes_left.each do |gnote|
             new_chord_notes = chord_notes + [gnote]
             new_gnl = gnotes_left.dup
+            new_gnl.delete(gnote)
             new_gnl.delete_if do |g|
               next(true) if g.guitar_string_index == gnote.guitar_string_index
-              if repeat_notes
-                next(true) if g == gnote
-              elsif g.note.name == gnote.note.name
+              if g.note.name == gnote.note.name && !repeat_notes
                 color_gnotes << g
                 next(true)
               end
@@ -81,14 +87,6 @@ module Coltrane
 
           return chords.compact
         end
-      end
-
-      def possible_regions(chord)
-        chord.notes.each_with_object([]) do |note, regions|
-          note.guitar_notes.map(&:fret).each do |fret|
-            regions << ((fret)..(fret+3)) if fret < 11
-          end
-        end.uniq
       end
 
       def remove_duplicate_chords(chords)

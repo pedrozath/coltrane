@@ -6,5 +6,6 @@ require 'bundler'
 Bundler.require
 
 require 'coltrane'
+include Coltrane
 
 pry
