@@ -21,6 +21,12 @@ RSpec.describe Note do
                   { guitar_string_index: 1, fret: 13})
   end
 
+  it 'can return intervals by subtraction' do
+    expect((Note.new('D') - Note.new('C')).name).to eq('2M')
+    expect((Note.new('B') - Note.new('C')).name).to eq('7M')
+    expect((Note.new('C') - Note.new('C')).name).to eq('1P')
+  end
+
   it 'has guitar notes in string' do
     expect(note.in_guitar_string(Guitar.strings[0]).collect(&:position))
       .to include({ guitar_string_index: 0, fret: 8},

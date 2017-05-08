@@ -13,7 +13,7 @@ module Coltrane
             (memo + [GuitarNote.new(arg_item)])
           end
 
-        when GuitarNote then memo + [guitar_note]
+        when GuitarNote then memo + [arg_item]
         when Pitch      then memo + guitar_notes_for_pitch(arg_item)
         when String     then memo + guitar_notes_for_pitch(Pitch.new(arg_item))
         end
@@ -52,6 +52,10 @@ module Coltrane
 
     def chord_quality
       ChordQuality.new_from_pitches(*pitches)
+    end
+
+    def render(*args)
+      GuitarRepresentation.render(self, *args)
     end
   end
 end

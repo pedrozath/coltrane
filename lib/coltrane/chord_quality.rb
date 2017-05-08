@@ -42,7 +42,7 @@ module Coltrane
       CHORD_QUALITIES.key(note_intervals.numbers) ||
         CHORD_QUALITIES.key(note_intervals.numbers.sort) ||
         find_chord_name(note_intervals.next_inversion, inversion + 1) ||
-        "(#{note_intervals.numbers.sort.join(' ')})"
+        nil
     end
   end
 end

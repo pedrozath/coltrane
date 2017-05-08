@@ -27,6 +27,20 @@ module Coltrane
       intervals
     end
 
+    def [](x)
+      intervals[x]
+    end
+
+    def shift(ammount)
+      IntervalSequence.new(intervals.map do |i|
+        (i.number + ammount) % 12
+      end)
+    end
+
+    def zero_it
+      self.shift(-intervals.first.number)
+    end
+
     def next_inversion
       IntervalSequence.new(intervals.rotate(+1))
     end

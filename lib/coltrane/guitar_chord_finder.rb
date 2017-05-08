@@ -5,31 +5,32 @@ module Coltrane
     class << self
       # TODO Refactor this piece of shit
       def by_chord_name(chord_name)
-        # @distance = nil
-        x = by_chord(Chord.new(chord_name))
-        puts x
-        x
+        by_chord(Chord.new(chord_name))
       end
 
       def by_chord(chord)
         gnotes = gnotes_for_chord(chord.notes)
-        gnotes_to_start = gnotes.dup.delete_if { |g| g.fret.zero? }
-        frets  = gnotes.map(&:fret)
-        gnotes_count = gnotes.count
-        chords = gnotes_to_start.reduce([]) do |memo, gnote_to_start|
-          puts "#{gnotes_count - i} left"
-          gnotes_to_work_with = gnotes.dup
-          gnotes_to_work_with.delete_if do |gnote|
-            distance = gnote.fret - gnote_to_start.fret
-            !distance.between?(0,4) && !gnote.fret.zero?
+        frets = gnotes.map(&:fret).uniq.sort
+        frets.delete(0)
+        threads = []
+        frets.each do |fret|
+          threads << Thread.new do
+            gnotes_for_fret = gnotes.dup.delete_if do |gnote|
+              !(gnote.fret-fret).between?(0,4) && !gnote.fret.zero?
+            end
+
+            gnotes_to_start_with = gnotes_for_fret.dup.delete_if do |gnote|
+              gnote.fret != fret
+            end
+
+            gnotes_to_start_with.reduce([]) do |memo2, gnote|
+              gnotes_for_fret.delete(gnote)
+              memo2 + combine_gnotes_into_chords( gnotes_for_fret, [gnote])
+            end
           end
-          memo # + combine_gnotes_into_chords(gnotes_to_work_with)
         end
-        chords = remove_duplicate_chords(chords)
-        chords.sort_by do |c|
-          frets = c.frets_in_sequence
-          frets.count(0)*10 -c.guitar_notes.count + c.frets.last
-        end
+        chords = threads.map(&:value).flatten
+        remove_duplicate_chords(chords)
       end
 
       def gnotes_for_chord(notes)
@@ -56,14 +57,6 @@ module Coltrane
                                        repeat_notes: true
           end
         else
-          # if repeat_notes
-          #   gnotes_to_search = gnotes_left.dup
-          # else
-          #   note = gnotes_left.map(&:note).first
-          #   gnotes_to_search = gnotes_left.dup.delete_if do |g|
-          #                        g.note.name != note.name
-          #                      end
-          # end
 
           chords = []
 

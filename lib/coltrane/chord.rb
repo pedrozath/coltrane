@@ -5,9 +5,14 @@ module Coltrane
 
     def initialize(arg)
       @root_note, @quality = case arg
-                               when String then note_and_quality_from_name(arg)
-                               when GuitarNoteSet then [arg.root_note, arg.chord_quality]
-                             end
+        when String then note_and_quality_from_name(arg)
+        when GuitarNoteSet then [arg.root_note, arg.chord_quality]
+        when Array
+          case arg[0]
+            when String then note_and_quality_from_notes(*arg.map{|a| Note.new(a)})
+            when Note then note_and_quality_from_notes(*arg)
+          end
+      end
     end
 
     def guitar_chords
@@ -28,11 +33,31 @@ module Coltrane
       end
     end
 
+    def on_guitar
+      NoteSet.new(notes).guitar_notes.render(root_note)
+    end
+
+    def on_piano
+      PianoRepresentation.render_intervals(notes, root_note)
+    end
+
+    def size
+      notes.size
+    end
+
+    def scales
+      Scale.having_chord(self.name)
+    end
+
     protected
 
     def note_and_quality_from_name(chord_name)
       _, name, quality = chord_name.match(/([A-Z]#?)(.*)/).to_a
       [Note.new(name), ChordQuality.new_from_string(quality)]
+    end
+
+    def note_and_quality_from_notes(*notes)
+      [notes.first, ChordQuality.new_from_notes(notes)]
     end
   end
 end

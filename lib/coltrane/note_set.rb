@@ -24,6 +24,10 @@ module Coltrane
       end
     end
 
+    def guitar_notes
+      GuitarNoteSet.new(notes.map(&:guitar_notes).flatten)
+    end
+
     def interval_sequence
       IntervalSequence.new(self)
     end

@@ -12,6 +12,10 @@ RSpec.describe Chord do
     expect(Chord.new(guitar_chord_2).name).to eq('C#m')
   end
 
+  it 'can return the chord from notes' do
+    expect(Chord.new(['C', 'E', 'G']).name).to eq('C')
+  end
+
   it 'can return guitar notes for the chord root' do
     expect(Chord.new('C').guitar_notes_for_root.map(&:position))
       .to include({ guitar_string_index: 5, fret: 8},

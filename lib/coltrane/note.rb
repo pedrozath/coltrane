@@ -23,12 +23,30 @@ module Coltrane
       'B'  => 11
     }.freeze
 
+    def self.all
+      NOTES.keys.map {|n| Note.new(n)}
+    end
+
     def initialize(arg)
       case arg
       when String
         raise "invalid note: #{arg}" unless valid_note?(arg)
         @name = arg
       when Numeric then @name = name_from_number(arg)
+      end
+    end
+
+    def +(n)
+      case n
+        when Numeric then Note.new(number + n)
+        when Note then Chord.new(number + n.number)
+      end
+    end
+
+    def -(n)
+      case n
+        when Numeric then Note.new(number + n)
+        when Note then Interval.new((number - n.number) % 12)
       end
     end
 
@@ -53,6 +71,10 @@ module Coltrane
       Guitar.strings.reduce([]) do |memo, guitar_string|
         memo + in_guitar_string(guitar_string)
       end
+    end
+
+    def on_guitar
+      GuitarNoteSet.new(guitar_notes).render
     end
 
     def in_guitar_string(guitar_string)
