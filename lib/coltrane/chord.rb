@@ -33,8 +33,13 @@ module Coltrane
       end
     end
 
+    def intervals
+      IntervalSequence.new(NoteSet.new(notes))
+    end
+
     def on_guitar
-      NoteSet.new(notes).guitar_notes.render(root_note)
+      name + "\n" +
+      NoteSet.new(notes).guitar_notes.render(root_note) + "\n\n"
     end
 
     def on_piano

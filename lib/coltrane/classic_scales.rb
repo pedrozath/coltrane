@@ -51,7 +51,7 @@ module ClassicScales
   end
 
   def chromatic(tone='C', mode=1)
-    new((1..12).to_a, tone: tone, mode: mode)
+    new(*([1]*12), tone: tone, mode: mode)
   end
 
   def ionian(tone='C')
@@ -101,6 +101,32 @@ module ClassicScales
                        scale: scale})
         end
         print Paint[note.name, found_sth ? 'yellow' : 'black']
+      end
+      print "\n"
+    end
+  end
+
+  def having_notes(*notes)
+    puts "\nSearching #{notes.join(', ')} in scales:\n\n"
+    scale_name_size = SCALES.keys.map(&:size).max
+    notes = notes.map { |n| Note.new(n) }
+    SCALES.each_with_object([]) do |scale_obj, results|
+      scale_name, intervals = scale_obj
+      print Paint[scale_name.ljust(scale_name_size), 'yellow']
+      Note.all.each do |note|
+        found_sth = false
+        print ' '
+        scale  = Scale.new(*intervals, tone: note.name)
+        notes_included = scale.include_notes?(*notes)
+        if notes_included == notes
+          found_sth = true
+          results << OpenStruct.new({
+            name: "#{note.name} #{scale_name}",
+            notes: notes_included
+          })
+        end
+        print Paint[note.name, found_sth ? 'yellow' : 'black']
+        print Paint["(#{notes_included.count || 0})", found_sth ? 'gray' : 'black']
       end
       print "\n"
     end

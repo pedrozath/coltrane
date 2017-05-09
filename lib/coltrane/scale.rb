@@ -33,8 +33,14 @@ class Scale
     notes.map(&:name).index(note.name)&.+1
   end
 
+  def include_notes?(*arg_notes)
+    arg_notes.each_with_object([]) do |n, memo|
+      memo << n if notes.map(&:name).include?(n.name)
+    end
+  end
+
   def notes
-    degrees.map { |d| self[d] }
+    @notes ||= degrees.map { |d| self[d] }
   end
 
   def interval(i)
@@ -75,6 +81,10 @@ class Scale
     GuitarRepresentation.render_degrees(NoteSet.new(notes).guitar_notes, self)
   end
 
+  def notes_on_guitar
+    GuitarRepresentation.render_notes(NoteSet.new(notes).guitar_notes, self)
+  end
+
   def intervals_on_piano
     PianoRepresentation.render_intervals(notes, tone)
   end
@@ -83,15 +93,44 @@ class Scale
     intervals_on_piano
   end
 
-  def chords(size)
-    permutations = interval_sequence.numbers.permutation(size).map do |intervals|
-      IntervalSequence.new(intervals)
+
+  def cache
+    ScaleCache.find_or_create_by(
+      interval_sequence: interval_sequence.numbers.to_s,
+      tone: tone.name
+    )
+  end
+
+  def cached_chords(size)
+    cchords = cache.chord_caches.where(size: size)
+    cchords.map do |chord_cache|
+      Chord.new(chord_cache.name)
     end
-    permutations.uniq.map do |c|
-      quality = ChordQuality.new(c.zero_it)
-      unless quality.name.nil?
-        Chord.new "#{(tone + c[0].number).name}#{quality.name}"
+  end
+
+  def cache_chords(chords)
+    []
+    chords.each do |chord|
+      cache.chord_caches.create name: chord.name, size: chord.size
+    end
+  end
+
+  def chords(size)
+    cchords = cached_chords(size)
+    if cchords.empty?
+      cache_chords begin
+        permutations = interval_sequence.numbers.permutation(size).map do |intervals|
+          IntervalSequence.new(intervals)
+        end
+        permutations.uniq.map do |c|
+          quality = ChordQuality.new(c.zero_it)
+          unless quality.name.nil?
+            Chord.new "#{(tone + c[0].number).name}#{quality.name}"
+          end
+        end.compact
       end
-    end.compact
+    else
+      cchords
+    end
   end
 end

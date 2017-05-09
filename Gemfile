@@ -2,8 +2,9 @@
 
 source 'https://rubygems.org'
 
-gem 'activerecord'
-gem 'sqlite'
+gem 'sqlite3'
+gem 'standalone_migrations', '5.2.0'
+
 gem 'guard'
 gem 'guard-rspec'
 gem 'paint'

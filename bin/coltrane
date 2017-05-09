@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 $LOAD_PATH << "#{__dir__}/../lib"
-
+ENV['RAILS_ENV'] = 'production'
 require 'bundler'
 Bundler.require
 

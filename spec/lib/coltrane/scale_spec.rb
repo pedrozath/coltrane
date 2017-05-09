@@ -19,12 +19,12 @@ RSpec.describe Scale do
 
   it 'can give you tertians' do
     expect(scale.tertians.map(&:name))
-      .to eq ["C", "Dm", "Em", "F", "G", "Am", "Bdim"]
+      .to eq ["CM", "Dm", "Em", "F", "G", "Am", "Bdim"]
   end
 
   it 'can give you all possible triads for a major scale' do
     expect(scale.chords(3).map(&:name))
-      .to include %w[CMsus2 C CMsus4 CMsus2 C CMsus4 DMsus2 Dm DMsus4 DMsus2 Dm
+      .to include *%w[CMsus2 C CMsus4 CMsus2 C CMsus4 DMsus2 Dm DMsus4 DMsus2 Dm
                 DMsus4 Em#5 Em#5 Em Em#5 EMsus4 Em EMsus4 Em#5 FMsus2 F FMsus2
                 FMsus2 F FMb5 F FMb5 FMsus2 F GMsus4 GMsus4 GMsus2 G GMsus4
                 G7ndim5 GMsus2 G G7ndim5 GMsus4 Am Am#5 AMsus4 Am AMsus4 AMsus2
@@ -34,7 +34,7 @@ RSpec.describe Scale do
 
   it 'can give you all possible triads for pentatonic scale' do
     expect(Scale.pentatonic_minor.chords(3).map(&:name))
-      .to eq ["Cm", "CMsus4", "D#Msus2", "D#", "FMsus2", "FMsus4"]
+      .to include("Cm", "CMsus4", "D#Msus2", "FMsus2", "FMsus4")
   end
 
   it 'can return scales that include a chord' do
@@ -49,6 +49,12 @@ RSpec.describe Scale do
     expect(Scale.having_chord('G7').map(&:name))
       .to include('C Major')
 
+  end
+
+  it 'can return scales that include some notes' do
+    scales = Scale.having_notes('C', 'F', 'B').map(&:name)
+    expect(scales).to include('C Major')
+    expect(scales).to_not include('F# Major')
   end
 
   it 'can return the degree of a chord in a scale' do
@@ -71,7 +77,7 @@ RSpec.describe Scale do
   end
 
   it 'can render intervals on piano' do
-    expect(Scale.hungarian_minor('D#').intervals_on_piano)
+    expect(Scale.hungarian_minor('D#').intervals_on_piano.class)
       .to eq(String)
   end
 

@@ -7,6 +7,17 @@ module Coltrane
         new(*frets_in_sequence(guitar_notes))
       end
 
+      def new_from_frets(*frets)
+        gns = (0..5).each_with_object([]) do |string_index, memo|
+          fret = frets[5-string_index]
+          unless fret.nil?
+            memo << GuitarNote.new(guitar_string_index: string_index,
+                                   fret: fret)
+          end
+        end
+        new_from_notes(gns)
+      end
+
       def frets_in_sequence(guitar_notes)
         guitar_notes.each_with_object([]) do |gn, memo|
           memo[gn.guitar_string_index] = gn.fret
@@ -19,6 +30,10 @@ module Coltrane
         { fret: fret, guitar_string_index: i }
       end
       super(arg)
+    end
+
+    def chord
+      Chord.new(notes)
     end
 
     def frets_in_sequence

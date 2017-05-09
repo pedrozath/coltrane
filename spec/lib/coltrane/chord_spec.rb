@@ -13,7 +13,7 @@ RSpec.describe Chord do
   end
 
   it 'can return the chord from notes' do
-    expect(Chord.new(['C', 'E', 'G']).name).to eq('C')
+    expect(Chord.new(['C', 'E', 'G']).name).to eq('CM')
   end
 
   it 'can return guitar notes for the chord root' do
