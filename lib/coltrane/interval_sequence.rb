@@ -23,6 +23,10 @@ module Coltrane
       end
     end
 
+    def reordered
+      IntervalSequence.new @intervals.sort_by!(&:number)
+    end
+
     def all
       intervals
     end

@@ -13,3 +13,5 @@ gem 'pry-stack_explorer'
 gem 'pry-rescue'
 gem 'rspec'
 gem 'rubocop', require: false
+
+gemspec

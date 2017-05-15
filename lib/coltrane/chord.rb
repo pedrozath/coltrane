@@ -54,6 +54,18 @@ module Coltrane
       Scale.having_chord(self.name)
     end
 
+    def next_inversion
+      Chord.new(notes.rotate(1))
+    end
+
+    def invert(n=1)
+      Chord.new(notes.rotate(n))
+    end
+
+    def previous_inversion
+      Chord.new(notes.rotate(-1))
+    end
+
     protected
 
     def note_and_quality_from_name(chord_name)

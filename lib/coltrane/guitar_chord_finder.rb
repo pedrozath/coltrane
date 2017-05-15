@@ -1,4 +1,4 @@
-require 'digest'
+# require 'digest'
 
 module Coltrane
   module GuitarChordFinder

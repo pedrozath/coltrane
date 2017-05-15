@@ -15,7 +15,7 @@ module Coltrane
 
     def self.new_from_notes(notes)
       note_set = NoteSet.new(notes) unless notes.class == NoteSet
-      new(note_set.interval_sequence)
+      new(note_set.interval_sequence.reordered)
     end
 
     def self.new_from_pitches(*pitches)

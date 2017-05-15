@@ -27,6 +27,10 @@ module Coltrane
       NOTES.keys.map {|n| Note.new(n)}
     end
 
+    def accident?
+      [1,3,6,8,10].include?(number)
+    end
+
     def initialize(arg)
       case arg
       when String
