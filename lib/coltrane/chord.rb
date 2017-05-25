@@ -24,6 +24,7 @@ module Coltrane
     end
 
     def name
+      return '—' if root_note.nil? || quality.nil?
       "#{root_note.name}#{quality.name}"
     end
 

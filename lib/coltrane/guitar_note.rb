@@ -16,6 +16,10 @@ module Coltrane
       pitch.note
     end
 
+    def to_s
+      "string: #{guitar_string_index}/fret: #{fret}"
+    end
+
     def guitar_string_index
       position[:guitar_string_index]
     end
