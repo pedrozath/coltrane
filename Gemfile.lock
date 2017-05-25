@@ -1,3 +1,8 @@
+PATH
+  remote: .
+  specs:
+    coltrane (0.0.2)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -141,16 +146,19 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  bundler (~> 1.14)
+  coltrane!
   guard
   guard-rspec
   paint
   pry
   pry-rescue
   pry-stack_explorer
+  rake (~> 10.0)
   rspec
   rubocop
   sqlite3
   standalone_migrations (= 5.2.0)
 
 BUNDLED WITH
-   1.14.6
+   1.15.0
