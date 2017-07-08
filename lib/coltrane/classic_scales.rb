@@ -11,7 +11,8 @@ module ClassicScales
     'Pentatonic Minor' => [3,2,2,3,2],
     'Blues Major'      => [2,1,1,3,2,3],
     'Blues Minor'      => [3,2,1,1,3,2],
-    'Whole Tone'       => [2,2,2,2,2,2]
+    'Whole Tone'       => [2,2,2,2,2,2],
+    'Flamenco'         => [1,3,1,2,1,2,2]
   }
 
   def major(tone='C', mode=1)
@@ -80,6 +81,10 @@ module ClassicScales
 
   def locrian(tone='C')
     new(*SCALES['Major'], tone: tone, mode: 7)
+  end
+
+  def flamenco(tone='C')
+    new(*SCALES['Flamenco'], tone: tone)
   end
 
   def having_chord(chord)

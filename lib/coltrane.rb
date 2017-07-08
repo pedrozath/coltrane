@@ -20,8 +20,9 @@ require 'coltrane/chord'
 require 'coltrane/classic_scales'
 require 'coltrane/fret_set'
 
-# require 'coltrane/piano_representation'
-# require 'coltrane/guitar_representation'
+require 'coltrane/piano_representation'
+require 'coltrane/guitar_representation'
+
 require 'coltrane/essential_guitar_chords'
 require 'coltrane/guitar_chord_finder'
 require 'coltrane/guitar_note_set'
