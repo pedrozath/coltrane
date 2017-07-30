@@ -75,6 +75,10 @@ module Coltrane
       NoteSet.new(notes).guitar_notes.render
     end
 
+    def on_flute
+      NoteSet.new(notes).guitar_notes.render
+    end
+
     def intervals_on_guitar
       NoteSet.new(notes).guitar_notes.render(tone)
     end
