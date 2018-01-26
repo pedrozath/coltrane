@@ -11,19 +11,21 @@ module Coltrane
     alias_method :all, :notes
 
     def self.[](*notes)
-      new(*notes)
+      new(notes)
     end
 
-    def initialize(*notes)
-      if notes[0].is_a?(NoteSet)
-         @notes = notes[0].all
-      elsif notes.detect {|a| a.class == String}
-        @notes = NoteSet.new *notes.map {|n| Note.new(n) if n.is_a?(String) }
-      else
-        @notes = notes
-      end
+    def initialize(arg)
+      @notes =
+        case arg
+        when NoteSet then arg.notes
+        when Array then arg.map {|n| n.is_a?(Note) ? n : Note.new(n) }
+        else raise "Invalid notes"
+        end
     end
 
+    def include?(note)
+      notes.detect {|n| n.eq?(note) }
+    end
 
     def names
       map(&:name)

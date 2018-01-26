@@ -44,14 +44,6 @@ RSpec.describe Scale do
   end
 
   it 'can return scales that include a chord' do
-    # expect(Scale.having_chord('C'))
-      # .to include({:name=>"C Major",             :degree =>1},
-      #             {:name=>"G Major",             :degree =>4},
-      #             {:name=>"A Natural Minor",     :degree =>3},
-      #             {:name=>"C Pentatonic Major",  :degree =>1},
-      #             {:name=>"A Pentatonic Minor",  :degree =>2},
-      #             {:name=>"C Blues Major",       :degree =>1},
-      #             {:name=>"A Blues Minor",       :degree =>2})
     expect(Scale.having_chord('G7').map(&:name))
       .to include('C Major')
 
@@ -67,6 +59,14 @@ RSpec.describe Scale do
     expect(scale.degree_of_chord(Chord.new(name: 'G7'))).to eq(5)
   end
 
+  it 'can return a specific note from the scale' do
+    expect(scale.degree(2).name).to eq('D')
+  end
+
+  it 'can return notes from the scale' do
+    expect(scale.notes.names).to include(*%w[C D E F G A B])
+  end
+
   it 'can return the greek modes' do
     expect(Scale.ionian('C').notes.names).to      include(*%w[C D E F G A B])
     expect(Scale.locrian('F').notes.names).to     include(*%w[F F# G# A# B C# D#])
@@ -74,25 +74,5 @@ RSpec.describe Scale do
     expect(Scale.aeolian('A#').notes.names).to    include(*%w[A# C C# D# F F# G#])
     expect(Scale.ionian('B').notes.names).to      include(*%w[B C# D# E F# G# A#])
   end
-
-  # it 'can render guitar notes' do
-  #   expect(scale.on_guitar.class)
-  #     .to eq(String)
-  # end
-
-  # it 'can render intervals' do
-  #   expect(scale.intervals_on_guitar.class)
-  #     .to eq(String)
-  # end
-
-  # it 'can render degrees' do
-  #   expect(scale.degrees_on_guitar.class)
-  #     .to eq(String)
-  # end
-
-  # it 'can render intervals on piano' do
-  #   expect(Scale.hungarian_minor('D#').intervals_on_piano.class)
-  #     .to eq(String)
-  # end
 
 end

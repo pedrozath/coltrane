@@ -1,12 +1,12 @@
 require 'simplecov'
 SimpleCov.start
-
 $LOAD_PATH.unshift(File.expand_path('../../', __FILE__))
 
 require 'bundler'
 Bundler.require(:test)
 
 require 'coltrane'
+require 'rspec-command'
 include Coltrane
 
 RSpec.configure do |config|
@@ -19,4 +19,8 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+end
+
+RSpec.configure do |config|
+  config.include RSpecCommand
 end

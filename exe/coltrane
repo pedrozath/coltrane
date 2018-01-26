@@ -1,11 +1,76 @@
 #!/usr/bin/env ruby
 
-$LOAD_PATH << "#{__dir__}/../lib"
-ENV['RAILS_ENV'] = 'production'
 require 'bundler'
-Bundler.require
+require 'pry'
+
+Bundler.require(:cli)
+
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
 require 'coltrane'
-include Coltrane
+require 'coltrane-cli'
 
-pry
+# Paint.mode = 0xFFFFFF
+Paint.mode = 0
+
+Mercenary.program(:Coltrane) do |p|
+  p.version Coltrane::VERSION
+  p.description <<~DESC
+    A music querying interface
+    by Pedro Maciel (pedro@pedromaciel.com)
+
+    [ check the repo for more details (github.com/pedrozath/coltrane) ]
+  DESC
+  p.syntax 'coltrane <subcommand> [options]'
+
+  @instrument_option = [
+    :on, '--on [guitar, piano]', 'Shows the notes on the given instrument'
+  ]
+
+
+  p.command(:notes) do |c|
+    c.syntax 'notes <notes separated by space> [--on <instrument>]'
+    c.description 'Shows the given notes.'
+    c.option(*@instrument_option)
+    c.action do |notes, options|
+      Coltrane::Cli::Notes.new(notes, **options)
+    end
+  end
+
+  p.command(:scale) do |c|
+    c.syntax 'scale <name of scale> <root note> [--on <instrument>]'
+    c.description 'Gives you information about a scale.'
+    c.option(*@instrument_option)
+    c.action do |(scale_name, root_note), options|
+      Coltrane::Cli::Scale.new(scale_name, root_note, **options)
+    end
+
+    c.command(:list) do |list|
+      list.syntax 'scale <name of scale> <root note> [--on <instrument>]'
+      list.description 'Gives you information about a scale.'
+      list.action
+    end
+  end
+
+  p.command(:help) do |c|
+    c.description 'May give you some help.'
+    c.syntax 'help <command> [subcommand, sub-subcommand, ...]'
+    c.action do |(*command_path), options|
+      if command_path.empty?
+        puts p
+        return
+      else
+        puts p.commands.dig(*command_path.map(&:to_sym)) || "\n Sorry, command found."
+      end
+    end
+  end
+
+  p.command(:about) do |c|
+    c.description 'Shows this screen'
+    c.action do
+      puts p
+    end
+  end
+
+  p.default_command(:about)
+end

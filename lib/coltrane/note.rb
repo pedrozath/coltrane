@@ -23,21 +23,32 @@ module Coltrane
       'B'  => 11
     }.freeze
 
+    def initialize(arg)
+      case arg
+      when String
+        raise "invalid note: #{arg}" unless (note=find_note(arg))
+        @name = note
+      when Numeric then @name = NOTES.key(arg % 12)
+      end
+    end
+
     def self.all
       NOTES.keys.map {|n| Note.new(n)}
+    end
+
+    def eq?(note)
+      number == note.number
     end
 
     def accident?
       [1,3,6,8,10].include?(number)
     end
 
-    def initialize(arg)
-      case arg
-      when String
-        raise "invalid note: #{arg}" unless valid_note?(arg)
-        @name = arg
-      when Numeric then @name = NOTES.key(arg % 12)
+    def find_note(str)
+      NOTES.each do |k, v|
+        return k if str.casecmp?(k)
       end
+      nil
     end
 
     def +(n)
@@ -56,7 +67,7 @@ module Coltrane
     end
 
     def valid_note?(note_name)
-      NOTES.key?(note_name)
+      find_note(note_name)
     end
 
     def number

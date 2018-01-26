@@ -2,10 +2,14 @@
 
 source 'https://rubygems.org'
 
-gem 'paint'
-gem 'rspec'
+group :cli do
+  gem 'paint'
+  gem 'mercenary'
+end
 
 group :test do
+  gem 'rspec'
+  gem 'rspec-command'
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rescue'

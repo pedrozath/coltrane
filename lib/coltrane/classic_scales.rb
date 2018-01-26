@@ -46,7 +46,9 @@ module Coltrane
       end
     end
 
-    alias_method :minor, :natural_minor
+    alias_method :minor,      :natural_minor
+    alias_method :pentatonic, :pentatonic_major
+    alias_method :blues,      :blues_major
 
     def from_key(key)
       scale = key.delete!('m') ? :minor : :major
