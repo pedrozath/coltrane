@@ -3,17 +3,20 @@ module Coltrane
     SPECIAL_FRETS = [3, 5, 7, 9, 12, 15, 17, 19]
 
     class Guitar
-      def initialize(notes, tuning: %w[E A D G B E], frets: 22)
-        @notes   = notes
-        @tuning  = tuning
-        @frets   = frets
+      def initialize(notes, tuning: %w[E A D G B E], frets: 22, flavor:)
+        @notes    = notes
+        @tuning   = tuning
+        @frets    = frets
+        @flavor   = flavor
+        @ref_note = @notes.first
       end
 
       def render
         @tuning.map do |string|
           string_note = Note.new(string)
           @frets.times.map do |fret|
-            m = (@notes.include?(string_note + fret) ? "◼◼" : "--")
+            note = string_note + fret
+            m = (@notes.include? ? place_mark(note) : "--")
             fret.zero? ? (m + " |") : m
           end.join(' ')
         end.join("\n") + "\n" +
@@ -21,6 +24,15 @@ module Coltrane
           m = SPECIAL_FRETS.include?(fret) ? fret.to_s.rjust(2, 0.to_s) : '  '
           "#{m}#{'  ' if fret.zero?}"
         end.join(' ')
+      end
+
+      def place_mark(note)
+        case @flavor
+        when :mark      then "◼◼"
+        when :note      then note.ljust(2, ' ')
+        when :intervals then (@ref_note - note).name.ljust(2, ' ')
+        when :degrees   then notes.degree(note)+1
+        end
       end
     end
   end
