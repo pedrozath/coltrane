@@ -1,30 +1,33 @@
 module Coltrane
   # It describes a sequence of intervals
   class IntervalSequence
+    extend Forwardable
     attr_reader :intervals
 
-    def initialize(arg)
-      arg = [arg] if arg.class != Array
-      @intervals = arg.reduce([]) do |memo, arg_item|
-        case arg_item
-        when Numeric  then memo << Interval.new(arg_item)
-        when Interval then memo << arg_item
-        when NoteSet  then memo + intervals_from_note_set(arg_item)
+    def_delegators :@intervals, :map, :each, :[], :size, :reduce
+
+    def initialize(notes: nil, intervals: nil, distances: nil)
+      if !notes.nil?
+        notes = NoteSet.new(*notes) if notes.is_a?(Array)
+        @intervals = intervals_from_notes(notes)
+      elsif !intervals.nil?
+        @intervals = intervals.map { |i| Interval.new(i) }
+      elsif !distances.nil?
+        @distances = distances
+        @intervals = intervals_from_distances(distances)
+      else
+        raise 'Provide: [notes:] || [intervals:] || [distances:'
+      end
+    end
+
+    def distances
+      intervals_semitones[1..-1].each_with_index.map do |n, i|
+        if i == 0
+          n
+        elsif i < intervals_semitones.size
+          n - intervals_semitones[i]
         end
-      end
-    end
-
-    def intervals_from_note_set(note_set)
-      note_numbers = note_set.notes.collect(&:number)
-      root         = note_numbers.shift
-      note_numbers.reduce([Interval.new(0)]) do |memo, number|
-        number += 12 if number < root
-        memo << Interval.new(number - root)
-      end
-    end
-
-    def reordered
-      IntervalSequence.new @intervals.sort_by!(&:number)
+      end + [12 - intervals_semitones.last]
     end
 
     def all
@@ -36,35 +39,60 @@ module Coltrane
     end
 
     def shift(ammount)
-      IntervalSequence.new(intervals.map do |i|
-        (i.number + ammount) % 12
+      IntervalSequence.new(intervals: intervals.map do |i|
+        (i.semitones + ammount) % 12
       end)
     end
 
     def zero_it
-      self.shift(-intervals.first.number)
+      self.shift(-intervals.first.semitones)
+    end
+
+    def inversion(index)
+      IntervalSequence.new(intervals: intervals.rotate(index)).zero_it
     end
 
     def next_inversion
-      IntervalSequence.new(intervals.rotate(+1))
+      inversion(index+1)
     end
 
     def previous_inversion
-      IntervalSequence.new(intervals.rotate(-1))
+      inversion(index-1)
     end
 
     def inversions
       Array.new(intervals.length) do |index|
-        IntervalSequence.new(interval.rotate(index))
+        inversion(index)
       end
     end
 
-    def numbers
-      intervals.collect(&:number)
+    def quality
+    end
+
+    def intervals_semitones
+      map(&:semitones)
     end
 
     def names
-      intervals.collect(&:name)
+      map(&:name)
+    end
+
+    def notes_for(root_note)
+      intervals.reduce([]) do |memo, interval|
+        memo + [root_note + interval]
+      end
+    end
+
+    private
+
+    def intervals_from_distances(distances)
+      distances[0..-2].reduce([Interval.new(0)]) do |memo, d|
+        memo + [memo.last + d]
+      end
+    end
+
+    def intervals_from_notes(notes)
+      notes.map { |n| notes.root - n }.sort_by(&:semitones)
     end
   end
 end

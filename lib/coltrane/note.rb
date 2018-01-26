@@ -36,21 +36,22 @@ module Coltrane
       when String
         raise "invalid note: #{arg}" unless valid_note?(arg)
         @name = arg
-      when Numeric then @name = name_from_number(arg)
+      when Numeric then @name = NOTES.key(arg % 12)
       end
     end
 
     def +(n)
       case n
-        when Numeric then Note.new(number + n)
-        when Note then Chord.new(number + n.number)
+        when Interval then Note.new(number + n.semitones)
+        when Numeric  then Note.new(number + n)
+        when Note     then Chord.new(number + n.semitones)
       end
     end
 
     def -(n)
       case n
-        when Numeric then Note.new(number + n)
-        when Note then Interval.new((number - n.number) % 12)
+        when Numeric then Note.new(n - number)
+        when Note    then Interval.new(n.number - number)
       end
     end
 
@@ -63,12 +64,11 @@ module Coltrane
     end
 
     def interval_to(note_name)
-      Interval.new(Note.new(note_name).number - number)
+      Note.new(note_name) - self
     end
 
-    def transpose_by(interval_number)
-      @name = name_from_number(number + interval_number)
-      self
+    def transpose_by(semitones)
+      self + semitones
     end
 
     def guitar_notes
@@ -87,12 +87,6 @@ module Coltrane
 
     def in_guitar_string_region(guitar_string, region)
       guitar_string.guitar_notes_for_note_in_region(self, region)
-    end
-
-    protected
-
-    def name_from_number(number)
-      NOTES.key(number % 12)
     end
   end
 end

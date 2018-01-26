@@ -1,33 +1,41 @@
 module Coltrane
   # It describes a interval between 2 pitches
   class Interval
-    attr_reader :number
+    attr_reader :semitones
 
     NAMES = [
       '1P',
-      '2m', '2M',
-      '3m', '3M',
-      '4P', '4A',
+      '2m',
+      '2M',
+      '3m',
+      '3M',
+      '4P',
+      '4A',
       '5P',
-      '6m', '6M',
+      '6m',
+      '6M',
       '7m',
-      '7M',
-      '8P',
-      '9m', '9M',
-      '10m', '10M',
-      '11P',
-      '12P',
-      '13m', '13M',
-      '14m', '14M',
-      '15P', '15A'
+      '7M'
     ].freeze
 
-    def initialize(number)
-      @number = number
+    def initialize(arg)
+      @semitones = (case arg
+                     when Interval then arg.semitones
+                     when String   then NAMES.index(arg)
+                     when Numeric  then arg
+                   end) % 12
     end
 
     def name
-      NAMES[number]
+      NAMES[semitones]
     end
+
+    def +(x)
+      case x
+      when Numeric then Interval.new(semitones + x)
+      when Interval then Interval.new(semitones + x.semitones)
+      end
+    end
+
   end
 end

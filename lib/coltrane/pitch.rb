@@ -17,11 +17,20 @@ module Coltrane
     end
 
     def name
-      "#{note.name}#{number / 12}"
+      "#{note.name}#{octave}"
+    end
+
+    def octave
+      number / 12
     end
 
     def note
       Note.new(number)
+    end
+
+    def +(arg)
+      n = arg.is_a?(Pitch) ? arg.number : arg
+      Pitch.new(number + n)
     end
   end
 end

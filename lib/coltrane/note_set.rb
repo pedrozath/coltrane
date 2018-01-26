@@ -1,17 +1,27 @@
 module Coltrane
   # It describes a set of notes
   class NoteSet
+    extend Forwardable
+
+    def_delegators :@notes, :first, :each, :size, :map, :reduce, :[]
+
     attr_reader :notes
 
-    def initialize(arg)
-      @notes = case arg
-               when String then notes_from_note_string(arg)
-               when Array  then notes_from_note_array(arg)
-               end
+    alias_method :root, :first
+    alias_method :all, :notes
+
+    def initialize(*notes)
+      if notes[0].is_a?(NoteSet)
+         @notes = notes[0].all
+      elsif notes.detect {|a| a.class == String}
+        @notes = NoteSet.new *notes.map {|n| Note.new(n) if n.is_a?(String) }
+      else
+        @notes = notes
+      end
     end
 
-    def root_note
-      notes.sort_by(&:number).first
+    def names
+      map(&:name)
     end
 
     def transpose_to(note_name)
@@ -29,14 +39,10 @@ module Coltrane
     end
 
     def interval_sequence
-      IntervalSequence.new(self)
+      IntervalSequence.new(notes: self)
     end
 
     protected
-
-    def notes_from_note_string(note_string)
-      notes_from_note_array(note_string.split(' '))
-    end
 
     def notes_from_note_array(note_array)
       note_array.collect do |note|

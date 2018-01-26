@@ -48,5 +48,9 @@ module Coltrane
         pitch_by_fret(fret)
       end
     end
+
+    def +(fret)
+      pitch + fret
+    end
   end
 end

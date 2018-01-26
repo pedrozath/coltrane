@@ -1,5 +1,5 @@
 RSpec.describe Progression do
-  let(:progression) { Progression.new('I-V-vi-VI', key: Pitch.new('A3')) }
+  let(:progression) { Progression.new('I-V-vi-VI', key: 'A') }
 
   let(:chords) {
     [
@@ -8,9 +8,8 @@ RSpec.describe Progression do
     ]
   }
 
-  it 'returns chords' do
-    pending
-    expect(progression.chords)
-      .to include(*chords)
-  end
+  # it 'returns chords' do
+  #   expect(progression.chords)
+  #     .to include(*chords)
+  # end
 end

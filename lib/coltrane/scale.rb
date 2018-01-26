@@ -3,22 +3,38 @@ module Coltrane
     extend ClassicScales
     attr_reader :interval_sequence, :tone
 
-    def initialize(*interval_steps, tone: 'C', mode: 1)
-      @tone = Note.new(tone)
-      intervals = interval_steps.rotate(mode-1).reduce([0]) do |intervals, step|
-        intervals << (intervals.last + step)
-      end
-
-      @interval_sequence = IntervalSequence.new(intervals)
+    def initialize(*distances, tone: 'C', mode: 1)
+      @tone              = Note.new(tone)
+      distances          = distances.rotate(mode-1)
+      @interval_sequence = IntervalSequence.new(distances: distances)
     end
 
-    def [](degree)
-      if degree < 1
-        raise 'Wrong degree! Use music convention for requesting degrees'
+    def self.new_by_notes(*notes)
+      return nil if notes.size < 5
+      is = NoteSet.new(notes).interval_sequence.numbers.sort
+      self.new(*is, tone: notes.first)
+    end
+
+    def name
+      is = self.interval_sequence.distances
+      (0...is.size).each do |i|
+        if (scale_name = Coltrane::ClassicScales::SCALES.key(is.rotate(i)))
+          return scale_name
+        end
       end
 
-      tone + interval_sequence[(degree-1) % (size)].number
+      nil
     end
+
+    def degree(d)
+      if d < 1 || d > size
+        raise "Provide a number between 1 and #{degrees}"
+      end
+
+      tone + interval_sequence[d - 1].semitones
+    end
+
+    alias_method :[], :degree
 
     def degrees
       (1..size)
@@ -50,16 +66,19 @@ module Coltrane
     end
 
     def size
-      interval_sequence.all.count - 1
+      interval_sequence.size
     end
 
-    def tertians
-      degrees.reduce([]) do |chords, degree|
-        intervals = IntervalSequence.new(3.times.map { |i| interval(degree+(i*2)) })
-        intervals = intervals.shift(-intervals.numbers[0])
-        chord_name = "#{self[degree].name}#{ChordQuality.new(intervals).name}"
-        chords << Chord.new(chord_name)
+    def tertians(n=3)
+      degrees.size.times.reduce([]) do |memo, d|
+        ns = NoteSet.new(*n.times.map { |i| notes[(d + (i*2)) % (size)]})
+        chord = Chord.new(notes: ns)
+        chord.named? ? memo + [chord] : memo
       end
+    end
+
+    def triads
+      tertians(3)
     end
 
     def sevenths
@@ -99,44 +118,20 @@ module Coltrane
       intervals_on_piano
     end
 
-
-    def cache
-      ScaleCache.find_or_create_by(
-        interval_sequence: interval_sequence.numbers.to_s,
-        tone: tone.name
-      )
-    end
-
-    def cached_chords(size)
-      cchords = cache.chord_caches.where(size: size)
-      cchords.map do |chord_cache|
-        Chord.new(chord_cache.name)
-      end
-    end
-
-    def cache_chords(chords)
-      []
-      chords.each do |chord|
-        cache.chord_caches.create name: chord.name, size: chord.size
-      end
+    def progression(*degrees)
+      Progression.new(self, degrees)
     end
 
     def chords(size)
-      cchords = cached_chords(size)
-      if cchords.empty?
-        cache_chords(begin
-          permutations = interval_sequence.numbers.permutation(size).map do |intervals|
-            IntervalSequence.new(intervals)
-          end
-          permutations.uniq.map do |c|
-            quality = ChordQuality.new(c.zero_it)
-            unless quality.name.nil?
-              Chord.new "#{(tone + c[0].number).name}#{quality.name}"
-            end
-          end.compact
-        end)
-      else
-        cchords
+      included_names = []
+      notes.permutation(size).reduce([]) do |memo, ns|
+        chord = Chord.new(notes: ns)
+        if chord.named? && !included_names.include?(chord.name)
+          included_names << chord.name
+          memo + [chord]
+        else
+          memo
+        end
       end
     end
   end

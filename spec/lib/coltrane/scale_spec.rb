@@ -1,8 +1,18 @@
 RSpec.describe Scale do
-  let(:scale) { Scale.new(2,2,1,2,2,2,1) }
+  let(:scale) { Scale.new(2,2,1,2,2,2,1, tone: 'C') }
+
+  it 'can try to find its name' do
+    expect(scale.name).to eq('Major')
+  end
 
   it 'can be defined by interval steps' do
     expect(scale.class).to eq(Scale)
+  end
+
+  it 'can parse major keys' do
+    scale = Scale.from_key('A#m')
+    expect(scale.name).to eq('Natural Minor')
+    expect(scale.tone.name).to eq('A#')
   end
 
   it 'defaults to C' do
@@ -10,30 +20,26 @@ RSpec.describe Scale do
   end
 
   it 'can give you degrees' do
+    expect(scale[3].name).to eq('E')
     expect(scale[7].name).to eq('B')
-  end
-
-  it 'can give you degrees above the scale size' do
-    expect(scale[9].name).to eq('D')
+    expect(scale[1].name).to eq('C')
   end
 
   it 'can give you tertians' do
     expect(scale.tertians.map(&:name))
-      .to eq ["CM", "Dm", "Em", "F", "G", "Am", "Bdim"]
+      .to eq ["CM", "Dm", "Em", "FM", "GM", "Am", "Bdim"]
   end
 
   it 'can give you all possible triads for a major scale' do
     expect(scale.chords(3).map(&:name))
-      .to include *%w[CMsus2 C CMsus4 CMsus2 C CMsus4 DMsus2 Dm DMsus4 DMsus2 Dm
-                DMsus4 Em#5 Em#5 Em Em#5 EMsus4 Em EMsus4 Em#5 FMsus2 F FMsus2
-                FMsus2 F FMb5 F FMb5 FMsus2 F GMsus4 GMsus4 GMsus2 G GMsus4
-                G7ndim5 GMsus2 G G7ndim5 GMsus4 Am Am#5 AMsus4 Am AMsus4 AMsus2
-                Am Am#5 Am#5 AMsus2 Am Am#5 Bdim Bm#5 Bdim Bm#5 CMsus2C CMsus4
-                CMsus2 C CMsus4]
+      .to include *%w[CMsus2 CM CMsus4 DMsus4 DMsus2 Dm DM
+        Em#5 Em EMsus4 FMsus2 FM Fdim F7ndim5 FMb5 GMsus4
+        GM GMsus2 G7ndim5 Am Am#5 AMsus4 AMsus2 Bdim Bm#5
+        Bm BMsus4 BMb5]
   end
 
   it 'can give you all possible triads for pentatonic scale' do
-    expect(Scale.pentatonic_minor.chords(3).map(&:name))
+    expect(Scale.pentatonic_minor.triads.map(&:name))
       .to include("Cm", "CMsus4", "D#Msus2", "FMsus2", "FMsus4")
   end
 
@@ -76,9 +82,9 @@ RSpec.describe Scale do
       .to eq(String)
   end
 
-  it 'can render intervals on piano' do
-    expect(Scale.hungarian_minor('D#').intervals_on_piano.class)
-      .to eq(String)
-  end
+  # it 'can render intervals on piano' do
+  #   expect(Scale.hungarian_minor('D#').intervals_on_piano.class)
+  #     .to eq(String)
+  # end
 
 end

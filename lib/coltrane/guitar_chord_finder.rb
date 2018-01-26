@@ -1,4 +1,12 @@
-# require 'digest'
+# This is an experimental feature
+
+# However I wasn't very happy with it so consider it deprecated
+# since I'm now in favor of displaying all possibles notes for
+# a chord in the guitar rather than suggesting the exact way
+# one could do it.
+
+# The spirit of this library is to experiment and improvising,
+# not to be a guitar chords list!
 
 module Coltrane
   module GuitarChordFinder

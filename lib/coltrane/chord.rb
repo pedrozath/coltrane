@@ -1,19 +1,48 @@
 module Coltrane
   # It describe a chord
-  class Chord
-    attr_reader :root_note, :quality
+  class Chord < NoteSet
+    attr_reader :root_note, :quality, :notes
 
-    def initialize(arg)
-      @root_note, @quality = case arg
-        when String then note_and_quality_from_name(arg)
-        when GuitarNoteSet then [arg.root_note, arg.chord_quality]
-        when Array
-          case arg[0]
-            when String then note_and_quality_from_notes(*arg.map{|a| Note.new(a)})
-            when Note then note_and_quality_from_notes(*arg)
-          end
+    def initialize(notes: nil, root_note: nil, quality: nil, name: nil)
+      if !notes.nil?
+        notes      = NoteSet.new(*notes) if notes.is_a?(Array)
+        @notes     = notes
+        @root_note = notes.first
+        @quality   = ChordQuality.new(notes: notes)
+      elsif !root_note.nil? && !quality.nil?
+        @notes     = quality.notes_for(root_note)
+        @root_note = root_note
+        @quality   = quality
+      elsif !name.nil?
+        @root_note, @quality, @notes = parse_from_name(name)
+      else
+        raise 'Wrong keywords. Expected setup is:'\
+          '[notes:] || [root_note:,quality:] || [name:]'
       end
     end
+
+    # def new_from_root_note_and_quality
+    #   quality.intervals.reduce([]) do |memo, intervals|
+    #     memo + [Note.new(root_note.number + interval)]
+    #   end
+    # end
+
+    # def initialize(arg)
+    #   @root_note, @quality = case arg
+    #     when String
+    #       note_and_quality_from_name(arg)
+    #     when GuitarNoteSet then [arg.root_note, arg.chord_quality]
+    #     when Array
+    #       if arg.empty?
+    #         @notes = []
+    #       else
+    #         case arg[0]
+    #           when String then note_and_quality_from_notes(*arg.map{|a| Note.new(a)})
+    #           when Note then note_and_quality_from_notes(*arg)
+    #         end
+    #       end
+    #   end
+    # end
 
     def guitar_chords
       GuitarChordFinder.by_chord(self)
@@ -24,14 +53,14 @@ module Coltrane
     end
 
     def name
-      return '—' if root_note.nil? || quality.nil?
+      return @notes.names.join('/') if !named?
       "#{root_note.name}#{quality.name}"
     end
 
-    def notes
-      quality.intervals.each_with_object([]) do |interval, notes|
-        notes << Note.new(root_note.number + interval)
-      end
+    def named?
+      notes.size >= 3 &&
+      !root_note.nil? &&
+      !quality&.name.nil?
     end
 
     def intervals
@@ -69,13 +98,17 @@ module Coltrane
 
     protected
 
-    def note_and_quality_from_name(chord_name)
-      _, name, quality = chord_name.match(/([A-Z]#?)(.*)/).to_a
-      [Note.new(name), ChordQuality.new_from_string(quality)]
+    def parse_from_name(name)
+      _, name, quality_name = name.match(/([A-Z]#?)(.*)/).to_a
+      root    = Note.new(name)
+      quality = ChordQuality.new(name: quality_name)
+      notes   = quality.notes_for(root)
+      [root, quality, notes]
     end
 
-    def note_and_quality_from_notes(*notes)
-      [notes.first, ChordQuality.new_from_notes(notes)]
-    end
+    # def note_and_quality_from_notes(*notes)
+    #   @notes = notes
+    #   [notes.first, ChordQuality.new_from_notes(notes)]
+    # end
   end
 end

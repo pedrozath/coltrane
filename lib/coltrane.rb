@@ -1,49 +1,45 @@
-# $LOAD_PATH << __dir__
+require 'bundler'
+Bundler.require
 
-# require 'bundler'
+require 'ostruct'
+require 'paint'
+# require 'pry'
 
-# Bundler.require
+require 'lib/coltrane/cadence'
 
-# ActiveSupport::Inflector.inflections do |inflect|
-#   inflect.irregular 'cache', 'caches'
-# end
+require 'lib/coltrane/interval_sequence'
+require 'lib/coltrane/interval_set'
+require 'lib/coltrane/interval'
+require 'lib/coltrane/qualities'
+require 'lib/coltrane/chord_quality'
+require 'lib/coltrane/note_set'
+require 'lib/coltrane/chord'
+require 'lib/coltrane/roman_chord'
 
-# ActiveRecord::Base.establish_connection YAML.load_file("#{__dir__}/../db/config.yml")['production']
-# require "#{__dir__}/../db/schema.rb"
+require 'lib/coltrane/classic_scales'
+require 'lib/coltrane/classic_progressions'
+require 'lib/coltrane/fret_set'
 
-require 'coltrane/cadence'
+require 'lib/coltrane/piano_representation'
+require 'lib/coltrane/guitar_representation'
 
-require 'coltrane/qualities'
-require 'coltrane/chord_quality'
-require 'coltrane/chord'
+require 'lib/coltrane/essential_guitar_chords'
+require 'lib/coltrane/guitar_chord_finder'
+require 'lib/coltrane/guitar_note_set'
+require 'lib/coltrane/guitar_chord'
+require 'lib/coltrane/guitar_note'
+require 'lib/coltrane/guitar_string'
+require 'lib/coltrane/guitar'
 
-require 'coltrane/classic_scales'
-require 'coltrane/fret_set'
 
-require 'coltrane/piano_representation'
-require 'coltrane/guitar_representation'
+require 'lib/coltrane/note'
 
-require 'coltrane/essential_guitar_chords'
-require 'coltrane/guitar_chord_finder'
-require 'coltrane/guitar_note_set'
-require 'coltrane/guitar_chord'
-require 'coltrane/guitar_note'
-require 'coltrane/guitar_string'
-require 'coltrane/guitar'
+require 'lib/coltrane/pitch'
+require 'lib/coltrane/progression'
+require 'lib/coltrane/scale'
+require 'lib/coltrane/mode'
 
-require 'coltrane/interval_sequence'
-require 'coltrane/interval_set'
-require 'coltrane/interval'
-
-require 'coltrane/note_set'
-require 'coltrane/note'
-
-require 'coltrane/pitch'
-require 'coltrane/progression'
-require 'coltrane/scale'
-require 'coltrane/mode'
-
-# require 'coltrane/scale_chord'
-# require 'coltrane/chord_cache'
-# require 'coltrane/scale_cache'
+# require 'lib/coltrane/scale_chord'
+# require 'lib/coltrane/chord_cache'
+# require 'lib/coltrane/scale_cache'
 # require 'terminal_input'
