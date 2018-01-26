@@ -122,15 +122,25 @@ module Coltrane
       Progression.new(self, degrees)
     end
 
+    def cache_key(extra)
+      [
+        @tone.name,
+        @interval_sequence.intervals_semitones.join(),
+        extra
+      ].join('-')
+    end
+
     def chords(size)
-      included_names = []
-      notes.permutation(size).reduce([]) do |memo, ns|
-        chord = Chord.new(notes: ns)
-        if chord.named? && !included_names.include?(chord.name)
-          included_names << chord.name
-          memo + [chord]
-        else
-          memo
+      Coltrane::Cache.find_or_record(cache_key("chords-#{size}")) do
+        included_names = []
+        notes.permutation(size).reduce([]) do |memo, ns|
+          chord = Chord.new(notes: ns)
+          if chord.named? && !included_names.include?(chord.name)
+            included_names << chord.name
+            memo + [chord]
+          else
+            memo
+          end
         end
       end
     end

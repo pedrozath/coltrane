@@ -40,7 +40,7 @@ RSpec.describe Scale do
 
   it 'can give you all possible triads for pentatonic scale' do
     expect(Scale.pentatonic_minor.triads.map(&:name))
-      .to include("Cm", "CMsus4", "D#Msus2", "FMsus2", "FMsus4")
+      .to include(*%w[CMsus4 D#m FMsus4 GMsus4 A#M])
   end
 
   it 'can return scales that include a chord' do
@@ -64,23 +64,23 @@ RSpec.describe Scale do
   end
 
   it 'can return the degree of a chord in a scale' do
-    expect(scale.degree_of_chord(Chord.new('G7'))).to eq(5)
+    expect(scale.degree_of_chord(Chord.new(name: 'G7'))).to eq(5)
   end
 
-  it 'can render guitar notes' do
-    expect(scale.on_guitar.class)
-      .to eq(String)
-  end
+  # it 'can render guitar notes' do
+  #   expect(scale.on_guitar.class)
+  #     .to eq(String)
+  # end
 
-  it 'can render intervals' do
-    expect(scale.intervals_on_guitar.class)
-      .to eq(String)
-  end
+  # it 'can render intervals' do
+  #   expect(scale.intervals_on_guitar.class)
+  #     .to eq(String)
+  # end
 
-  it 'can render degrees' do
-    expect(scale.degrees_on_guitar.class)
-      .to eq(String)
-  end
+  # it 'can render degrees' do
+  #   expect(scale.degrees_on_guitar.class)
+  #     .to eq(String)
+  # end
 
   # it 'can render intervals on piano' do
   #   expect(Scale.hungarian_minor('D#').intervals_on_piano.class)

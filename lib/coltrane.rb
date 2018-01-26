@@ -5,6 +5,7 @@ require 'ostruct'
 require 'paint'
 # require 'pry'
 
+require 'lib/coltrane/cache'
 require 'lib/coltrane/cadence'
 
 require 'lib/coltrane/interval_sequence'
