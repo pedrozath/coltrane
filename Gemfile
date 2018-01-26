@@ -3,10 +3,12 @@
 source 'https://rubygems.org'
 
 gem 'paint'
-gem 'pry'
 gem 'rspec'
 
 group :test do
+  gem 'pry'
+  gem 'pry-byebug'
+  gem 'pry-rescue'
   gem 'simplecov', require: false
   gem 'rubocop', require: false
 end

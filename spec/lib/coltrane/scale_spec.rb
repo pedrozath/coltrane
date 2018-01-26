@@ -67,6 +67,14 @@ RSpec.describe Scale do
     expect(scale.degree_of_chord(Chord.new(name: 'G7'))).to eq(5)
   end
 
+  it 'can return the greek modes' do
+    expect(Scale.ionian('C').notes.names).to      include(*%w[C D E F G A B])
+    expect(Scale.locrian('F').notes.names).to     include(*%w[F F# G# A# B C# D#])
+    expect(Scale.mixolydian('D#').notes.names).to include(*%w[D# F G G# A# C C#])
+    expect(Scale.aeolian('A#').notes.names).to    include(*%w[A# C C# D# F F# G#])
+    expect(Scale.ionian('B').notes.names).to      include(*%w[B C# D# E F# G# A#])
+  end
+
   # it 'can render guitar notes' do
   #   expect(scale.on_guitar.class)
   #     .to eq(String)

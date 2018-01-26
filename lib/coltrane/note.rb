@@ -44,7 +44,7 @@ module Coltrane
       case n
         when Interval then Note.new(number + n.semitones)
         when Numeric  then Note.new(number + n)
-        when Note     then Chord.new(number + n.semitones)
+        when Note     then Chord.new(number + n.number)
       end
     end
 

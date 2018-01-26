@@ -14,79 +14,39 @@ module Coltrane
       'Flamenco'         => [1,3,1,2,1,2,2]
     }
 
-    def major(tone='C', mode=1)
-      new(*SCALES['Major'], tone: tone, mode: mode)
+    MODES = {
+      'Major' => %w[Ionian Dorian Phrygian Lydian Mixolydian Aeolian Locrian]
+    }
+
+    private
+
+    # A little helper to build method names
+    # just make the code more clear
+    def self.methodize(string)
+      string.downcase.gsub(' ', '_')
     end
 
-    def natural_minor(tone='C', mode=1)
-      new(*SCALES['Natural Minor'], tone: tone, mode: mode)
+    public
+
+    # Creates factories for scales
+    SCALES.each do |name, distances|
+      define_method methodize(name) do |tone='C', mode=1|
+        new(*distances, tone: tone, mode: mode)
+      end
+    end
+
+    # Creates factories for Greek Modes and possibly others
+    MODES.each do |scale, modes|
+      modes.each_with_index do |mode, index|
+        scale_method = methodize(scale)
+        mode_n = index + 1
+        define_method methodize(mode) do |tone='C'|
+          new(*SCALES[scale], tone: tone, mode: mode_n)
+        end
+      end
     end
 
     alias_method :minor, :natural_minor
-
-    def harmonic_minor(tone='C', mode=1)
-      new(*SCALES['Harmonic Minor'], tone: tone, mode: mode)
-    end
-
-    def hungarian_minor(tone='C', mode=1)
-      new(*SCALES['Hungarian Minor'], tone: tone, mode: mode)
-    end
-
-    def pentatonic_major(tone='C', mode=1)
-      new(*SCALES['Pentatonic Major'], tone: tone, mode: mode)
-    end
-
-    def pentatonic_minor(tone='C', mode=1)
-      new(*SCALES['Pentatonic Minor'], tone: tone, mode: mode)
-    end
-
-    def blues_major(tone='C', mode=1)
-      new(*SCALES['Blues Major'], tone: tone, mode: mode)
-    end
-
-    def blues_minor(tone='C', mode=1)
-      new(*SCALES['Blues Minor'], tone: tone, mode: mode)
-    end
-
-    def whole_tone(tone='C', mode=1)
-      new(*SCALES['Blues Minor'], tone: tone, mode: mode)
-    end
-
-    def chromatic(tone='C', mode=1)
-      new(*([1]*12), tone: tone, mode: mode)
-    end
-
-    def ionian(tone='C')
-      new(*SCALES['Major'], tone: tone, mode: 1)
-    end
-
-    def dorian(tone='C')
-      new(*SCALES['Major'], tone: tone, mode: 2)
-    end
-
-    def phrygian(tone='C')
-      new(*SCALES['Major'], tone: tone, mode: 3)
-    end
-
-    def lydian(tone='C')
-      new(*SCALES['Major'], tone: tone, mode: 4)
-    end
-
-    def mixolydian(tone='C')
-      new(*SCALES['Major'], tone: tone, mode: 5)
-    end
-
-    def aeolian(tone='C')
-      new(*SCALES['Major'], tone: tone, mode: 6)
-    end
-
-    def locrian(tone='C')
-      new(*SCALES['Major'], tone: tone, mode: 7)
-    end
-
-    def flamenco(tone='C')
-      new(*SCALES['Flamenco'], tone: tone)
-    end
 
     def from_key(key)
       scale = key.delete!('m') ? :minor : :major

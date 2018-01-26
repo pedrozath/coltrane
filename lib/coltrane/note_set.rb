@@ -10,6 +10,10 @@ module Coltrane
     alias_method :root, :first
     alias_method :all, :notes
 
+    def self.[](*notes)
+      new(*notes)
+    end
+
     def initialize(*notes)
       if notes[0].is_a?(NoteSet)
          @notes = notes[0].all
@@ -19,6 +23,7 @@ module Coltrane
         @notes = notes
       end
     end
+
 
     def names
       map(&:name)

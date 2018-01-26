@@ -58,7 +58,9 @@ module Coltrane
     end
 
     def notes
-      @notes ||= degrees.map { |d| self[d] }
+      # Coltrane::Cache.find_or_record(cache_key("notes")) do
+        NoteSet[*degrees.map { |d| degree(d) }]
+      # end
     end
 
     def interval(i)
