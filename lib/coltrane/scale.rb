@@ -28,7 +28,7 @@ module Coltrane
 
     def degree(d)
       if d < 1 || d > size
-        raise "Provide a number between 1 and #{degrees}"
+        raise WrongDegree.new(d)
       end
 
       tone + interval_sequence[d - 1].semitones
@@ -73,7 +73,9 @@ module Coltrane
 
     def tertians(n=3)
       degrees.size.times.reduce([]) do |memo, d|
-        ns = NoteSet.new(*n.times.map { |i| notes[(d + (i*2)) % (size)]})
+        ns = NoteSet[
+          *n.times.map { |i| notes[(d + (i*2)) % (size)]}
+        ]
         chord = Chord.new(notes: ns)
         chord.named? ? memo + [chord] : memo
       end

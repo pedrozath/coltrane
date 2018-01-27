@@ -19,7 +19,7 @@ module Coltrane
         super(notes: notes)
         @name = find_quality
       else
-        raise 'Provide: [name:] || [notes:]'
+        raise WrongKeywords.new('[name:] || [notes:]')
       end
     end
 

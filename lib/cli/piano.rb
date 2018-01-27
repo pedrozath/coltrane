@@ -11,7 +11,7 @@ module Coltrane
         └──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──┘
       ASCII
 
-      def initialize(notes)
+      def initialize(notes, flavor:)
         @notes    = notes
         @ref_note = notes.first
       end

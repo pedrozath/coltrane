@@ -24,15 +24,24 @@ Mercenary.program(:Coltrane) do |p|
   p.syntax 'coltrane <subcommand> [options]'
 
   @instrument_option = [
-    :on, '--on [guitar, piano]', 'Shows the notes on the given instrument'
+    :on,
+    '--on [guitar, piano]',
+    'Shows the notes on the given instrument'
   ]
 
+  @flavor_option = [
+    :flavor,
+    '--flavor [marks, notes, intervals, degrees]',
+    'Chooses which additional information to display on instruments'
+  ]
 
   p.command(:notes) do |c|
     c.syntax 'notes <notes separated by space> [--on <instrument>]'
     c.description 'Shows the given notes.'
     c.option(*@instrument_option)
-    c.action do |notes, options|
+    c.option(*@flavor_option)
+    c.action do |(*notes), options|
+      raise 'Provide some notes. Ex: coltrane notes C D Gb' if notes.empty?
       Coltrane::Cli::Notes.new(notes, **options)
     end
   end
@@ -41,14 +50,34 @@ Mercenary.program(:Coltrane) do |p|
     c.syntax 'scale <name of scale> <root note> [--on <instrument>]'
     c.description 'Gives you information about a scale.'
     c.option(*@instrument_option)
-    c.action do |(scale_name, root_note), options|
-      Coltrane::Cli::Scale.new(scale_name, root_note, **options)
+    c.option(*@flavor_option)
+    c.action do |(name, root_note), options|
+      Coltrane::Cli::Scale.new(name: name, root_note: root_note, **options)
     end
 
     c.command(:list) do |list|
-      list.syntax 'scale <name of scale> <root note> [--on <instrument>]'
-      list.description 'Gives you information about a scale.'
-      list.action
+      list.syntax 'list [scales, flavors, instruments(--on), chord-qualities]'
+      list.description 'List information.'
+      list.action do |(arg)|
+        puts case arg
+          when 'scales' then Coltrane::Scale.known_scales
+          when 'flavors' then %w[marks notes intervals degrees]
+          when 'instruments' then %w[guitar piano text]
+          when 'chords', 'chord-qualities' then Coltrane::Qualities::CHORD_QUALITIES.keys.sort.join(' ')
+        end
+      end
+    end
+  end
+
+  p.command(:'find-scale') do |c|
+    c.syntax 'find-scale [--notes [C,D,E,...] OR --chord [Cmaj7, Db7]'
+    c.description 'finds scales with the provided --notes or --chord'
+    c.option :notes, '--notes "C D E"', 'find scales with those notes'
+    c.option :chords, '--chords "Cmaj7 D11"', 'find scales with those chords'
+    c.action do |(arg), options|
+      options[:notes]  = options[:notes]&.split(' ')
+      options[:chords] = options[:chords]&.split(' ')
+      Coltrane::Cli::Scale.find(**options)
     end
   end
 
@@ -60,7 +89,9 @@ Mercenary.program(:Coltrane) do |p|
         puts p
         return
       else
-        puts p.commands.dig(*command_path.map(&:to_sym)) || "\n Sorry, command found."
+        puts (command_path.reduce(p) do |memo, key|
+          memo.commands.delete(key.to_sym)
+        end || "\n Sorry, command found.")
       end
     end
   end

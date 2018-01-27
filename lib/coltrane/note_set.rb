@@ -18,8 +18,8 @@ module Coltrane
       @notes =
         case arg
         when NoteSet then arg.notes
-        when Array then arg.map {|n| n.is_a?(Note) ? n : Note.new(n) }
-        else raise "Invalid notes"
+        when Array   then arg.map {|n| n.is_a?(Note) ? n : Note.new(n) }
+        else raise InvalidNotes.new(arg)
         end
     end
 
@@ -29,6 +29,14 @@ module Coltrane
 
     def degree(note)
       index(note)+1
+    end
+
+    def index(note)
+      notes.each_with_index { |n, i| return i if note.eq?(n)}
+    end
+
+    def pretty_names
+      map(&:pretty_name)
     end
 
     def names

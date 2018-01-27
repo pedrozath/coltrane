@@ -50,62 +50,14 @@ module Coltrane
     alias_method :pentatonic, :pentatonic_major
     alias_method :blues,      :blues_major
 
+    def known_scales
+      SCALES.keys
+    end
+
     def from_key(key)
       scale = key.delete!('m') ? :minor : :major
       note  = key
       Scale.public_send(scale.nil? || scale == 'M' ? :major : :minor, note)
-    end
-
-    def having_chord(chord)
-      # TODO: This is a complete mess, refactor it!
-      puts "\nSearching #{chord} in scales:\n\n"
-      scale_name_size = SCALES.keys.map(&:size).max
-      chord = Chord.new(name: chord)
-      SCALES.each_with_object([]) do |scale_obj, results|
-        scale_name, intervals = scale_obj
-        print Paint[scale_name.ljust(scale_name_size), 'yellow']
-        Note.all.each do |note|
-          found_sth = false
-          print ' '
-          scale  = Scale.new(*intervals, tone: note.name)
-          degree = scale.degree_of_chord(chord)
-          unless degree.nil?
-            found_sth = true
-            results << OpenStruct.new({ name: "#{note.name} #{scale_name}",
-                         degree: degree,
-                         scale: scale})
-          end
-          print Paint[note.name, found_sth ? 'yellow' : 'black']
-        end
-        print "\n"
-      end
-    end
-
-    def having_notes(*notes)
-      # TODO: This is a complete mess, refactor it!
-      puts "\nSearching #{notes.join(', ')} in scales:\n\n"
-      scale_name_size = SCALES.keys.map(&:size).max
-      notes = notes.map { |n| Note.new(n) }
-      SCALES.each_with_object([]) do |scale_obj, results|
-        scale_name, intervals = scale_obj
-        print Paint[scale_name.ljust(scale_name_size), 'yellow']
-        Note.all.each do |note|
-          found_sth = false
-          print ' '
-          scale  = Scale.new(*intervals, tone: note.name)
-          notes_included = scale.include_notes?(*notes)
-          if notes_included == notes
-            found_sth = true
-            results << OpenStruct.new({
-              name: "#{note.name} #{scale_name}",
-              notes: notes_included
-            })
-          end
-          print Paint[note.name, found_sth ? 'yellow' : 'black']
-          print Paint["(#{notes_included.count || 0})", found_sth ? 'gray' : 'black']
-        end
-        print "\n"
-      end
     end
   end
 end

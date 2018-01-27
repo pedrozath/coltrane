@@ -8,7 +8,7 @@ module Coltrane
 
     def initialize(notes: nil, intervals: nil, distances: nil)
       if !notes.nil?
-        notes = NoteSet.new(*notes) if notes.is_a?(Array)
+        notes = NoteSet[*notes] if notes.is_a?(Array)
         @intervals = intervals_from_notes(notes)
       elsif !intervals.nil?
         @intervals = intervals.map { |i| Interval.new(i) }

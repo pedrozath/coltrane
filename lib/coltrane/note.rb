@@ -1,5 +1,6 @@
 module Coltrane
   # It describes a musical note, independent of octave
+
   class Note
     attr_reader :name
 
@@ -26,10 +27,14 @@ module Coltrane
     def initialize(arg)
       case arg
       when String
-        raise "invalid note: #{arg}" unless (note=find_note(arg))
+        raise Coltrane::InvalidNote.new(arg) unless (note = find_note(arg))
         @name = note
       when Numeric then @name = NOTES.key(arg % 12)
       end
+    end
+
+    def pretty_name
+      @name.gsub('b',"\u266D").gsub('#',"\u266F")
     end
 
     def self.all

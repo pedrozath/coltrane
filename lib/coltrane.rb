@@ -6,6 +6,8 @@ require 'paint'
 # require 'pry'
 
 require 'coltrane/version'
+require 'coltrane/errors'
+
 require 'coltrane/cache'
 require 'coltrane/cadence'
 

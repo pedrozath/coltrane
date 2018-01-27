@@ -16,10 +16,10 @@ module Coltrane
           string_note = Note.new(string)
           @frets.times.map do |fret|
             note = string_note + fret
-            m = (@notes.include? ? place_mark(note) : "--")
+            m = (@notes.include?(note) ? place_mark(note) : "--")
             fret.zero? ? (m + " |") : m
           end.join(' ')
-        end.join("\n") + "\n" +
+        end.join("\n") + "\n"*2 +
         @frets.times.map do |fret|
           m = SPECIAL_FRETS.include?(fret) ? fret.to_s.rjust(2, 0.to_s) : '  '
           "#{m}#{'  ' if fret.zero?}"
@@ -28,10 +28,11 @@ module Coltrane
 
       def place_mark(note)
         case @flavor
-        when :mark      then "◼◼"
-        when :note      then note.ljust(2, ' ')
-        when :intervals then (@ref_note - note).name.ljust(2, ' ')
-        when :degrees   then notes.degree(note)+1
+        when :notes     then note.pretty_name.ljust(2, "\u266E")
+        when :intervals then (@ref_note - note).name.ljust(2, '-')
+        when :degrees   then @notes.degree(note).to_s.rjust(2, '0')
+        when :marks     then '◼◼'
+        else raise WrongFlavorError.new
         end
       end
     end
