@@ -13,7 +13,7 @@ module Coltrane
 
     def number_from_name(pitch_string)
       _, note, octaves = pitch_string.match(/(.*)(\d)/).to_a
-      Note.new(note).number + 12 * octaves.to_i
+      Note[note].number + 12 * octaves.to_i
     end
 
     def name
@@ -25,7 +25,7 @@ module Coltrane
     end
 
     def note
-      Note.new(number)
+      Note[number]
     end
 
     def +(arg)

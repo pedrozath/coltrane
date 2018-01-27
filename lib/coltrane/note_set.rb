@@ -3,7 +3,8 @@ module Coltrane
   class NoteSet
     extend Forwardable
 
-    def_delegators :@notes, :first, :each, :size, :map, :reduce, :[], :index
+    def_delegators :@notes, :first, :each, :size,
+                   :map, :reduce, :[], :index, :empty?
 
     attr_reader :notes
 
@@ -18,9 +19,14 @@ module Coltrane
       @notes =
         case arg
         when NoteSet then arg.notes
-        when Array   then arg.map {|n| n.is_a?(Note) ? n : Note.new(n) }
+        when Array   then arg.map {|n| n.is_a?(Note) ? n : Note[n] }
         else raise InvalidNotes.new(arg)
         end
+    end
+
+    def &(another)
+      binding.pry if another.is_a?(Array)
+      NoteSet[*(notes & another.notes)]
     end
 
     def include?(note)
@@ -29,6 +35,10 @@ module Coltrane
 
     def degree(note)
       index(note)+1
+    end
+
+    def +(other_noteset)
+      NoteSet[*(notes + other_noteset.notes)]
     end
 
     def index(note)
@@ -59,17 +69,6 @@ module Coltrane
 
     def interval_sequence
       IntervalSequence.new(notes: self)
-    end
-
-    protected
-
-    def notes_from_note_array(note_array)
-      note_array.collect do |note|
-        case note
-        when String then Note.new(note)
-        when Note   then note
-        end
-      end
     end
   end
 end

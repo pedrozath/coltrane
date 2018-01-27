@@ -14,6 +14,7 @@ module Coltrane
       def initialize(notes, flavor:)
         @notes    = notes
         @ref_note = notes.first
+        @flavor   = flavor
       end
 
       def render_intervals
@@ -32,8 +33,17 @@ module Coltrane
         line.gsub('X'*size).with_index do |match, i|
           note = notes[i%notes.size]
           next ' '*size unless @notes.include?(note)
-          interval_name = (@ref_note - note).name
-          Paint[interval_name[size == 2 ? 0..2 : index ], 'red']
+          Paint[replacer(note)[size == 2 ? 0..2 : index ], 'red']
+        end
+      end
+
+      def replacer(note)
+        # TODO: Maybe extract this method into its own class/module
+        case @flavor
+        when :intervals then (@ref_note - note).name
+        when :marks then '◼ '
+        when :degrees then @notes.degree(note).to_s.rjust(2,'0')
+        when :notes then note.pretty_name.to_s.ljust(2, "\u266E")
         end
       end
 

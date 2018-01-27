@@ -78,9 +78,11 @@ module Coltrane
     end
 
     def notes_for(root_note)
-      intervals.reduce([]) do |memo, interval|
-        memo + [root_note + interval]
-      end
+      NoteSet[
+        *intervals.reduce([]) do |memo, interval|
+          memo + [root_note + interval]
+        end
+      ]
     end
 
     private

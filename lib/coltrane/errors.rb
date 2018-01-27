@@ -29,7 +29,14 @@ module Coltrane
     end
   end
 
-  class WrongDegree < BadConstructor
+  class HasNoNotes < BadConstructor
+    def initialize(obj)
+      super "The given object (#{obj.inspect} does not respond to :notes, "\
+            "thereby it can't be used for this operation)"
+    end
+  end
+
+  class WrongDegree
     def initialize(degree)
       super "#{degree} is not a valid degree. Degrees for this scale must be between 1 and #{degrees}"
     end

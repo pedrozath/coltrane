@@ -24,42 +24,51 @@ module Coltrane
       'B'  => 11
     }.freeze
 
-    def initialize(arg)
-      case arg
-      when String
-        raise Coltrane::InvalidNote.new(arg) unless (note = find_note(arg))
-        @name = note
-      when Numeric then @name = NOTES.key(arg % 12)
-      end
+    def initialize(name, number)
+      @name, @number = name, number
+    end
+
+    @@notes = NOTES.reduce({}) do |memo, (key,val)|
+      memo.merge(key => new(key, val))
+    end
+
+    private_class_method :new
+
+    def self.[](arg)
+      name =
+        case arg
+        when Note then return arg
+        when String then find_note(arg)
+        when Numeric then NOTES.key(arg % 12)
+        else raise InvalidNote.new("Wrong type: #{arg.class}")
+        end
+
+      @@notes[name] || (raise InvalidNote.new("#{arg}"))
+    end
+
+    def self.all
+      @@notes.values
+    end
+
+    def self.find_note(str)
+      NOTES.each { |k, v| return k if str.casecmp?(k) }
+      nil
     end
 
     def pretty_name
       @name.gsub('b',"\u266D").gsub('#',"\u266F")
     end
 
-    def self.all
-      NOTES.keys.map {|n| Note.new(n)}
-    end
-
-    def eq?(note)
-      number == note.number
-    end
+    alias_method :to_s, :name
 
     def accident?
       [1,3,6,8,10].include?(number)
     end
 
-    def find_note(str)
-      NOTES.each do |k, v|
-        return k if str.casecmp?(k)
-      end
-      nil
-    end
-
     def +(n)
       case n
-        when Interval then Note.new(number + n.semitones)
-        when Numeric  then Note.new(number + n)
+        when Interval then Note[number + n.semitones]
+        when Numeric  then Note[number + n]
         when Note     then Chord.new(number + n.number)
       end
     end
@@ -80,7 +89,7 @@ module Coltrane
     end
 
     def interval_to(note_name)
-      Note.new(note_name) - self
+      Note[note_name] - self
     end
 
     def transpose_by(semitones)

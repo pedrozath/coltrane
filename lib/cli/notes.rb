@@ -18,6 +18,10 @@ module Coltrane
         end
       end
 
+      # def render
+      #   [@desc, ]
+      # end
+
       def on_text
         puts <<~OUTPUT
 
@@ -35,7 +39,7 @@ module Coltrane
 
           #{@desc}
 
-          #{Coltrane::Cli::Piano.new(@notes, flavor: @flavor).render_intervals}
+          #{Coltrane::Cli::Piano.new(@notes, flavor: @flavor).render}
 
           #{hint}
 

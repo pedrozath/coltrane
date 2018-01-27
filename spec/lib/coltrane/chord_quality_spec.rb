@@ -1,11 +1,6 @@
 RSpec.describe ChordQuality do
   let :notes do
-    [
-      Note.new('A'),
-      Note.new('E'),
-      Note.new('G'),
-      Note.new('C#')
-    ]
+    [ Note['A'], Note['E'], Note['G'], Note['C#'] ]
   end
 
   it 'can return quality from notes' do

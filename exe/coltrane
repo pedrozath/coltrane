@@ -10,8 +10,8 @@ $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 require 'coltrane'
 require 'coltrane-cli'
 
-# Paint.mode = 0xFFFFFF
-Paint.mode = 0
+Paint.mode = 0xFFFFFF
+# Paint.mode = 0
 
 Mercenary.program(:Coltrane) do |p|
   p.version Coltrane::VERSION
@@ -75,8 +75,8 @@ Mercenary.program(:Coltrane) do |p|
     c.option :notes, '--notes "C D E"', 'find scales with those notes'
     c.option :chords, '--chords "Cmaj7 D11"', 'find scales with those chords'
     c.action do |(arg), options|
-      options[:notes]  = options[:notes]&.split(' ')
-      options[:chords] = options[:chords]&.split(' ')
+      options[:notes]  = "#{options[:notes]}".split(' ')
+      options[:chords] = "#{options[:chords]}".split(' ')
       Coltrane::Cli::Scale.find(**options)
     end
   end

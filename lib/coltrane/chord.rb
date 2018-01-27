@@ -59,7 +59,7 @@ module Coltrane
 
     def parse_from_name(name)
       _, name, quality_name = name.match(/([A-Z]#?)(.*)/).to_a
-      root    = Note.new(name)
+      root    = Note[name]
       quality = ChordQuality.new(name: quality_name)
       notes   = quality.notes_for(root)
       [root, quality, notes]

@@ -30,6 +30,18 @@ RSpec.describe Scale do
       .to eq ["CM", "Dm", "Em", "FM", "GM", "Am", "Bdim"]
   end
 
+  it 'can give you a major scale' do
+    expect(Scale.major('C').notes.names).to include(*%w[C D E F G A B])
+    expect(Scale.major('C').notes.names).to_not include(*%w[C# D# F# G# A#])
+    expect(Scale.major('D#').notes.names).to_not include(*%w[E])
+  end
+
+  it 'can tell you if a scale includes given notes' do
+    expect(Scale.major('C').include?(NoteSet[*%w[A B C D E F G]])).to be_truthy
+    expect(Scale.major('D#').include?(Note['E'])).to be_falsey
+    expect(Scale.major('F#').include?(Note['G'])).to be_falsey
+  end
+
   it 'can give you all possible triads for a major scale' do
     expect(scale.chords(3).map(&:name))
       .to include *%w[CMsus2 CM CMsus4 DMsus4 DMsus2 Dm DM
@@ -44,13 +56,11 @@ RSpec.describe Scale do
   end
 
   it 'can return scales that include a chord' do
-    expect(Scale.having_chord('G7').map(&:name))
-      .to include('C Major')
-
+    expect(Scale.having_chord('G7').map(&:full_name)).to include('C Major')
   end
 
   it 'can return scales that include some notes' do
-    scales = Scale.having_notes('C', 'F', 'B').map(&:name)
+    scales = Scale.having_notes(NoteSet['C','F','B']).map(&:full_name)
     expect(scales).to include('C Major')
     expect(scales).to_not include('F# Major')
   end
@@ -65,6 +75,7 @@ RSpec.describe Scale do
 
   it 'can return notes from the scale' do
     expect(scale.notes.names).to include(*%w[C D E F G A B])
+    expect(scale.notes.names).to_not include(*%w[C# D# F# G# A#])
   end
 
   it 'can return the greek modes' do

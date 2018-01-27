@@ -31,7 +31,7 @@ module Coltrane
     # Creates factories for scales
     SCALES.each do |name, distances|
       define_method methodize(name) do |tone='C', mode=1|
-        new(*distances, tone: tone, mode: mode)
+        new(*distances, tone: tone, mode: mode, name: name)
       end
     end
 
@@ -39,9 +39,10 @@ module Coltrane
     MODES.each do |scale, modes|
       modes.each_with_index do |mode, index|
         scale_method = methodize(scale)
+        mode_name = mode
         mode_n = index + 1
         define_method methodize(mode) do |tone='C'|
-          new(*SCALES[scale], tone: tone, mode: mode_n)
+          new(*SCALES[scale], tone: tone, mode: mode_n, name: mode_name)
         end
       end
     end
@@ -59,5 +60,30 @@ module Coltrane
       note  = key
       Scale.public_send(scale.nil? || scale == 'M' ? :major : :minor, note)
     end
+
+    def having_notes(notes)
+      scale_names = []
+      SCALES.each_with_object([]) do |(name, intervals), results|
+        Note.all.each.map do |tone|
+          scale      = new(*intervals, tone: tone, name: scale)
+          scale_name = scale.pretty_name
+          if scale.include?(notes) && !scale_names.include?(scale_name)
+            scale_names << scale_name
+            results << scale
+          end
+        end
+      end
+    end
+
+    def having_chords(*chords)
+      should_create = !chords.first.is_a?(Chord)
+      notes = chords.reduce(NoteSet[]) do |memo, c|
+        memo + (should_create ? Chord.new(name: c) : c).notes
+      end
+      having_notes(notes)
+    end
+
+    alias_method :having_chord, :having_chords
+
   end
 end

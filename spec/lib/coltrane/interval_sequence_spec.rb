@@ -18,10 +18,7 @@ RSpec.describe IntervalSequence do
 
   it 'can be created from Notes' do
     expect(IntervalSequence.new(notes:[
-      Note.new('A'),
-      Note.new('E'),
-      Note.new('G'),
-      Note.new('C#')
+      Note['A'], Note['E'], Note['G'], Note['C#']
     ]).intervals_semitones).to eq([0,4,7,10])
   end
 
