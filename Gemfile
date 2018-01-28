@@ -2,14 +2,6 @@
 
 source 'https://rubygems.org'
 
-gem 'facets', require: false
-
-group :cli do
-  gem 'paint'
-  gem 'chroma'
-  gem 'mercenary'
-end
-
 group :test do
   gem 'rspec'
   gem 'pry'
