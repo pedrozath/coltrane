@@ -1,3 +1,7 @@
+require 'mercenary'
+require 'paint'
+require 'chroma'
+
 require 'cli/errors'
 
 require 'cli/representation'

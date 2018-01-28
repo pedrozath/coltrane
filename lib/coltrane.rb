@@ -1,9 +1,6 @@
-require 'bundler'
-Bundler.require
-
+require 'forwardable'
 require 'facets/multiton'
 require 'ostruct'
-require 'paint'
 
 require 'coltrane/version'
 require 'coltrane/errors'
@@ -23,10 +20,7 @@ require 'coltrane/roman_chord'
 require 'coltrane/classic_scales'
 require 'coltrane/classic_progressions'
 
-require 'coltrane/piano_representation'
-
 require 'coltrane/note'
-
 require 'coltrane/pitch'
 require 'coltrane/progression'
 require 'coltrane/scale'
