@@ -79,34 +79,8 @@ module Coltrane
       end
     end
 
-    def valid_note?(note_name)
-      find_note(note_name)
-    end
-
     def interval_to(note_name)
       Note[note_name] - self
-    end
-
-    def transpose_by(semitones)
-      self + semitones
-    end
-
-    def guitar_notes
-      Guitar.strings.reduce([]) do |memo, guitar_string|
-        memo + in_guitar_string(guitar_string)
-      end
-    end
-
-    def on_guitar
-      GuitarNoteSet.new(guitar_notes).render
-    end
-
-    def in_guitar_string(guitar_string)
-      guitar_string.guitar_notes_for_note(self)
-    end
-
-    def in_guitar_string_region(guitar_string, region)
-      guitar_string.guitar_notes_for_note_in_region(self, region)
     end
   end
 end

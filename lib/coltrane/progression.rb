@@ -14,14 +14,6 @@ module Coltrane
       all_chords.values_at(*chord_indexes)
     end
 
-    def on_guitar
-      chords.map(&:on_guitar)
-    end
-
-    def on_piano
-      chords.map(&:on_piano)
-    end
-
     private
 
     def all_chords

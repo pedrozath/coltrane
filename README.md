@@ -54,6 +54,12 @@ puts Coltrane::Scale.having_chord('Cmaj7').scales.map(&:name)
 # => ["C Major", "G Major", "E Natural Minor", "A Natural Minor", "E Harmonic Minor", "B Flamenco"]
 ```
 
+### Classes
+
+###Note
+
+Not to be confused with `Pitch`. Notes
+
 ## Roadmap
 
 There's a lot of things that need to be done on this library, specially on the CLI:
