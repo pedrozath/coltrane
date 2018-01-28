@@ -16,7 +16,7 @@ module Coltrane
         @distances = distances
         @intervals = intervals_from_distances(distances)
       else
-        raise 'Provide: [notes:] || [intervals:] || [distances:'
+        raise 'Provide: [notes:] || [intervals:] || [distances:]'
       end
     end
 

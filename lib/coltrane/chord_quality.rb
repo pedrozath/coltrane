@@ -6,26 +6,18 @@ module Coltrane
 
     def initialize(name: nil, notes: nil)
       if !name.nil?
-        @name = name
-        super(intervals: CHORD_QUALITIES[name])
+        if(intervals = CHORD_QUALITIES[name])
+          @name = name
+          super(intervals: intervals)
+        else
+          raise ChordNotFoundError.new
+        end
       elsif !notes.nil?
         super(notes: notes)
-        @name = find_quality
+        @name = CHORD_QUALITIES.key(intervals_semitones)
       else
         raise WrongKeywords.new('[name:] || [notes:]')
       end
     end
-
-    private
-
-    def find_quality
-      (size).times do |i|
-        if(found=CHORD_QUALITIES.key(inversion(i).intervals_semitones))
-          return found
-        end
-      end
-      nil
-    end
-
   end
 end

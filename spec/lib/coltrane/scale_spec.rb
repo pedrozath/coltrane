@@ -43,26 +43,37 @@ RSpec.describe Scale do
   end
 
   it 'can give you all possible triads for a major scale' do
-    expect(scale.chords(3).map(&:name))
-      .to include *%w[CMsus2 CM CMsus4 DMsus4 DMsus2 Dm DM
-        Em#5 Em EMsus4 FMsus2 FM Fdim F7ndim5 FMb5 GMsus4
-        GM GMsus2 G7ndim5 Am Am#5 AMsus4 AMsus2 Bdim Bm#5
-        Bm BMsus4 BMb5]
+    expect(scale.triads.map(&:name))
+      .to include *%w[CM Dm Em FM GM Am Bdim]
+  end
+
+  it 'can give you all possible sevenths for a major scale' do
+    expect(scale.sevenths.map(&:name))
+      .to include *%w[CM7 Dm7 Em7 FM7 G7 Am7 Bm7b5]
   end
 
   it 'can give you all possible triads for pentatonic scale' do
     expect(Scale.pentatonic_minor.triads.map(&:name))
-      .to include(*%w[CMsus4 D#m FMsus4 GMsus4 A#M])
+      .to include(*%w[])
+  end
+
+  it 'can give you all possible triads for pentatonic scale' do
+    expect(Scale.pentatonic_major.sevenths.map(&:name))
+      .to include(*%w[])
   end
 
   it 'can return scales that include a chord' do
-    expect(Scale.having_chord('G7').map(&:full_name)).to include('C Major')
+    expect(Scale.having_chord('G7').scales.map(&:full_name)).to include('C Major')
   end
 
   it 'can return scales that include some notes' do
-    scales = Scale.having_notes(NoteSet['C','F','B']).map(&:full_name)
-    expect(scales).to include('C Major')
-    expect(scales).to_not include('F# Major')
+    scale_search = Scale.having_notes(NoteSet['C','F','B'])
+    expect(scale_search.scales.map(&:full_name)).to include('C Major')
+    expect(scale_search.scales.map(&:full_name)).to_not include('F# Major')
+    expect(scale_search.scales.map(&:full_name)).to_not include('Gb Major')
+    expect(scale_search.results['Major'][Note['C'].id].size).to eq(3)
+    expect(scale_search.results['Major'][Note['D#'].id].size).to eq(2)
+    expect(scale_search.results['Major'][Note['E'].id].size).to eq(1)
   end
 
   it 'can return the degree of a chord in a scale' do

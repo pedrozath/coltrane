@@ -1,6 +1,7 @@
 require 'bundler'
 Bundler.require
 
+require 'facets/multiton'
 require 'ostruct'
 require 'paint'
 

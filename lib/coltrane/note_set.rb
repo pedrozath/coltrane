@@ -3,8 +3,8 @@ module Coltrane
   class NoteSet
     extend Forwardable
 
-    def_delegators :@notes, :first, :each, :size,
-                   :map, :reduce, :[], :index, :empty?
+    def_delegators :@notes, :first, :each, :size, :map, :reduce, :index,
+                   :[], :index, :empty?, :permutation, :include?
 
     attr_reader :notes
 
@@ -25,12 +25,7 @@ module Coltrane
     end
 
     def &(another)
-      binding.pry if another.is_a?(Array)
       NoteSet[*(notes & another.notes)]
-    end
-
-    def include?(note)
-      notes.detect {|n| n.eq?(note) }
     end
 
     def degree(note)
@@ -39,10 +34,6 @@ module Coltrane
 
     def +(other_noteset)
       NoteSet[*(notes + other_noteset.notes)]
-    end
-
-    def index(note)
-      notes.each_with_index { |n, i| return i if note.eq?(n)}
     end
 
     def pretty_names

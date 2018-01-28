@@ -16,6 +16,10 @@ module Coltrane
       end
     end
 
+    def id
+      [(name || @interval_sequence), tone.number]
+    end
+
     def name
       @name = begin
         is = self.interval_sequence.distances
@@ -72,9 +76,9 @@ module Coltrane
     alias_method :include?, :include_notes?
 
     def notes
-      # Coltrane::Cache.find_or_record(cache_key("notes")) do
-      NoteSet[*degrees.map { |d| degree(d) }]
-      # end
+      Coltrane::Cache.find_or_record(cache_key("notes")) do
+        NoteSet[*degrees.map { |d| degree(d) }]
+      end
     end
 
     def interval(i)
@@ -100,12 +104,11 @@ module Coltrane
     end
 
     def sevenths
-      degrees.reduce([]) do |chords, degree|
-        intervals = IntervalSequence.new(4.times.map { |i| interval(degree+(i*2)) })
-        intervals = intervals.shift(-intervals.numbers[0])
-        chord_name = "#{self[degree].name}#{ChordQuality.new(intervals).name}"
-        chords << Chord.new(chord_name)
-      end
+      tertians(4)
+    end
+
+    def pentads
+      tertians(5)
     end
 
     def progression(*degrees)
@@ -118,6 +121,12 @@ module Coltrane
         @interval_sequence.intervals_semitones.join(),
         extra
       ].join('-')
+    end
+
+    def all_chords
+      (3..size).reduce([]) do |memo, s|
+        memo + chords(s)
+      end
     end
 
     def chords(size)

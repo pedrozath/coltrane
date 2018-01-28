@@ -2,7 +2,10 @@ module Coltrane
   # It describes a musical note, independent of octave
 
   class Note
-    attr_reader :name
+    include Multiton
+
+    attr_reader :name, :number
+    alias_method :id, :number
 
     NOTES = {
       'C'  => 0,
@@ -24,12 +27,8 @@ module Coltrane
       'B'  => 11
     }.freeze
 
-    def initialize(name, number)
-      @name, @number = name, number
-    end
-
-    @@notes = NOTES.reduce({}) do |memo, (key,val)|
-      memo.merge(key => new(key, val))
+    def initialize(name)
+      @name, @number = name, NOTES[name]
     end
 
     private_class_method :new
@@ -43,11 +42,11 @@ module Coltrane
         else raise InvalidNote.new("Wrong type: #{arg.class}")
         end
 
-      @@notes[name] || (raise InvalidNote.new("#{arg}"))
+      new(name) || (raise InvalidNote.new("#{arg}"))
     end
 
     def self.all
-      @@notes.values
+      %w[C C# D D# E F F# G G# A A# B].map { |n| Note[n] }
     end
 
     def self.find_note(str)
@@ -82,10 +81,6 @@ module Coltrane
 
     def valid_note?(note_name)
       find_note(note_name)
-    end
-
-    def number
-      NOTES[name]
     end
 
     def interval_to(note_name)

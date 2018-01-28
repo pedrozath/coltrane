@@ -41,4 +41,14 @@ module Coltrane
       super "#{degree} is not a valid degree. Degrees for this scale must be between 1 and #{degrees}"
     end
   end
+
+  class ChordNotFoundError < ColtraneError
+    def initialize
+      super "The chord you provided wasn't found. "\
+            "If you're sure this chord exists, "\
+            "would you mind to suggest it's inclusion here: "\
+            "https://github.com/pedrozath/coltrane/issues "\
+            "\n\nA tip tho: always include the letter M for major"
+    end
+  end
 end

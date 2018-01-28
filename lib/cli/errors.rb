@@ -17,5 +17,12 @@ module Coltrane
         super msg || 'Provide --notes or --chords. Ex: `coltrane find-scale --notes C E G`.'
       end
     end
+
+    class WrongRepresentationTypeError < ColtraneCliError
+      def initialize(type)
+        super "The provided representation type (#{type}) "\
+              "is not available at the moment."
+      end
+    end
   end
 end

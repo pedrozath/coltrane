@@ -2,28 +2,43 @@ module Coltrane
   module Cli
     SPECIAL_FRETS = [3, 5, 7, 9, 12, 15, 17, 19]
 
-    class Guitar
-      def initialize(notes, tuning: %w[E A D G B E], frets: 22, flavor:)
+    class Guitar < Representation
+      def initialize(notes, flavor, tuning: %w[E A D G B E], frets: 22)
         @notes    = notes
-        @tuning   = tuning
+        @tuning   = tuning.reverse
         @frets    = frets
         @flavor   = flavor
         @ref_note = @notes.first
       end
 
       def render
+        [render_notes, render_special_frets, hint].join("\n"*2)
+      end
+
+      def render_notes
         @tuning.map do |string|
-          string_note = Note.new(string)
-          @frets.times.map do |fret|
-            note = string_note + fret
-            m = (@notes.include?(note) ? place_mark(note) : "--")
-            fret.zero? ? (m + " |") : m
+          string_note = Note[string]
+          (@frets+2).times.map do |i|
+            if i.zero?
+              string
+            else
+              fret = i - 1
+              note = string_note + fret
+              m = (@notes.include?(note) ? place_mark(note) : "--")
+              fret.zero? ? (m + " |") : m
+            end
           end.join(' ')
-        end.join("\n") + "\n"*2 +
-        @frets.times.map do |fret|
+        end.join("\n")
+      end
+
+      def render_special_frets
+        (@frets+1).times.map do |fret|
           m = SPECIAL_FRETS.include?(fret) ? fret.to_s.rjust(2, 0.to_s) : '  '
           "#{m}#{'  ' if fret.zero?}"
         end.join(' ')
+      end
+
+      def render_dotted_frets
       end
 
       def place_mark(note)
@@ -38,79 +53,3 @@ module Coltrane
     end
   end
 end
-
-  #     def render(guitar_notes, ref_note=nil)
-  #       end.join("\n")
-
-  #       special_frets = [3,5,7,9,12,15,17,19,21]
-  #       visual_aids = Guitar.frets.times.map do |fret|
-  #         x = if special_frets.include?(fret)
-  #           Paint[fret.to_s.rjust(2, 0.to_s), :yellow]
-  #         else
-  #           '  '
-  #         end
-  #         x + ' '
-  #       end.join('')
-
-  #       [tabs, "#{visual_aids}"].join("\n")
-  #     end
-
-  #     def render_degrees(guitar_notes, ref_scale)
-  #       gns = guitar_notes.guitar_notes.map(&:position)
-  #       tabs = Guitar.strings.map do |string|
-  #         Guitar.frets.times.map.each do |fret|
-  #           position = { guitar_string_index: string.index, fret: fret }
-  #           present = gns.include?(position)
-  #           x = if present
-  #             gn = GuitarNote.new(position)
-  #             mark = ref_scale.degree_of_note(gn.note).to_s.rjust(2, 0.to_s)
-  #             Paint[mark, :red]
-  #           else
-  #             '--'
-  #           end
-  #           x + (fret.zero? ? '|' : ' ')
-  #         end.join('')
-  #       end.join("\n")
-
-  #       special_frets = [3,5,7,9,12,15,17,19,21]
-  #       visual_aids = Guitar.frets.times.map do |fret|
-  #         x = if special_frets.include?(fret)
-  #           Paint[fret.to_s.rjust(2, 0.to_s), :yellow]
-  #         else
-  #           '  '
-  #         end
-  #         x + ' '
-  #       end.join('')
-
-  #       [tabs, "#{visual_aids}"].join("\n")
-  #     end
-
-  #     def render_notes(guitar_notes, ref_scale)
-  #       gns = guitar_notes.guitar_notes.map(&:position)
-  #       tabs = Guitar.strings.map do |string|
-  #         Guitar.frets.times.map.each do |fret|
-  #           position = { guitar_string_index: string.index, fret: fret }
-  #           present = gns.include?(position)
-  #           x = if present
-  #             gn = GuitarNote.new(position)
-  #             mark = gn.note.name.to_s.ljust(2, ' ')
-  #             Paint[mark, :red]
-  #           else
-  #             '--'
-  #           end
-  #           x + (fret.zero? ? '|' : ' ')
-  #         end.join('')
-  #       end.join("\n")
-
-  #       special_frets = [3,5,7,9,12,15,17,19,21]
-  #       visual_aids = Guitar.frets.times.map do |fret|
-  #         x = if special_frets.include?(fret)
-  #           Paint[fret.to_s.rjust(2, 0.to_s), :yellow]
-  #         else
-  #           '  '
-  #         end
-  #         x + ' '
-  #       end.join('')
-
-  #       [tabs, "#{visual_aids}"].join("\n")
-  #     end

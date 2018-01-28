@@ -1,30 +1,25 @@
 module Coltrane
   module Cli
-    class Piano
+    class Piano < Representation
       PIANO_TEMPLATE = <<~ASCII
         ┌─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─╥─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─┐
         │ │ ││ │ ║ │ ││ ││ │ ║ │ ││ │ ║ │ ││ ││ │ │
         │ │X││X│ ║ │X││X││X│ ║ │X││X│ ║ │X││X││X│ │
         │ │X││X│ ║ │X││X││X│ ║ │X││X│ ║ │X││X││X│ │
         │ ┕╥┙┕╥┙ ║ ┕╥┙┕╥┙┕╥┙ ║ ┕╥┙┕╥┙ ║ ┕╥┙┕╥┙┕╥┙ │
+        │  ║  ║  ║  ║  ║  ║  ║  ║  ║  ║  ║  ║  ║  │
         │XX║XX║XX║XX║XX║XX║XX║XX║XX║XX║XX║XX║XX║XX│
         └──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──╨──┘
       ASCII
 
-      def initialize(notes, flavor:)
-        @notes    = notes
-        @ref_note = notes.first
-        @flavor   = flavor
-      end
-
-      def render_intervals
+      def render
         PIANO_TEMPLATE.each_line.map.each_with_index do |l, ln|
           case ln
           when 2, 3 then replace_x(l, black_notes, 1, ln - 2)
-          when 5 then replace_x(l, white_notes, 2)
+          when 6 then replace_x(l, white_notes, 2)
           else l
           end
-        end.join
+        end.join + "\n" + hint
       end
 
       private

@@ -7,11 +7,18 @@ Bundler.require(:cli)
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
+require 'core_ext'
 require 'coltrane'
 require 'coltrane-cli'
 
-Paint.mode = 0xFFFFFF
-# Paint.mode = 0
+full_color_terminals = %w[iTerm.app]
+safe_mode_terminals = %w[Unsupported]
+
+if full_color_terminals.include?(ENV['TERM_PROGRAM'])
+  Paint.mode = 0xFFFFFF
+elsif safe_mode_terminals.include?(ENV['TERM_PROGRAM'])
+  Paint.mode = 0
+end
 
 Mercenary.program(:Coltrane) do |p|
   p.version Coltrane::VERSION
@@ -25,14 +32,14 @@ Mercenary.program(:Coltrane) do |p|
 
   @instrument_option = [
     :on,
-    '--on [guitar, piano]',
-    'Shows the notes on the given instrument'
+    '--on guitar INSTRUMENT',
+    'Shows the notes on the given instrument/representation type. Can be piano, guitar, ukulele, bass or text'
   ]
 
   @flavor_option = [
     :flavor,
-    '--flavor [marks, notes, intervals, degrees]',
-    'Chooses which additional information to display on instruments'
+    '--flavor FLAVOR',
+    'Chooses which <additional></additional> information to display: marks, notes, intervals or degrees'
   ]
 
   p.command(:notes) do |c|
@@ -40,44 +47,103 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Shows the given notes.'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
-    c.action do |(*notes), options|
-      raise 'Provide some notes. Ex: coltrane notes C D Gb' if notes.empty?
-      Coltrane::Cli::Notes.new(notes, **options)
+    c.action do |(notes), on: 'text', flavor: 'notes'|
+      raise 'Provide some notes. Ex: coltrane notes C-D-Gb' if notes.empty?
+      notes = Coltrane::NoteSet[*notes.split('-')]
+      Coltrane::Cli::Notes.new(notes, on: on, flavor: flavor)
+    end
+  end
+
+  p.command(:chord) do |c|
+    c.syntax 'chord <chord-name> [--on <instrument>]'
+    c.description 'Shows the given chord. Ex: coltrane chord Cmaj7 --on piano'
+    c.option(*@instrument_option)
+    c.option(*@flavor_option)
+    c.option :notes, '--notes C-D-E', 'finds chords with those notes, provided they are separated by dashes'
+    c.action do |(chords), notes: nil, on: 'text', flavor: 'notes'|
+      chords = chords&.split('-')
+      Coltrane::Cli::Chord.new(*chords, notes: notes&.split('-'), on: on, flavor: flavor)
     end
   end
 
   p.command(:scale) do |c|
-    c.syntax 'scale <name of scale> <root note> [--on <instrument>]'
-    c.description 'Gives you information about a scale.'
+    c.syntax 'scale <name of scale>-<root note> [--on <instrument>]'
+    c.description 'Gives you information about a scale. Ex: coltrane scale natural-minor-Db --on guitar'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
-    c.action do |(name, root_note), options|
-      Coltrane::Cli::Scale.new(name: name, root_note: root_note, **options)
-    end
-
-    c.command(:list) do |list|
-      list.syntax 'list [scales, flavors, instruments(--on), chord-qualities]'
-      list.description 'List information.'
-      list.action do |(arg)|
-        puts case arg
-          when 'scales' then Coltrane::Scale.known_scales
-          when 'flavors' then %w[marks notes intervals degrees]
-          when 'instruments' then %w[guitar piano text]
-          when 'chords', 'chord-qualities' then Coltrane::Qualities::CHORD_QUALITIES.keys.sort.join(' ')
+    c.option :triads,   '--triads',        'Outputs triads from the scale'
+    c.option :sevenths, '--sevenths',      'Outputs seventh chords from the scale'
+    c.option :pentads,  '--pentads',       'Outputs pentad chords from the scale'
+    c.option :tertians, '--tertians SIZE', 'Outputs all tertian chords from the given size from the scale'
+    c.option :chords,   '--chords [SIZE]', 'Outputs all chords from given size from the scale. Leave size empty to retrieve all'
+    c.action do |(scale_str), flavor:'degrees', on:'text', **options|
+      scale = Coltrane::Cli::Scale.parse(scale_str)
+      keyword_args = {flavor: flavor, on: on }
+      if options.include?(:triads)
+        chords = scale.triads
+        Coltrane::Cli::Chord.new(*chords, **keyword_args)
+      elsif options.include?(:sevenths)
+        chords = scale.sevenths
+        Coltrane::Cli::Chord.new(*chords, **keyword_args)
+      elsif options.include?(:pentads)
+        chords = scale.pentads
+        Coltrane::Cli::Chord.new(*chords, **keyword_args)
+      elsif options.include?(:tertians)
+        chords = scale.tertians(options[:tertians].to_i)
+        Coltrane::Cli::Chord.new(*chords, **keyword_args)
+      elsif options.include?(:chords)
+        if options[:chords].nil?
+          chords = scale.all_chords
+        else
+          chords = scale.chords(options[:chords])
         end
+        Coltrane::Cli::Chord.new(*chords, **keyword_args)
+      else
+        Coltrane::Cli::Scale.new(scale, **keyword_args)
+      end
+    end
+  end
+
+  p.command(:list) do |list|
+    list.syntax 'list [scales, flavors, instruments (used in --on options), chord-qualities]'
+    list.description 'List information.'
+    list.action do |(arg)|
+      puts case arg
+        when 'scales' then Coltrane::Scale.known_scales
+        when 'flavors' then %w[marks notes intervals degrees]
+        when 'instruments' then %w[guitar bass ukulele piano text]
+        when 'chords', 'chord-qualities' then Coltrane::Qualities::CHORD_QUALITIES.keys.sort.join(' ')
       end
     end
   end
 
   p.command(:'find-scale') do |c|
-    c.syntax 'find-scale [--notes [C,D,E,...] OR --chord [Cmaj7, Db7]'
+    c.syntax 'find-scale --notes C-D-E-...] OR --chord Cmaj7-Db7'
     c.description 'finds scales with the provided --notes or --chord'
-    c.option :notes, '--notes "C D E"', 'find scales with those notes'
-    c.option :chords, '--chords "Cmaj7 D11"', 'find scales with those chords'
+    c.option :notes, '--notes C-D-E', 'Find scales with those notes'
+    c.option :chords, '--chords Cmaj7-D11', 'find scales with those chords'
     c.action do |(arg), options|
-      options[:notes]  = "#{options[:notes]}".split(' ')
-      options[:chords] = "#{options[:chords]}".split(' ')
+      options[:notes]  = "#{options[:notes]}".split('-')
+      options[:chords] = "#{options[:chords]}".split('-')
       Coltrane::Cli::Scale.find(**options)
+    end
+  end
+
+  p.command(:'common-chords') do |c|
+    c.syntax 'common-chords <SCALE1 SCALE2 [SCALE3]>'
+    c.description 'Finds chords that are shared between the given scales'
+    c.option(*@instrument_option)
+    c.option(*@flavor_option)
+    c.action do |(*scale_strings), on: 'text', flavor: 'notes'|
+      raise 'Provide at least 2 scales' if scale_strings.size < 2
+      first_scale_str, *other_scales_strs = scale_strings
+      first_scale = Coltrane::Cli::Scale.parse(first_scale_str)
+      chords = other_scales_strs.reduce(first_scale.all_chords.map(&:name)) do |memo, scale_str|
+        scale = Coltrane::Cli::Scale.parse(scale_str)
+        memo & scale.all_chords.map(&:name)
+      end
+      raise 'No common chords were found' if chords.empty?
+      Coltrane::Cli::Chord.new(*chords, on: on, flavor: flavor)
     end
   end
 
