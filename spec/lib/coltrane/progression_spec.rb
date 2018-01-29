@@ -9,6 +9,7 @@ RSpec.describe Progression do
   }
 
   it 'returns chords' do
+    pending
     expect(progression.chords)
       .to include(*chords)
   end

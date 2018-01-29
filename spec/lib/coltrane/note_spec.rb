@@ -5,10 +5,6 @@ RSpec.describe Note do
     end
   end
 
-  it 'can transpose' do
-    expect(Note['C'].transpose_by(2).name).to eq('D')
-  end
-
   it 'when summed to intervals it returns the corresponding note' do
     expect((Note['C'] + Interval.new('3M')).name).to eq('E')
   end
