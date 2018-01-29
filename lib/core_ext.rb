@@ -1,7 +1,8 @@
 # frozen_string_literal: true
 
+# Stolen from Active Support and changed a bit
+# may in the future be substituted by facets version
 class String
-  # Stolen from Active Support and changed a bit
   def underscore
     return self unless /[A-Z-]|::/.match?(self)
     word = to_s.gsub('::', '/')

@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Style/Documentation
 
 module Coltrane
   module Cli
@@ -28,3 +29,6 @@ module Coltrane
     end
   end
 end
+
+# rubocop:enable Style/Documentation
+

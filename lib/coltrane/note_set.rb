@@ -22,7 +22,7 @@ module Coltrane
         case arg
         when NoteSet then arg.notes
         when Array   then arg.map { |n| n.is_a?(Note) ? n : Note[n] }
-        else raise InvalidNotes, arg
+        else raise InvalidNotesError, arg
         end
     end
 

@@ -18,7 +18,7 @@ module Coltrane
         super(notes: notes)
         @name = CHORD_QUALITIES.key(intervals_semitones)
       else
-        raise WrongKeywords, '[name:] || [notes:]'
+        raise WrongKeywordsError, '[name:] || [notes:]'
       end
     end
   end

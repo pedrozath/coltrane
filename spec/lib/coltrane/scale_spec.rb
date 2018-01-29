@@ -76,10 +76,6 @@ RSpec.describe Scale do
     expect(scale_search.results['Major'][Note['E'].id].size).to eq(1)
   end
 
-  it 'can return the degree of a chord in a scale' do
-    expect(scale.degree_of_chord(Chord.new(name: 'G7'))).to eq(5)
-  end
-
   it 'can return a specific note from the scale' do
     expect(scale.degree(2).name).to eq('D')
   end

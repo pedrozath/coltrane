@@ -1,8 +1,7 @@
 # frozen_string_literal: true
 
 module Coltrane
-  # It describes a musical note, independent of octave
-
+  # Describes a musical note, independent of octave (that'd be pitch)
   class Note
     include Multiton
 
@@ -43,10 +42,10 @@ module Coltrane
         when String then find_note(arg)
         when Numeric then NOTES.key(arg % 12)
         else
-          raise InvalidNote, "Wrong type: #{arg.class}"
+          raise InvalidNoteError, "Wrong type: #{arg.class}"
         end
 
-      new(name) || (raise InvalidNote, arg.to_s)
+      new(name) || (raise InvalidNoteError, arg.to_s)
     end
 
     def self.all
@@ -54,7 +53,7 @@ module Coltrane
     end
 
     def self.find_note(str)
-      NOTES.each { |k, _v| return k if str.casecmp?(k) }
+      NOTES.each_key { |k, _v| return k if str.casecmp?(k) }
       nil
     end
 
@@ -68,18 +67,18 @@ module Coltrane
       [1, 3, 6, 8, 10].include?(number)
     end
 
-    def +(n)
-      case n
-      when Interval then Note[number + n.semitones]
-      when Numeric  then Note[number + n]
-      when Note     then Chord.new(number + n.number)
+    def +(other)
+      case other
+      when Interval then Note[number + other.semitones]
+      when Numeric  then Note[number + other]
+      when Note     then Chord.new(number + other.number)
       end
     end
 
-    def -(n)
-      case n
-      when Numeric then Note.new(n - number)
-      when Note    then Interval.new(n.number - number)
+    def -(other)
+      case other
+      when Numeric then Note.new(other - number)
+      when Note    then Interval.new(other.number - number)
       end
     end
 

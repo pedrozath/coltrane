@@ -2,6 +2,7 @@
 
 module Coltrane
   module Cli
+    # Interfaces chord functionality with the lib
     class Chord
       def initialize(*chords, on: :text, flavor: 'intervals', notes: nil)
         @chords =
@@ -18,9 +19,13 @@ module Coltrane
         @chords.each do |chord|
           raise ChordNotFoundError unless chord.named?
           desc = "#{chord.name} chord:"
-          Coltrane::Cli::Notes.new(chord.notes, on: on, desc: desc, flavor: flavor)
+          Coltrane::Cli::Notes.new chord.notes, on: on,
+                                                desc: desc,
+                                                flavor: flavor
         end
       end
     end
   end
 end
+
+# rubocop:enable Metrics/MethodLength

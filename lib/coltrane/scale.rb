@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Coltrane
+  # Musical scale creation and manipulation
   class Scale
     extend ClassicScales
     attr_reader :interval_sequence, :tone
@@ -14,7 +15,7 @@ module Coltrane
       elsif !notes.nil?
         ds = NoteSet[*notes].interval_sequence.distances
         new(*ds, tone: notes.first)
-      else raise WrongKeywords, '[*distances, (tone: "C", mode: 1)] || [notes:]'
+      else raise WrongKeywordsError, '[*distances, (tone: "C", mode: 1)] || [notes:]'
       end
     end
 
@@ -41,8 +42,7 @@ module Coltrane
     alias full_name pretty_name
 
     def degree(d)
-      raise WrongDegree, d if d < 1 || d > size
-
+      raise WrongDegreeError, d if d < 1 || d > size
       tone + interval_sequence[d - 1].semitones
     end
 
@@ -53,9 +53,8 @@ module Coltrane
     end
 
     def degree_of_chord(chord)
-      if chords(chord.size).map(&:name).include?(chord.name)
-        degree_of_note(chord.root_note)
-      end
+      return if chords(chord.size).map(&:name).include?(chord.name)
+      degree_of_note(chord.root_note)
     end
 
     def degree_of_note(note)
@@ -63,9 +62,9 @@ module Coltrane
       return note + 1 unless note.nil?
     end
 
-    def &(something)
-      raise HasNoNotes unless something.respond_to?(:notes)
-      notes & something
+    def &(other)
+      raise HasNoNotesError unless other.respond_to?(:notes)
+      notes & other
     end
 
     def include_notes?(arg)
@@ -91,9 +90,7 @@ module Coltrane
 
     def tertians(n = 3)
       degrees.size.times.reduce([]) do |memo, d|
-        ns = NoteSet[
-          *n.times.map { |i| notes[(d + (i * 2)) % size] }
-        ]
+        ns = NoteSet[*Array.new(n) { |i| notes[(d + (i * 2)) % size] } ]
         chord = Chord.new(notes: ns)
         chord.named? ? memo + [chord] : memo
       end
@@ -116,17 +113,11 @@ module Coltrane
     end
 
     def cache_key(extra)
-      [
-        @tone.name,
-        @interval_sequence.intervals_semitones.join,
-        extra
-      ].join('-')
+      [@tone.name, @interval_sequence.intervals_semitones.join, extra].join('-')
     end
 
     def all_chords
-      (3..size).reduce([]) do |memo, s|
-        memo + chords(s)
-      end
+      (3..size).reduce([]) { |memo, s| memo + chords(s) }
     end
 
     def chords(size)

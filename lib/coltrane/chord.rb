@@ -18,13 +18,18 @@ module Coltrane
       elsif !name.nil?
         @root_note, @quality, @notes = parse_from_name(name)
       else
-        raise WrongKeywords, '[notes:] || [root_note:, quality:] || [name:]'
+        raise WrongKeywordsError, '[notes:] || [root_note:, quality:] || [name:]'
       end
     end
 
     def name
       return @notes.names.join('/') unless named?
       "#{root_note.name}#{quality.name}"
+    end
+
+    def pretty_name
+      return @notes.names.join('/') unless named?
+      "#{root_note.pretty_name}#{quality.name}"
     end
 
     def named?
@@ -60,7 +65,7 @@ module Coltrane
     protected
 
     def parse_from_name(name)
-      _, name, quality_name = name.match(/([A-Z]#?)(.*)/).to_a
+      _, name, quality_name = name.match(/([A-Z](?:#|b)?)(.*)/).to_a
       root    = Note[name]
       quality = ChordQuality.new(name: quality_name)
       notes   = quality.notes_for(root)

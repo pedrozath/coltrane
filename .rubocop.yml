@@ -1,0 +1,11 @@
+AllCops:
+  Include:
+    - 'lib/**/*'
+  Exclude:
+    - 'bin/**/*'
+    - '*'
+
+Style/Documentation:
+  Enabled: false
+Metrics/AbcSize:
+  Enabled: false

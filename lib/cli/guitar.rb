@@ -4,6 +4,7 @@ module Coltrane
   module Cli
     SPECIAL_FRETS = [3, 5, 7, 9, 12, 15, 17, 19].freeze
 
+    # Renders notes in a common most popular ukulele scheme
     class Guitar < Representation
       def initialize(notes, flavor, tuning: %w[E A D G B E], frets: 22)
         @notes    = notes
@@ -20,7 +21,7 @@ module Coltrane
       def render_notes
         @tuning.map do |string|
           string_note = Note[string]
-          (@frets + 2).times.map do |i|
+          Array.new(@frets + 2) do |i|
             if i.zero?
               string
             else
@@ -34,7 +35,7 @@ module Coltrane
       end
 
       def render_special_frets
-        (@frets + 1).times.map do |fret|
+        Array.new(@frets + 1) do |fret|
           m = SPECIAL_FRETS.include?(fret) ? fret.to_s.rjust(2, 0.to_s) : '  '
           "#{m}#{'  ' if fret.zero?}"
         end.join(' ')

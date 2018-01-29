@@ -2,6 +2,7 @@
 
 module Coltrane
   module Cli
+    # Renders notes in a common most popular ukulele scheme
     class Ukulele < Guitar
       SPECIAL_FRETS = [5, 7, 9, 12].freeze
 

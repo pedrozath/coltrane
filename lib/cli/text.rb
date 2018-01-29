@@ -2,6 +2,7 @@
 
 module Coltrane
   module Cli
+    # A text representation
     class Text < Representation
       def render
         case @flavor

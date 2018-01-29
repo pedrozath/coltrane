@@ -5,7 +5,7 @@ $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
 require 'core_ext'
 require 'coltrane'
-require 'coltrane-cli'
+require 'cli'
 
 full_color_terminals = %w[iTerm.app]
 safe_mode_terminals = %w[Unsupported]

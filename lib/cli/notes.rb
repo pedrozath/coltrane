@@ -2,9 +2,10 @@
 
 module Coltrane
   module Cli
+    # Interfaces notes outputting functionality with the lib
     class Notes
-      def initialize(notes, on: 'text', desc: 'The notes you supplied:', flavor: 'notes')
-        @desc   = desc
+      def initialize(notes, on: 'text', desc: nil, flavor: 'notes')
+        @desc   = desc || 'The notes you supplied:'
         flavor  = flavor.underscore.to_sym
         on      = on.to_sym
         notes   = Coltrane::NoteSet.new(notes)
