@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Interval do
   it 'cant be negative' do
     expect(Interval.new(-2).semitones).to eq(10)

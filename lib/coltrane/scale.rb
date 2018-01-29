@@ -90,7 +90,7 @@ module Coltrane
 
     def tertians(n = 3)
       degrees.size.times.reduce([]) do |memo, d|
-        ns = NoteSet[*Array.new(n) { |i| notes[(d + (i * 2)) % size] } ]
+        ns = NoteSet[ *Array.new(n) { |i| notes[(d + (i * 2)) % size] } ]
         chord = Chord.new(notes: ns)
         chord.named? ? memo + [chord] : memo
       end

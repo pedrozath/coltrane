@@ -61,9 +61,10 @@ module Coltrane
     end
 
     def from_key(key)
-      scale = key.delete!('m') ? :minor : :major
-      note  = key
-      Scale.public_send(scale.nil? || scale == 'M' ? :major : :minor, note)
+      key_regex = /([A-G][#b]?)([mM]?)/
+      _, note, s = *key.match(key_regex)
+      scale = s == 'm' ? :minor : :major
+      Scale.public_send(scale, note)
     end
 
     # Will output a OpenStruct like the following:

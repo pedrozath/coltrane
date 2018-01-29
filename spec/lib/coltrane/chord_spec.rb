@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Chord do
   it 'can return the chord from notes' do
     expect(Chord.new(notes: %w[C E G]).name).to eq('CM')
@@ -11,6 +13,6 @@ RSpec.describe Chord do
 
   it 'has notes' do
     expect(Chord.new(name: 'A7').notes.names)
-      .to contain_exactly('A','C#','E','G')
+      .to contain_exactly('A', 'C#', 'E', 'G')
   end
 end

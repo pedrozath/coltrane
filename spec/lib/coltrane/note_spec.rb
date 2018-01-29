@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Note do
   describe '#interval' do
     it 'returns an interval to other note' do

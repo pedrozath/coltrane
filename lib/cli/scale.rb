@@ -31,7 +31,7 @@ module Coltrane
             p     = (notes.size.to_f / searched_notes.size) * 100
             l     = p == 100 ? p : (p + 20) * 0.4
             und   = p == 100 ? :underline : nil
-            color = Color::HSL.new(30, p, l/2).html
+            color = Color::HSL.new(30, p, l / 2).html
             output << Paint["#{Note[tone_number].name}(#{notes.size})", color, und]
             output << ' '
           end

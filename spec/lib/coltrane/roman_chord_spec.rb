@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe RomanChord do
   let(:key) { Scale.major('C') }
 
@@ -26,5 +28,4 @@ RSpec.describe RomanChord do
     expect(RomanChord.new(key, 'iii').to_chord.name)
       .to eq('Em')
   end
-
 end
