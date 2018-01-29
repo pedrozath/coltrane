@@ -8,8 +8,8 @@ RSpec.describe Progression do
     ]
   }
 
-  # it 'returns chords' do
-  #   expect(progression.chords)
-  #     .to include(*chords)
-  # end
+  it 'returns chords' do
+    expect(progression.chords)
+      .to include(*chords)
+  end
 end

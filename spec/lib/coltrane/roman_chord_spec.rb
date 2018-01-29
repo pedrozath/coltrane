@@ -11,8 +11,13 @@ RSpec.describe RomanChord do
       .to eq('E')
   end
 
-  it 'can output major chords' do
+  it 'can output major triad' do
     expect(RomanChord.new(key, 'III').to_chord.name)
+      .to eq('EM')
+  end
+
+  it 'can output minor triad' do
+    expect(RomanChord.new(key, 'iii').to_chord.name)
       .to eq('Em')
   end
 

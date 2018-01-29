@@ -58,7 +58,7 @@ puts Coltrane::Scale.having_chord('Cmaj7').scales.map(&:name)
 
 ###Note
 
-Not to be confused with `Pitch`. Notes
+Not to be confused with `Pitch`.
 
 ## Roadmap
 
