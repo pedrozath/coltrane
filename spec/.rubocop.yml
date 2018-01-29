@@ -1,0 +1,10 @@
+inherit_from: ../.rubocop.yml
+
+Metrics/BlockLength:
+  Enabled: false
+Metrics/LineLength:
+  Enabled: false
+Lint/AmbiguousOperator:
+  Enabled: false
+Style/MixinUsage:
+  Enabled: false

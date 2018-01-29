@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe RomanChord do
   let(:key) { Scale.major('C') }
 
@@ -11,9 +13,19 @@ RSpec.describe RomanChord do
       .to eq('E')
   end
 
-  it 'can output major chords' do
+  it 'can output major triad' do
+    pending
     expect(RomanChord.new(key, 'III').to_chord.name)
+      .to eq('EM')
+  end
+
+  it 'can output minor triad' do
+    expect(RomanChord.new(key, 'iii').to_chord.name)
       .to eq('Em')
   end
 
+  it 'can detect if minor' do
+    expect(RomanChord.new(key, 'iii').to_chord.name)
+      .to eq('Em')
+  end
 end

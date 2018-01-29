@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 require 'forwardable'
 require 'facets/multiton'
+require 'core_ext'
 require 'ostruct'
 
 require 'coltrane/version'

@@ -1,13 +1,16 @@
+# frozen_string_literal: true
+
 module Coltrane
+  # It's totally a wip yet.
   module ClassicProgressions
     PROGRESSIONS = {
-      pop:        [:major, [1,5,6,4]],
-      fifties:    [:major, [1,6,4,5]],
-      blues:      [:major, [1,4,1,5,4,1]],
-      jazz:       [:major, [2,5,1]],
-      jazz_minor: [:minor, [2,5,1]],
-      andalusian: [:minor, [1,7,6,5]]
-    }
+      pop:        [:major, [1, 5, 6, 4]],
+      fifties:    [:major, [1, 6, 4, 5]],
+      blues:      [:major, [1, 4, 1, 5, 4, 1]],
+      jazz:       [:major, [2, 5, 1]],
+      jazz_minor: [:minor, [2, 5, 1]],
+      andalusian: [:minor, [1, 7, 6, 5]]
+    }.freeze
 
     def pop(tone)
       scale, degrees = PROGRESSIONS[:pop]

@@ -1,22 +1,24 @@
+# frozen_string_literal: true
+
 require 'spec_helper'
 
 describe 'coltrane' do
   ENV['TERM_PROGRAM'] = 'Unsupported'
 
-  let!(:cmd1) { "coltrane" }
+  let!(:cmd1) { 'coltrane' }
 
   describe 'notes' do
-    let!(:cmd2) { cmd1 + " notes" }
+    let!(:cmd2) { cmd1 + ' notes' }
 
     context 'non-empty notes' do
-      let!(:cmd3) { cmd2 + " C-D-E" }
+      let!(:cmd3) { cmd2 + ' C-D-E' }
       subject { `#{cmd3}` }
 
       it { is_expected.to include('C', 'D') }
       it { is_expected.to_not include('C#') }
 
       context('on guitar') do
-        let!(:cmd4) { cmd3 + " --on guitar" }
+        let!(:cmd4) { cmd3 + ' --on guitar' }
         subject { `#{cmd4}` }
 
         it { is_expected.to include(<<~OUTPUT) }
@@ -100,15 +102,14 @@ describe 'coltrane' do
       let!(:cmd3) { cmd2 + ' Cmaj7' }
       subject { `#{cmd3}` }
 
-      it { is_expected.to include "C E G B" }
+      it { is_expected.to include 'C E G B' }
     end
 
     context('using notes') do
       let!(:cmd3) { cmd2 + ' --notes C-E-G' }
       subject { `#{cmd3}` }
 
-      it { is_expected.to include "CM" }
-
+      it { is_expected.to include 'CM' }
     end
   end
 end

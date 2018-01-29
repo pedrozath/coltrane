@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   # It describes a sequence of intervals
   class IntervalSequence
@@ -22,7 +24,7 @@ module Coltrane
 
     def distances
       intervals_semitones[1..-1].each_with_index.map do |n, i|
-        if i == 0
+        if i.zero?
           n
         elsif i < intervals_semitones.size
           n - intervals_semitones[i]
@@ -45,7 +47,7 @@ module Coltrane
     end
 
     def zero_it
-      self.shift(-intervals.first.semitones)
+      shift(-intervals.first.semitones)
     end
 
     def inversion(index)
@@ -53,11 +55,11 @@ module Coltrane
     end
 
     def next_inversion
-      inversion(index+1)
+      inversion(index + 1)
     end
 
     def previous_inversion
-      inversion(index-1)
+      inversion(index - 1)
     end
 
     def inversions
@@ -66,8 +68,7 @@ module Coltrane
       end
     end
 
-    def quality
-    end
+    def quality; end
 
     def intervals_semitones
       map(&:semitones)

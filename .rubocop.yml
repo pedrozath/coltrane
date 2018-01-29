@@ -1,0 +1,19 @@
+AllCops:
+  Include:
+    - 'lib/**/*'
+  Exclude:
+    - 'bin/**/*'
+    - '*'
+
+Metrics/AbcSize:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Lint/UnneededSplatExpansion:
+  Enabled: false
+Security/MarshalLoad:
+  Enabled: false

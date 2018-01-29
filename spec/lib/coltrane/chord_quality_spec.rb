@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 RSpec.describe ChordQuality do
   let :notes do
-    [ Note['A'], Note['E'], Note['G'], Note['C#'] ]
+    [Note['A'], Note['E'], Note['G'], Note['C#']]
   end
 
   it 'can return quality from notes' do

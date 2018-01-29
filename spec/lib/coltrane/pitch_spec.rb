@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Pitch do
   let(:pitch) { Pitch.new('E2') }
 

@@ -1,5 +1,8 @@
+# frozen_string_literal: true
+
 module Coltrane
   module Cli
+    # It allows rendering notes in an ASCII piano
     class Piano < Representation
       PIANO_TEMPLATE = <<~ASCII
         ┌─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─╥─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─┐
@@ -24,11 +27,11 @@ module Coltrane
 
       private
 
-      def replace_x(line, notes, size, index=0)
-        line.gsub('X'*size).with_index do |match, i|
-          note = notes[i%notes.size]
-          next ' '*size unless @notes.include?(note)
-          Paint[replacer(note)[size == 2 ? 0..2 : index ], 'red']
+      def replace_x(line, notes, size, index = 0)
+        line.gsub('X' * size).with_index do |_match, i|
+          note = notes[i % notes.size]
+          next ' ' * size unless @notes.include?(note)
+          Paint[replacer(note)[size == 2 ? 0..2 : index], 'red']
         end
       end
 
@@ -37,7 +40,7 @@ module Coltrane
         case @flavor
         when :intervals then (@ref_note - note).name
         when :marks then '◼ '
-        when :degrees then @notes.degree(note).to_s.rjust(2,'0')
+        when :degrees then @notes.degree(note).to_s.rjust(2, '0')
         when :notes then note.pretty_name.to_s.ljust(2, "\u266E")
         end
       end
@@ -47,7 +50,7 @@ module Coltrane
       end
 
       def black_notes
-        Coltrane::Scale.pentatonic_major('C#',4).notes
+        Coltrane::Scale.pentatonic_major('C#', 4).notes
       end
     end
   end

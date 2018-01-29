@@ -1,6 +1,8 @@
+# frozen_string_literal: true
+
 require 'mercenary'
 require 'paint'
-require 'chroma'
+require 'color'
 
 require 'cli/errors'
 

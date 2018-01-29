@@ -1,4 +1,5 @@
 
+# frozen_string_literal: true
 # class IntervalSet
 #   def initialize(*intervals)
 #     @intervals = intervals

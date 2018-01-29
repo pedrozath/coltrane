@@ -1,12 +1,10 @@
+# frozen_string_literal: true
+
 RSpec.describe Note do
   describe '#interval' do
     it 'returns an interval to other note' do
       expect(Note['C'].interval_to('D').semitones).to eq(10)
     end
-  end
-
-  it 'can transpose' do
-    expect(Note['C'].transpose_by(2).name).to eq('D')
   end
 
   it 'when summed to intervals it returns the corresponding note' do

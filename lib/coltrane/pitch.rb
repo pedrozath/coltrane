@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   # It describes a pitch, like E4 or Bb5. It's like a note, but it has an octave
   class Pitch
@@ -28,9 +30,8 @@ module Coltrane
       Note[number]
     end
 
-    def +(arg)
-      n = arg.is_a?(Pitch) ? arg.number : arg
-      Pitch.new(number + n)
+    def +(other)
+      Pitch.new(number + (other.is_a?(Pitch) ? other.number : other))
     end
   end
 end
