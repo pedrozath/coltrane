@@ -6,6 +6,9 @@ A musical abacus written in ruby.
 
 More info, story and purpose of the library [here](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
 
+Chat room for discussing the project, answering questions, etc:
+https://gitter.im/coltrane-music/Lobby
+
 ## CLI (Command Line Interface)
 
 ```bash
