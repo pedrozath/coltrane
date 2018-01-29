@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Coltrane
+  # It deals with chords in roman notation
   class RomanChord
     DIGITS = {
       'I'   => 1,
@@ -28,10 +29,10 @@ module Coltrane
     end
 
     def quality
-      ChordQuality.new(name: is_major? ? 'M' : 'm')
+      ChordQuality.new(name: major? ? 'M' : 'm')
     end
 
-    def is_major?
+    def major?
       @roman_numeral[0] =~ /[[:upper]]/
     end
   end

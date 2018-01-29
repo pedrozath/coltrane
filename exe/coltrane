@@ -1,6 +1,8 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
 
+# rubocop:disable Metrics/BlockLength
+
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
 require 'core_ext'
@@ -109,7 +111,7 @@ Mercenary.program(:Coltrane) do |p|
            when 'flavors' then %w[marks notes intervals degrees]
            when 'instruments' then %w[guitar bass ukulele piano text]
            when 'chords', 'chord-qualities' then Coltrane::Qualities::CHORD_QUALITIES.keys.sort.join(' ')
-      end
+           end
     end
   end
 
@@ -149,11 +151,12 @@ Mercenary.program(:Coltrane) do |p|
     c.action do |(*command_path), _options|
       if command_path.empty?
         puts p
-        return
       else
-        puts (command_path.reduce(p) do |memo, key|
-          memo.commands.delete(key.to_sym)
-        end || "\n Sorry, command found.")
+        puts begin
+          command_path.reduce(p) do |memo, key|
+            memo.commands.delete(key.to_sym)
+          end || "\n Sorry, command found."
+        end
       end
     end
   end
@@ -167,3 +170,5 @@ Mercenary.program(:Coltrane) do |p|
 
   p.default_command(:about)
 end
+
+# rubocop:enable Metrics/BlockLength

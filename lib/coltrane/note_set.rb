@@ -26,16 +26,16 @@ module Coltrane
         end
     end
 
-    def &(another)
-      NoteSet[*(notes & another.notes)]
+    def &(other)
+      NoteSet[*(notes & other.notes)]
     end
 
     def degree(note)
       index(note) + 1
     end
 
-    def +(other_noteset)
-      NoteSet[*(notes + other_noteset.notes)]
+    def +(other)
+      NoteSet[*(notes + other.notes)]
     end
 
     def pretty_names

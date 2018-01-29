@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Coltrane
+  # It's totally a wip yet.
   module ClassicProgressions
     PROGRESSIONS = {
       pop:        [:major, [1, 5, 6, 4]],

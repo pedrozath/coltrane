@@ -5,7 +5,15 @@ AllCops:
     - 'bin/**/*'
     - '*'
 
-Style/Documentation:
-  Enabled: false
 Metrics/AbcSize:
+  Enabled: false
+Metrics/ClassLength:
+  Enabled: false
+Metrics/MethodLength:
+  Enabled: false
+Metrics/ModuleLength:
+  Enabled: false
+Lint/UnneededSplatExpansion:
+  Enabled: false
+Security/MarshalLoad:
   Enabled: false

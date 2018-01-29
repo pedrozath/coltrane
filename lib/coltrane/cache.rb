@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
 module Coltrane
+  # A simple caching based on serializing objects into files
+  # maybe this should changed to save in a single json file
   class Cache
     class << self
       def find_or_record(key, &block)

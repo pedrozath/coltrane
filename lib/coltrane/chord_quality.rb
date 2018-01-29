@@ -8,12 +8,9 @@ module Coltrane
 
     def initialize(name: nil, notes: nil)
       if !name.nil?
-        if (intervals = CHORD_QUALITIES[name])
-          @name = name
-          super(intervals: intervals)
-        else
-          raise ChordNotFoundError
-        end
+        raise ChordNotFoundError unless (intervals = CHORD_QUALITIES[name])
+        @name = name
+        super(intervals: intervals)
       elsif !notes.nil?
         super(notes: notes)
         @name = CHORD_QUALITIES.key(intervals_semitones)

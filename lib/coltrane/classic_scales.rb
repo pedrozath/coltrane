@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Coltrane
+  # This module deals with well known scales on music
   module ClassicScales
     SCALES = {
       'Major'            => [2, 2, 1, 2, 2, 2, 1],
@@ -19,19 +20,9 @@ module Coltrane
       'Major' => %w[Ionian Dorian Phrygian Lydian Mixolydian Aeolian Locrian]
     }.freeze
 
-    private
-
-    # A little helper to build method names
-    # just make the code more clear
-    def self.methodize(string)
-      string.downcase.tr(' ', '_')
-    end
-
-    public
-
     # Creates factories for scales
     SCALES.each do |name, distances|
-      define_method methodize(name) do |tone = 'C', mode = 1|
+      define_method name.underscore do |tone = 'C', mode = 1|
         new(*distances, tone: tone, mode: mode, name: name)
       end
     end
@@ -39,10 +30,9 @@ module Coltrane
     # Creates factories for Greek Modes and possibly others
     MODES.each do |scale, modes|
       modes.each_with_index do |mode, index|
-        scale_method = methodize(scale)
         mode_name = mode
         mode_n = index + 1
-        define_method methodize(mode) do |tone = 'C'|
+        define_method mode.underscore do |tone = 'C'|
           new(*SCALES[scale], tone: tone, mode: mode_n, name: mode_name)
         end
       end
@@ -84,12 +74,9 @@ module Coltrane
           Note.all.each.map do |tone|
             scale = new(*intervals, tone: tone, name: scale)
             output[:results][name] ||= {}
-            if output[:results][name].key?(tone.number)
-              next
-            else
-              output[:scales] << scale if scale.include?(notes)
-              output[:results][name][tone.number] = scale.notes & notes
-            end
+            next if output[:results][name].key?(tone.number)
+            output[:scales] << scale if scale.include?(notes)
+            output[:results][name][tone.number] = scale.notes & notes
           end
         end
       )

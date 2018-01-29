@@ -15,7 +15,8 @@ module Coltrane
       elsif !notes.nil?
         ds = NoteSet[*notes].interval_sequence.distances
         new(*ds, tone: notes.first)
-      else raise WrongKeywordsError, '[*distances, (tone: "C", mode: 1)] || [notes:]'
+      else
+        raise WrongKeywordsError, '[*distances, tone: "C", mode: 1] || [notes:]'
       end
     end
 

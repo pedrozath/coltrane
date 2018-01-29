@@ -18,7 +18,8 @@ module Coltrane
       elsif !name.nil?
         @root_note, @quality, @notes = parse_from_name(name)
       else
-        raise WrongKeywordsError, '[notes:] || [root_note:, quality:] || [name:]'
+        raise WrongKeywordsError,
+              '[notes:] || [root_note:, quality:] || [name:]'
       end
     end
 

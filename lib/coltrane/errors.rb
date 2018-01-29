@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+# rubocop:disable Style/Documentation
+
 module Coltrane
   class ColtraneError < StandardError
     def initialize(msg)
@@ -55,3 +57,5 @@ module Coltrane
     end
   end
 end
+
+# rubocop:enable Style/Documentation

@@ -2,6 +2,7 @@
 
 module Coltrane
   module Cli
+    # Interfaces commands with the scales functionality
     class Scale
       def self.parse(str)
         *scale_name, tone = str.split('-')
@@ -14,7 +15,9 @@ module Coltrane
           notes = NoteSet[*notes]
         elsif chords.any?
           puts "\nSearching for scales containing #{chords.join(', ')}:\n\n"
-          notes = chords.reduce(NoteSet[]) { |memo, c| memo + Coltrane::Chord.new(name: c).notes }
+          notes = chords.reduce(NoteSet[]) do |memo, c|
+            memo + Coltrane::Chord.new(name: c).notes
+          end
         else raise BadFindScales
         end
         render_search(notes)
@@ -40,7 +43,7 @@ module Coltrane
         puts output.join
       end
 
-      def initialize(scale, on: :text, flavor: 'degrees', notes: [], chords: [])
+      def initialize(scale, on: :text, flavor: 'degrees')
         desc = "This is the #{scale.tone.name} #{scale.name} scale:"
         Coltrane::Cli::Notes.new(scale.notes, on: on, desc: desc, flavor: flavor)
       end

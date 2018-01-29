@@ -30,9 +30,8 @@ module Coltrane
       Note[number]
     end
 
-    def +(arg)
-      n = arg.is_a?(Pitch) ? arg.number : arg
-      Pitch.new(number + n)
+    def +(other)
+      Pitch.new(number + (other.is_a?(Pitch) ? other.number : other))
     end
   end
 end

@@ -2,6 +2,7 @@
 
 module Coltrane
   module Cli
+    # It manages notes representations, most of times instruments
     class Representation
       ACCEPTED_FLAVORS = %i[marks notes intervals degrees].freeze
 
@@ -16,13 +17,10 @@ module Coltrane
                when :ukelele then :ukulele
                when :bass then :bass_guitar
                else type
-        end
+               end
 
-        if (the_class = @@types[type])
-          the_class.new(notes, flavor)
-        else
-          raise WrongRepresentationTypeError, type
-        end
+        raise(WrongRepresentationTypeError, type) unless @@types.include?(type)
+        @@types[type].new(notes, flavor)
       end
 
       def initialize(notes, flavor)

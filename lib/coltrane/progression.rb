@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 module Coltrane
+  # Allows creation of chord progressions
   class Progression
     extend ClassicProgressions
 

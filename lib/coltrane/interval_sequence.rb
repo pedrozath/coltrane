@@ -24,7 +24,7 @@ module Coltrane
 
     def distances
       intervals_semitones[1..-1].each_with_index.map do |n, i|
-        if i == 0
+        if i.zero?
           n
         elsif i < intervals_semitones.size
           n - intervals_semitones[i]

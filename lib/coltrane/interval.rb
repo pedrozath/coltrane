@@ -25,17 +25,17 @@ module Coltrane
                     when Interval then arg.semitones
                     when String   then NAMES.index(arg)
                     when Numeric  then arg
-                   end) % 12
+                    end) % 12
     end
 
     def name
       NAMES[semitones]
     end
 
-    def +(x)
-      case x
-      when Numeric then Interval.new(semitones + x)
-      when Interval then Interval.new(semitones + x.semitones)
+    def +(other)
+      case other
+      when Numeric then Interval.new(semitones + other)
+      when Interval then Interval.new(semitones + other.semitones)
       end
     end
   end

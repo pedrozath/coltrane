@@ -2,6 +2,7 @@
 
 module Coltrane
   module Cli
+    # It allows rendering notes in an ASCII piano
     class Piano < Representation
       PIANO_TEMPLATE = <<~ASCII
         ┌─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─╥─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─┐
