@@ -1,39 +1,52 @@
 # frozen_string_literal: true
 
 module Coltrane
+  attr_reader :degree, :quality
+
   # It deals with chords in roman notation
   class RomanChord
-    DIGITS = {
-      'I'   => 1,
-      'V'   => 5
-    }.freeze
+    DIGITS = %w[I II III IV V VI VII].freeze
+    NOTATION_REGEX = %r{
+      (?<degree>[ivIV]*)
+      (?<quality>.*)
+    }x
 
-    def initialize(scale, roman_numeral)
-      @scale = scale
-      @roman_numeral = roman_numeral
+    def initialize(scale, notation)
+      @scale    = scale
+      @notation = notation.match(NOTATION_REGEX).named_captures
     end
 
-    def to_chord
+    def degree
+      DIGITS.index(@notation['degree'].upcase) + 1
+    end
+
+    def quality_name
+      [
+        minor_notation,
+        @notation['quality'].gsub('o', 'dim').gsub('ø', 'm7b5')
+      ].join
+    end
+
+    def minor_notation
+      return 'm' if !@notation['quality'].match?((/dim|m7b5/)) && !upcase?
+    end
+
+    def upcase?
+      !!(@notation['degree'][0].match /[[:upper:]]/)
+    end
+
+    def chord
       Chord.new root_note: root_note,
                 quality: quality
     end
 
-    def root_note
-      @scale[degree]
-    end
-
-    def degree
-      @roman_numeral.split('').reduce(0) do |memo, r|
-        memo + (DIGITS[r] || 0) + (DIGITS[r.swapcase] || 0)
-      end
-    end
-
     def quality
-      ChordQuality.new(name: major? ? 'M' : 'm')
+      q = quality_name
+      ChordQuality.new(name: (q.size.zero? ? 'M' : q))
     end
 
-    def major?
-      @roman_numeral[0] =~ /[[:upper]]/
+    def root_note
+      @scale[@degree]
     end
   end
 end

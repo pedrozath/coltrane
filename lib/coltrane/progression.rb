@@ -7,13 +7,9 @@ module Coltrane
 
     attr_reader :scale
 
-    def initialize(_roman_notation, key: nil, scale: nil)
+    def initialize(roman_notation, key: nil, scale: nil)
       @scale = Scale.from_key(key) unless key.nil?
     end
-
-    # def chords
-
-    # end
 
     private
 
