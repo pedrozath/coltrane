@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby
+# frozen_string_literal: true
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
@@ -71,9 +72,9 @@ Mercenary.program(:Coltrane) do |p|
     c.option :pentads,  '--pentads',       'Outputs pentad chords from the scale'
     c.option :tertians, '--tertians SIZE', 'Outputs all tertian chords from the given size from the scale'
     c.option :chords,   '--chords [SIZE]', 'Outputs all chords from given size from the scale. Leave size empty to retrieve all'
-    c.action do |(scale_str), flavor:'degrees', on:'text', **options|
+    c.action do |(scale_str), flavor: 'degrees', on: 'text', **options|
       scale = Coltrane::Cli::Scale.parse(scale_str)
-      keyword_args = {flavor: flavor, on: on }
+      keyword_args = { flavor: flavor, on: on }
       if options.include?(:triads)
         chords = scale.triads
         Coltrane::Cli::Chord.new(*chords, **keyword_args)
@@ -87,11 +88,11 @@ Mercenary.program(:Coltrane) do |p|
         chords = scale.tertians(options[:tertians].to_i)
         Coltrane::Cli::Chord.new(*chords, **keyword_args)
       elsif options.include?(:chords)
-        if options[:chords].nil?
-          chords = scale.all_chords
-        else
-          chords = scale.chords(options[:chords])
-        end
+        chords = if options[:chords].nil?
+                   scale.all_chords
+                 else
+                   scale.chords(options[:chords])
+                 end
         Coltrane::Cli::Chord.new(*chords, **keyword_args)
       else
         Coltrane::Cli::Scale.new(scale, **keyword_args)
@@ -104,10 +105,10 @@ Mercenary.program(:Coltrane) do |p|
     list.description 'List information.'
     list.action do |(arg)|
       puts case arg
-        when 'scales' then Coltrane::Scale.known_scales
-        when 'flavors' then %w[marks notes intervals degrees]
-        when 'instruments' then %w[guitar bass ukulele piano text]
-        when 'chords', 'chord-qualities' then Coltrane::Qualities::CHORD_QUALITIES.keys.sort.join(' ')
+           when 'scales' then Coltrane::Scale.known_scales
+           when 'flavors' then %w[marks notes intervals degrees]
+           when 'instruments' then %w[guitar bass ukulele piano text]
+           when 'chords', 'chord-qualities' then Coltrane::Qualities::CHORD_QUALITIES.keys.sort.join(' ')
       end
     end
   end
@@ -117,9 +118,9 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'finds scales with the provided --notes or --chord'
     c.option :notes, '--notes C-D-E', 'Find scales with those notes'
     c.option :chords, '--chords Cmaj7-D11', 'find scales with those chords'
-    c.action do |(arg), options|
-      options[:notes]  = "#{options[:notes]}".split('-')
-      options[:chords] = "#{options[:chords]}".split('-')
+    c.action do |(_arg), options|
+      options[:notes]  = (options[:notes]).to_s.split('-')
+      options[:chords] = (options[:chords]).to_s.split('-')
       Coltrane::Cli::Scale.find(**options)
     end
   end
@@ -145,7 +146,7 @@ Mercenary.program(:Coltrane) do |p|
   p.command(:help) do |c|
     c.description 'May give you some help.'
     c.syntax 'help <command> [subcommand, sub-subcommand, ...]'
-    c.action do |(*command_path), options|
+    c.action do |(*command_path), _options|
       if command_path.empty?
         puts p
         return

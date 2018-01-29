@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   module Cli
     class Chord
@@ -10,7 +12,7 @@ module Coltrane
               chords
             end
           elsif !notes.nil?
-             [Coltrane::Chord.new(notes: notes)]
+            [Coltrane::Chord.new(notes: notes)]
           end
 
         @chords.each do |chord|

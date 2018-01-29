@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   # It describes a set of notes
   class NoteSet
@@ -8,8 +10,8 @@ module Coltrane
 
     attr_reader :notes
 
-    alias_method :root, :first
-    alias_method :all, :notes
+    alias root first
+    alias all notes
 
     def self.[](*notes)
       new(notes)
@@ -19,8 +21,8 @@ module Coltrane
       @notes =
         case arg
         when NoteSet then arg.notes
-        when Array   then arg.map {|n| n.is_a?(Note) ? n : Note[n] }
-        else raise InvalidNotes.new(arg)
+        when Array   then arg.map { |n| n.is_a?(Note) ? n : Note[n] }
+        else raise InvalidNotes, arg
         end
     end
 
@@ -29,7 +31,7 @@ module Coltrane
     end
 
     def degree(note)
-      index(note)+1
+      index(note) + 1
     end
 
     def +(other_noteset)

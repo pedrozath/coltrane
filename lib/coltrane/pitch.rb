@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   # It describes a pitch, like E4 or Bb5. It's like a note, but it has an octave
   class Pitch

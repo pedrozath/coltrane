@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   class ColtraneError < StandardError
     def initialize(msg)
@@ -6,7 +8,7 @@ module Coltrane
   end
 
   class BadConstructor < ColtraneError
-    def initialize(msg=nil)
+    def initialize(msg = nil)
       super "Bad constructor. #{msg}"
     end
   end
@@ -47,7 +49,7 @@ module Coltrane
       super "The chord you provided wasn't found. "\
             "If you're sure this chord exists, "\
             "would you mind to suggest it's inclusion here: "\
-            "https://github.com/pedrozath/coltrane/issues "\
+            'https://github.com/pedrozath/coltrane/issues '\
             "\n\nA tip tho: always include the letter M for major"
     end
   end

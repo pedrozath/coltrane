@@ -1,18 +1,20 @@
+# frozen_string_literal: true
+
 module Coltrane
   class Scale
     extend ClassicScales
     attr_reader :interval_sequence, :tone
 
     def initialize(*distances, tone: 'C', mode: 1, name: nil, notes: nil)
-      @name                = name
+      @name = name
       if !distances.nil? && !tone.nil?
         @tone              = Note[tone]
-        distances          = distances.rotate(mode-1)
+        distances          = distances.rotate(mode - 1)
         @interval_sequence = IntervalSequence.new(distances: distances)
       elsif !notes.nil?
         ds = NoteSet[*notes].interval_sequence.distances
-        self.new(*ds, tone: notes.first)
-      else raise WrongKeywords.new('[*distances, (tone: "C", mode: 1)] || [notes:]')
+        new(*ds, tone: notes.first)
+      else raise WrongKeywords, '[*distances, (tone: "C", mode: 1)] || [notes:]'
       end
     end
 
@@ -22,7 +24,7 @@ module Coltrane
 
     def name
       @name = begin
-        is = self.interval_sequence.distances
+        is = interval_sequence.distances
         (0...is.size).each do |i|
           if (scale_name = Coltrane::ClassicScales::SCALES.key(is.rotate(i)))
             return scale_name
@@ -36,17 +38,15 @@ module Coltrane
       "#{tone.name} #{name}"
     end
 
-    alias_method :full_name, :pretty_name
+    alias full_name pretty_name
 
     def degree(d)
-      if d < 1 || d > size
-        raise WrongDegree.new(d)
-      end
+      raise WrongDegree, d if d < 1 || d > size
 
       tone + interval_sequence[d - 1].semitones
     end
 
-    alias_method :[], :degree
+    alias [] degree
 
     def degrees
       (1..size)
@@ -73,26 +73,26 @@ module Coltrane
       (self & noteset).size == noteset.size
     end
 
-    alias_method :include?, :include_notes?
+    alias include? include_notes?
 
     def notes
-      Coltrane::Cache.find_or_record(cache_key("notes")) do
+      Coltrane::Cache.find_or_record(cache_key('notes')) do
         NoteSet[*degrees.map { |d| degree(d) }]
       end
     end
 
     def interval(i)
-      interval_sequence[(i-1) % size]
+      interval_sequence[(i - 1) % size]
     end
 
     def size
       interval_sequence.size
     end
 
-    def tertians(n=3)
+    def tertians(n = 3)
       degrees.size.times.reduce([]) do |memo, d|
         ns = NoteSet[
-          *n.times.map { |i| notes[(d + (i*2)) % (size)]}
+          *n.times.map { |i| notes[(d + (i * 2)) % size] }
         ]
         chord = Chord.new(notes: ns)
         chord.named? ? memo + [chord] : memo
@@ -118,7 +118,7 @@ module Coltrane
     def cache_key(extra)
       [
         @tone.name,
-        @interval_sequence.intervals_semitones.join(),
+        @interval_sequence.intervals_semitones.join,
         extra
       ].join('-')
     end

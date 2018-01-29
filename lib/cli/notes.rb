@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   module Cli
     class Notes
@@ -11,7 +13,7 @@ module Coltrane
       end
 
       def render
-        puts "\n"+[@desc, @representation.render].join("\n"*2)
+        puts "\n" + [@desc, @representation.render].join("\n" * 2)
       end
     end
   end

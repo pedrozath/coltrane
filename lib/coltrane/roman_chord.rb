@@ -1,9 +1,11 @@
+# frozen_string_literal: true
+
 module Coltrane
   class RomanChord
     DIGITS = {
       'I'   => 1,
-      'V'   => 5,
-    }
+      'V'   => 5
+    }.freeze
 
     def initialize(scale, roman_numeral)
       @scale = scale
