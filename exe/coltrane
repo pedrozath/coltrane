@@ -24,7 +24,7 @@ Mercenary.program(:Coltrane) do |p|
     A music querying interface
     by Pedro Maciel (pedro@pedromaciel.com)
 
-    [ check the repo for more details (github.com/pedrozath/coltrane) ]
+    Check the chat room for project discussion/help: https://gitter.im/coltrane-music/Lobby
   DESC
   p.syntax 'coltrane <subcommand> [options]'
 
