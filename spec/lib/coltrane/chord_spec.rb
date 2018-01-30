@@ -7,7 +7,7 @@ RSpec.describe Chord do
 
   it 'can return a chord from root_note and quality' do
     expect(Chord.new(root_note: Note['C'],
-                     quality: ChordQuality.new(name: 'M')).names)
+                     quality: ChordQuality.new(name: 'M')).notes.names)
       .to eq(%w[C E G])
   end
 

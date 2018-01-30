@@ -2,7 +2,7 @@
 
 module Coltrane
   # It describe a chord
-  class Chord < NoteSet
+  class Chord
     attr_reader :root_note, :quality, :notes
 
     def initialize(notes: nil, root_note: nil, quality: nil, name: nil)
