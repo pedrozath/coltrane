@@ -11,12 +11,24 @@ https://gitter.im/coltrane-music/Lobby
 
 ## CLI (Command Line Interface)
 
+### Installation
+
+#### Compiled binary
+
+There's an experimental compiled version you can [download here](https://raw.githubusercontent.com/pedrozath/coltrane/master/dist/coltrane). It has been tested only macOS High Sierra so far, but it should work on Linux and Windows as well.
+
+macOS & Linux: You probably will need `chmod +x coltrane` before running it.
+Windows users: Please add the `.exe` extension to it before running it (via command prompt).
+
+#### Ruby command
+
 ```bash
 $ gem install coltrane
 ```
 
-When you install the gem on your system, you automatically gain access to the
-CLI.
+Once you install the gem the CLI is instaled in your system and it's ready to be used.
+
+### Usage
 
 It allows you to query for notes and chords and display them on your favorite instrument. No sheet music reading skills needed. It also allows you to find scales with a chord and find chords shared between two scales (that is actually the main goal when I did this project).
 
