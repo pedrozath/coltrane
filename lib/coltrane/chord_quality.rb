@@ -8,7 +8,6 @@ module Coltrane
 
     def initialize(name: nil, notes: nil)
       if !name.nil?
-        binding.pry unless (intervals = CHORD_QUALITIES[name])
         raise ChordNotFoundError unless (intervals = CHORD_QUALITIES[name])
         @name = name
         super(intervals: intervals)

@@ -124,13 +124,16 @@ module Coltrane
     def chords(size)
       Coltrane::Cache.find_or_record(cache_key("chords-#{size}")) do
         included_names = []
-        notes.permutation(size).reduce([]) do |memo, ns|
-          chord = Chord.new(notes: ns)
-          if chord.named? && !included_names.include?(chord.name)
-            included_names << chord.name
-            memo + [chord]
-          else
-            memo
+        scale_rotations = interval_sequence.inversions.map(&:intervals_semitones)
+        ChordQuality::CHORD_QUALITIES.reduce([]) do |memo1, (qname, qintervals)|
+          next memo1 if qintervals.size != size
+          memo1 + scale_rotations.each_with_index.reduce([]) do |memo2, (rot, index)|
+            if (rot & qintervals).size == size
+              memo2 + [ Chord.new(root_note: degree(index+1),
+                                  quality: ChordQuality.new(name: qname)) ]
+            else
+              memo2
+            end
           end
         end
       end

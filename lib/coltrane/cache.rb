@@ -6,11 +6,19 @@ module Coltrane
   class Cache
     class << self
       def find_or_record(key, &block)
-        unless (cached = fetch(key))
+        if @disabled || !(cached = fetch(key))
           cached = yield block
           record(key, cached)
         end
         cached
+      end
+
+      def disable
+        @disabled = true
+      end
+
+      def enable
+        @disabled = false
       end
 
       private

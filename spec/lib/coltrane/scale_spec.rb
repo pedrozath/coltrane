@@ -94,6 +94,24 @@ RSpec.describe Scale do
     expect(scale.degree(2).name).to eq('D')
   end
 
+  it 'can return you all possible named chords for a scale' do
+    Cache.disable
+    expect(scale.all_chords.map(&:name))
+      .to contain_exactly *%w[
+        CMsus2 CM CMsus4 DMsus2 Dm DMsus4 Em#5 Em EMsus4 FMsus2 FM
+        FMb5 GMsus4 GMsus2 GM G7ndim5 Am Am#5 AMsus4 AMsus2 Bdim Bm#5
+        CMadd9 Csus24 CM6 CM7 CM7sus4 D4 Dm7 D7sus4 Dmadd9 Dsus24 Dmadd4
+        Em7#5 E7#5sus4 Emb6b9 E4 Em7 E7sus4 Emadd4 FM6 FM7 FMadd9 FM7b5
+        G7sus4 Gsus24 GM6 G7 GMadd9 G9ndim5 Amadd4 A4 Am7 Amadd9 Am7#5
+        A7sus4 Asus24 A7#5sus4 Bmb6b9 B4 Bm7b5 Bm7#5 B7#5sus4 CM6/9 CM9
+        CM9sus4 Dm9 D11 Dm7add11 Dm6/9 Dm6 E11b9 Em7add11 FM6/9 FM6#11
+        FM9 FM7#11 FM9b5 G11 G7add6 GM6/9 G9 G13ndim5 Am7add11 Am9 Am9#5
+        A11 CM13 Dm11 D13sus4 E7sus4b9b13 FM13 FM6/9#11 FM9#11 G13sus4 G13
+        Am11 Am11#5 Dm13 FM13#11 A9sus4 CM7add13 Cmaj7 D9sus4 E7sus4b9
+        F6/9#11 FM7add13 Fmaj7 G9sus4
+      ]
+  end
+
   it 'can return notes from the scale' do
     expect(scale.notes.names).to include('C', 'D', 'E', 'F', 'G', 'A', 'B')
     expect(scale.notes.names).to_not include('C#', 'D#', 'F#', 'G#', 'A#')
