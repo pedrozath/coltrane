@@ -13,7 +13,8 @@ module Coltrane
       'Pentatonic Minor' => [3, 2, 2, 3, 2],
       'Blues Minor'      => [3, 2, 1, 1, 3, 2],
       'Whole Tone'       => [2, 2, 2, 2, 2, 2],
-      'Flamenco'         => [1, 3, 1, 2, 1, 2, 2]
+      'Flamenco'         => [1, 3, 1, 2, 1, 2, 2],
+      'Chromatic'        => [1]*12
     }.freeze
 
     MODES = {
