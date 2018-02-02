@@ -11,10 +11,8 @@ module Coltrane
       @scale = Scale.from_key(key) unless key.nil?
     end
 
-    private
+    def chords
 
-    def chord_indexes
-      scale.degrees.map { |d| d - 1 }
     end
   end
 end

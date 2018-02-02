@@ -18,7 +18,7 @@ module Coltrane
 
     class BadFindScales < ColtraneCliError
       def initialize(msg = nil)
-        super msg || 'Provide --notes or --chords. Ex: `coltrane find-scale --notes C E G`.'
+        super msg || 'Provide --notes or --chords. Ex: `coltrane find-scale --notes C-E-G`.'
       end
     end
 

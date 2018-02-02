@@ -77,13 +77,20 @@ module Coltrane
 
     def -(other)
       case other
-      when Numeric then Note.new(other - number)
+      when Numeric then Note[number - other]
       when Note    then Interval.new(other.number - number)
       end
     end
 
     def interval_to(note_name)
       Note[note_name] - self
+    end
+
+    def enharmonic?(other)
+      case other
+      when String then number == Note[other].number
+      when Note then number == other.number
+      end
     end
   end
 end

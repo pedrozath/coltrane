@@ -7,23 +7,29 @@ module Coltrane
   class RomanChord
     DIGITS = %w[I II III IV V VI VII].freeze
     NOTATION_REGEX = %r{
-      (?<degree>[ivIV]*)
+      (?<degree>b?[ivIV]*)
       (?<quality>.*)
     }x
 
     def initialize(scale, notation)
       @scale    = scale
       @notation = notation.match(NOTATION_REGEX).named_captures
+      @notation['quality'] = @notation['quality']
+        .gsub('o', 'dim')
+        .gsub('ø', 'm7b5')
     end
 
     def degree
-      DIGITS.index(@notation['degree'].upcase) + 1
+      d      = @notation['degree']
+      @flats = d.count('b')
+      d      = d.delete('b')
+      @degree ||= DIGITS.index(d.upcase) + 1
     end
 
     def quality_name
       [
         minor_notation,
-        @notation['quality'].gsub('o', 'dim').gsub('ø', 'm7b5')
+        @notation['quality']
       ].join
     end
 
@@ -46,7 +52,8 @@ module Coltrane
     end
 
     def root_note
-      @scale[@degree]
+      binding.pry if @scale[degree] - @flats == Note['A#']
+      @scale[degree] - @flats
     end
   end
 end
