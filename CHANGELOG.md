@@ -6,14 +6,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
-
-### Fixes
 - Correct Flat/Sharp on scales
-
-### Adds
-- Progressions
 - Refactor notes and add pitch frequencies, pitch classes
 
+
+## [1.1.25]
+
+### Removes
+- Caching, as after some refactoring it made no sense anymore
+
+### Adds
+- Progressions and Roman Chords
+- Adds Progression command to the CLI
 
 ## [1.1.24]
 

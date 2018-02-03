@@ -3,7 +3,7 @@
 module Coltrane
   attr_reader :degree, :quality
 
-  # It deals with chords in roman notation
+  # This class deals with chords in roman notation. Ex: IVº.
   class RomanChord
     DIGITS = %w[I II III IV V VI VII].freeze
     NOTATION_REGEX = %r{
@@ -11,12 +11,22 @@ module Coltrane
       (?<quality>.*)
     }x
 
-    def initialize(scale, notation)
-      @scale    = scale
-      @notation = notation.match(NOTATION_REGEX).named_captures
-      @notation['quality'] = @notation['quality']
-        .gsub('o', 'dim')
-        .gsub('ø', 'm7b5')
+    NOTATION_SUBSTITUTIONS = [
+      %w[º dim],
+      %w[o dim],
+      %w[ø m7b5]
+    ]
+
+    def initialize(notation, key: nil, scale: nil)
+      @scale   = scale || Scale.from_key(key)
+      notation = notation.match(NOTATION_REGEX).named_captures
+      notation['quality'] =
+        NOTATION_SUBSTITUTIONS.reduce(notation['quality']) do |memo, subs|
+          break memo if memo.empty?
+          memo.gsub(*subs)
+        end
+
+      @notation = notation
     end
 
     def degree

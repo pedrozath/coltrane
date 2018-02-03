@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    coltrane (1.0.23)
+    coltrane (1.0.25)
       color (~> 1.8)
       facets (~> 3.1)
       mercenary (~> 0.3)

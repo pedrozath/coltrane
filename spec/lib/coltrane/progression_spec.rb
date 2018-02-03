@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 
 RSpec.describe Progression do
-  let(:progression) { Progression.new('I-V-vi-VI', key: 'A') }
+  let(:progression) { Progression.new('I-IV-vi-V', key: 'A') }
 
   it 'returns chords' do
-    pending
-    expect(progression.chords)
-      .to include(*chords)
+    expect(progression.chords.map(&:name))
+      .to contain_exactly(*%w[AM DM F#m EM])
   end
 end
