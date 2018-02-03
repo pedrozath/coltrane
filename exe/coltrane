@@ -102,6 +102,17 @@ Mercenary.program(:Coltrane) do |p|
     end
   end
 
+  p.command(:progression) do |c|
+    c.syntax 'progression <roman numeral notation> in <key> [--on <instrument>]'
+    c.description 'Gives you chords of a progression in a key. Ex: coltrane progression I-IV-iv-V in Am --on guitar'
+    c.option(*@instrument_option)
+    c.option(*@flavor_option)
+    c.action do |(notation, _, key), on: 'text', flavor: 'notes'|
+      chords = Coltrane::Progression.new(notation, key: key).chords
+      Coltrane::Cli::Chord.new(*chords, on: on, flavor: flavor)
+    end
+  end
+
   p.command(:list) do |list|
     list.syntax 'list [scales, flavors, instruments (used in --on options), chord-qualities]'
     list.description 'List information.'

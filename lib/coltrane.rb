@@ -7,10 +7,6 @@ require 'ostruct'
 
 require 'coltrane/version'
 require 'coltrane/errors'
-
-require 'coltrane/cache'
-# Coltrane::Cache.disable
-
 require 'coltrane/cadence'
 
 require 'coltrane/note'

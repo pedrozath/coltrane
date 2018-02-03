@@ -95,7 +95,6 @@ RSpec.describe Scale do
   end
 
   it 'can return you all possible named chords for a scale' do
-    Cache.disable
     expect(scale.all_chords.map(&:name))
       .to contain_exactly *%w[
         CMsus2 CM CMsus4 DMsus2 Dm DMsus4 Em#5 Em EMsus4 FMsus2 FM

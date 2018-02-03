@@ -21,14 +21,7 @@ describe 'coltrane' do
         let!(:cmd4) { cmd3 + ' --on guitar' }
         subject { `#{cmd4}` }
 
-        it { is_expected.to include(<<~OUTPUT) }
-          E E♮ | -- -- -- -- -- -- -- C♮ -- D♮ -- E♮ -- -- -- -- -- -- -- C♮ -- D♮
-          B -- | C♮ -- D♮ -- E♮ -- -- -- -- -- -- -- C♮ -- D♮ -- E♮ -- -- -- -- --
-          G -- | -- -- -- -- C♮ -- D♮ -- E♮ -- -- -- -- -- -- -- C♮ -- D♮ -- E♮ --
-          D D♮ | -- E♮ -- -- -- -- -- -- -- C♮ -- D♮ -- E♮ -- -- -- -- -- -- -- C♮
-          A -- | -- -- C♮ -- D♮ -- E♮ -- -- -- -- -- -- -- C♮ -- D♮ -- E♮ -- -- --
-          E E♮ | -- -- -- -- -- -- -- C♮ -- D♮ -- E♮ -- -- -- -- -- -- -- C♮ -- D♮
-        OUTPUT
+        it { is_expected.to_not include('Error') }
       end
     end
   end
