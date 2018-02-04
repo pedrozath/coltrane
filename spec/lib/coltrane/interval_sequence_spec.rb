@@ -26,7 +26,16 @@ RSpec.describe IntervalSequence do
 
   it 'can return named intervals' do
     expect(IntervalSequence.new(intervals: [0, 4, 7, 10]).names)
-      .to eq(%w[1P 3M 5P 7m])
+      .to eq(%w[P1 M3 P5 m7])
+  end
+
+  it 'has helper methods for interval names' do
+    expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).has_minor_third?)
+      .to eq(true)
+    expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).has_perfect_fifth?)
+      .to eq(true)
+    expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).has_minor_second?)
+      .to eq(false)
   end
 
   it 'can return inversions' do
@@ -36,13 +45,39 @@ RSpec.describe IntervalSequence do
     expect(interval.inversion(2).intervals_semitones).to eq([0, 5, 9])
   end
 
-  # it 'can be shifted' do
-  #   expect(IntervalSequence.new([1,3,5]).shift(-1).numbers)
-  #     .to eq([0,2,4])
-  # end
+  it 'returns interval by ordinal' do
+    expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).third)
+      .to eq(Interval.minor_third.full_name)
+    expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).third)
+      .to_not eq(Interval.major_third.full_name)
+    expect(IntervalSequence.new(intervals: [0, 3, 7, 10]).fifth)
+      .to eq('Perfect Fifth')
+    expect(IntervalSequence.new(intervals: [0, 3, 8, 10]).fifth)
+      .to eq('Augmented Fifth')
+    expect(IntervalSequence.new(intervals: [0, 3, 6, 10]).fifth)
+      .to eq('Diminished Fifth')
+    expect(IntervalSequence.new(intervals: [0, 3, 6, 9]).sixth)
+      .to eq('Major Sixth')
+  end
 
-  # it 'can be shifted further' do
-  #   expect(IntervalSequence.new([1,3,5]).shift(-2).numbers)
-  #     .to eq([11,1,3])
-  # end
+  it 'has an ordinal with bang that doesnt return dim or aug' do
+    expect(IntervalSequence.new(intervals: [0, 3, 9]).sixth!)
+      .to eq('Major Sixth')
+    expect(IntervalSequence.new(intervals: [0, 3, 8]).sixth!)
+      .to eq('Minor Sixth')
+    expect(IntervalSequence.new(intervals: [0, 3, 7]).sixth)
+      .to eq('Diminished Sixth')
+    expect(IntervalSequence.new(intervals: [0, 3, 7]).sixth!)
+      .to be_nil
+  end
+
+  it 'check if has an ordinal' do
+    expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).has_third?)
+      .to be_truthy
+    expect(IntervalSequence.new(intervals: [0, 3, 5]).has_seventh?)
+      .to be_falsey
+    expect(IntervalSequence.new(intervals: [0, 2, 5, 7, 10]).has_second?)
+      .to be_truthy
+  end
+
 end

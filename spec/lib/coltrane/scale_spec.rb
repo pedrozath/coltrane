@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe Scale do
-  let(:scale) { Scale.new(2, 2, 1, 2, 2, 2, 1, tone: 'C') }
+  let(:scale) { Scale.major('C') }
 
   it 'can try to find its name' do
     expect(scale.name).to eq('Major')
@@ -96,19 +96,14 @@ RSpec.describe Scale do
 
   it 'can return you all possible named chords for a scale' do
     expect(scale.all_chords.map(&:name))
-      .to contain_exactly *%w[
-        CMsus2 CM CMsus4 DMsus2 Dm DMsus4 Em#5 Em EMsus4 FMsus2 FM
-        FMb5 GMsus4 GMsus2 GM G7ndim5 Am Am#5 AMsus4 AMsus2 Bdim Bm#5
-        CMadd9 Csus24 CM6 CM7 CM7sus4 D4 Dm7 D7sus4 Dmadd9 Dsus24 Dmadd4
-        Em7#5 E7#5sus4 Emb6b9 E4 Em7 E7sus4 Emadd4 FM6 FM7 FMadd9 FM7b5
-        G7sus4 Gsus24 GM6 G7 GMadd9 G9ndim5 Amadd4 A4 Am7 Amadd9 Am7#5
-        A7sus4 Asus24 A7#5sus4 Bmb6b9 B4 Bm7b5 Bm7#5 B7#5sus4 CM6/9 CM9
-        CM9sus4 Dm9 D11 Dm7add11 Dm6/9 Dm6 E11b9 Em7add11 FM6/9 FM6#11
-        FM9 FM7#11 FM9b5 G11 G7add6 GM6/9 G9 G13ndim5 Am7add11 Am9 Am9#5
-        A11 CM13 Dm11 D13sus4 E7sus4b9b13 FM13 FM6/9#11 FM9#11 G13sus4 G13
-        Am11 Am11#5 Dm13 FM13#11 A9sus4 CM7add13 Cmaj7 D9sus4 E7sus4b9
-        F6/9#11 FM7add13 Fmaj7 G9sus4
-      ]
+      .to include *%w[Bdim Bm7b5 Bm7b5b9 Bm7b5b11 Dm Em Am Dm6 Dm7 Em7 Am7 Em9
+        Em11 CM FM GM CM6 FM6 GM6 C6/9 F6/9 G6/9 C6/9(add11) G6/9(add11) G7 G9
+        G11 G13 CM7 FM7 CM9 FM9 CM11 CM13 CMsus2 DMsus2 FMsus2 GMsus2 AMsus2
+        CM6sus2 DM6sus2 FM6sus2 GM6sus2 D7sus2 G7sus2 A7sus2 CM7sus2 FM7sus2
+        A+sus2 A+7sus2 CMsus4 DMsus4 EMsus4 GMsus4 AMsus4 CM6sus4 DM6sus4
+        GM6sus4 C6/9sus4 D6/9sus4 G6/9sus4 D7sus4 E7sus4 G7sus4 A7sus4 D9sus4
+        G9sus4 A9sus4 CM7sus4 CM9sus4 E+sus4 A+sus4 B+sus4 E+7sus4 A+7sus4
+        B+7sus4 A+9sus4]
   end
 
   it 'can return notes from the scale' do

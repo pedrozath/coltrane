@@ -56,6 +56,15 @@ module Coltrane
             "\n\nA tip tho: always include the letter M for major"
     end
   end
+
+  class IntervalNotFoundError < ColtraneError
+    def initialize(arg)
+      super "The interval \"#{arg}\" that was provided wasn't found. "\
+            "If you're sure this interval exists, "\
+            "would you mind to suggest it's inclusion here: "\
+            'https://github.com/pedrozath/coltrane/issues '\
+    end
+  end
 end
 
 # rubocop:enable Style/Documentation

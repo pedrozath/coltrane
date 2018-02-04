@@ -5,7 +5,7 @@ RSpec.describe NoteSet do
 
   it 'can return named intervals' do
     expect(note_set.interval_sequence.names)
-      .to eq(%w[1P 3M 5P 7m])
+      .to eq(%w[P1 M3 P5 m7])
   end
 
   it 'can intersect other notesets' do

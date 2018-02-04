@@ -6,14 +6,50 @@ module Coltrane
     extend Forwardable
     attr_reader :intervals
 
-    def_delegators :@intervals, :map, :each, :[], :size, :reduce
+    def_delegators :@intervals, :map, :each, :[], :size,
+                   :reduce, :delete
+
+    Interval::ALL_FULL_NAMES.each do |full_name|
+      define_method "has_#{full_name.underscore}?" do
+        !!(intervals.detect {|i| i.public_send("#{full_name.underscore}?")})
+      end
+    end
+
+    (1..15).each do |i|
+      # defines methods like :fifth, :third, eleventh:
+      define_method i.interval_name.underscore do
+        priority = send("#{i.interval_name.underscore}!")
+        return priority unless priority.nil?
+        @intervals.each do |ix|
+          ix.full_names.detect do |ixx|
+            return ixx if ixx.match(/#{i.interval_name}/)
+          end
+        end
+        nil
+      end
+
+      define_method "#{i.interval_name.underscore}!" do
+        @intervals.each do |ix|
+          ix.full_names.detect do |ixx|
+            next if ixx.match(/Diminished|Augmented/)
+            return ixx if ixx.match? /#{i.interval_name}/
+          end
+        end
+        nil
+      end
+
+      # defines methods like :has_fifth?, :has_third?, has_eleventh?:
+      define_method "has_#{i.interval_name.underscore}?" do
+        !!@intervals.detect {|ix| ix.full_name.match(/#{i.interval_name}/) }
+      end
+    end
 
     def initialize(notes: nil, intervals: nil, distances: nil)
       if !notes.nil?
         notes = NoteSet[*notes] if notes.is_a?(Array)
         @intervals = intervals_from_notes(notes)
       elsif !intervals.nil?
-        @intervals = intervals.map { |i| Interval.new(i) }
+        @intervals = intervals.map { |i| Interval[i] }
       elsif !distances.nil?
         @distances = distances
         @intervals = intervals_from_distances(distances)
@@ -31,6 +67,16 @@ module Coltrane
         end
       end + [12 - intervals_semitones.last]
     end
+
+    def names
+      intervals.map(&:name)
+    end
+
+    def has?(interval_name)
+      @intervals.include?(Interval[interval_name])
+    end
+
+    alias interval_names names
 
     def all
       intervals
@@ -68,14 +114,16 @@ module Coltrane
       end
     end
 
-    def quality; end
-
     def intervals_semitones
       map(&:semitones)
     end
 
     def names
       map(&:name)
+    end
+
+    def full_names
+      map(&:full_name)
     end
 
     def notes_for(root_note)
@@ -86,10 +134,17 @@ module Coltrane
       ]
     end
 
+    def &(other)
+      case other
+      when Array then intervals & other
+      when IntervalSequence then intervals & other.semitones
+      end
+    end
+
     private
 
     def intervals_from_distances(distances)
-      distances[0..-2].reduce([Interval.new(0)]) do |memo, d|
+      distances[0..-2].reduce([Interval[0]]) do |memo, d|
         memo + [memo.last + d]
       end
     end

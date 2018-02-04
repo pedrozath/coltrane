@@ -47,6 +47,11 @@ module Coltrane
       SCALES.keys
     end
 
+    # All but the chromatic
+    def standard_scales
+      SCALES.reject { |k,v| k == 'Chromatic' }
+    end
+
     def fetch(name, tone = nil)
       Coltrane::Scale.public_send(name, tone)
     end
@@ -71,7 +76,7 @@ module Coltrane
     def having_notes(notes)
       format = { scales: [], results: {} }
       OpenStruct.new(
-        SCALES.each_with_object(format) do |(name, intervals), output|
+        standard_scales.each_with_object(format) do |(name, intervals), output|
           Note.all.each.map do |tone|
             scale = new(*intervals, tone: tone, name: scale)
             output[:results][name] ||= {}

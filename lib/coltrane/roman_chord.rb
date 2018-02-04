@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 module Coltrane
-  attr_reader :degree, :quality
-
   # This class deals with chords in roman notation. Ex: IVº.
   class RomanChord
     DIGITS = %w[I II III IV V VI VII].freeze
@@ -17,52 +15,92 @@ module Coltrane
       %w[ø m7b5]
     ]
 
-    def initialize(notation, key: nil, scale: nil)
-      @scale   = scale || Scale.from_key(key)
-      notation = notation.match(NOTATION_REGEX).named_captures
-      notation['quality'] =
-        NOTATION_SUBSTITUTIONS.reduce(notation['quality']) do |memo, subs|
-          break memo if memo.empty?
-          memo.gsub(*subs)
-        end
-
-      @notation = notation
+    def initialize(notation=nil, chord: nil, key: nil, scale: nil)
+      if notation.nil? && chord.nil? || key.nil? && scale.nil?
+        raise WrongKeywordsError,
+          '[notation, [scale: || key:]] '\
+          '[chord:, [scale: || key:]] '\
+      end
+      @scale = scale || Scale.from_key(key)
+      if !notation.nil?
+        @notation = notation
+      elsif !chord.nil?
+        @chord = chord.is_a?(String) ? Chord.new(name: chord) : chord
+      end
     end
 
     def degree
-      d      = @notation['degree']
+      return @scale.degree_of_note(root_note) unless @chord.nil?
+      d      = regexed_notation['degree']
       @flats = d.count('b')
       d      = d.delete('b')
       @degree ||= DIGITS.index(d.upcase) + 1
     end
 
-    def quality_name
-      [
-        minor_notation,
-        @notation['quality']
-      ].join
-    end
-
-    def minor_notation
-      return 'm' if !@notation['quality'].match?((/dim|m7b5/)) && !upcase?
+    def roman_numeral
+      r = DIGITS[degree]
+      minor? ? r.downcase : r
     end
 
     def upcase?
-      !!(@notation['degree'][0].match /[[:upper:]]/)
+      !!(regexed_notation['degree'][0].match /[[:upper:]]/)
     end
 
     def chord
-      Chord.new root_note: root_note,
-                quality: quality
+      @chord ||= Chord.new root_note: root_note,
+                           quality: quality
+    end
+
+    def minor?
+      quality.has_minor_third?
+    end
+
+    def major?
+      quality.has_major_third?
+    end
+
+    def quality_name
+      return @chord.quality.name unless @chord.nil?
+      q     = normalize_quality_name(regexed_notation['quality'])
+      minor = 'm' if !q.match?((/dim|m7b5/)) && !upcase?
+      q     = [minor, q].join
+      q.empty? ? 'M' : q
     end
 
     def quality
-      q = quality_name
-      ChordQuality.new(name: (q.size.zero? ? 'M' : q))
+      return @chord.quality unless @chord.nil?
+      ChordQuality.new(name: quality_name) if quality_name
     end
 
     def root_note
+      return @chord.root_note unless @chord.nil?
       @scale[degree] - @flats
+    end
+
+    def notation
+      q = case quality_name
+      when 'm', 'M' then ''
+      when 'm7', 'M' then '7'
+      else quality_name
+      end
+
+      @notation ||= [
+        roman_numeral,
+        q,
+      ].join
+    end
+
+    private
+
+    def regexed_notation
+      @regexed_notation ||= @notation.match(NOTATION_REGEX).named_captures
+    end
+
+    def normalize_quality_name(quality_name)
+      NOTATION_SUBSTITUTIONS.reduce(quality_name) do |memo, subs|
+        break memo if memo.empty?
+        memo.gsub(*subs)
+      end
     end
   end
 end
