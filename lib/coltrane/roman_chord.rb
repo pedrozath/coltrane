@@ -62,7 +62,6 @@ module Coltrane
     end
 
     def root_note
-      binding.pry if @scale[degree] - @flats == Note['A#']
       @scale[degree] - @flats
     end
   end

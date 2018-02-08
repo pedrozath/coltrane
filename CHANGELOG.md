@@ -12,6 +12,11 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [1.1.25]
 
+### Fixes
+- Ruby version on the gemspec
+
+## [1.1.25]
+
 ### Removes
 - Caching, as after some refactoring it made no sense anymore
 
