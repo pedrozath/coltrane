@@ -17,7 +17,6 @@ module Coltrane
           end
 
         @chords.each do |chord|
-          raise ChordNotFoundError unless chord.named?
           desc = "#{chord.name} chord:"
           Coltrane::Cli::Notes.new chord.notes, on: on,
                                                 desc: desc,

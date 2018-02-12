@@ -24,19 +24,13 @@ module Coltrane
     end
 
     def name
-      return @notes.names.join('/') unless named?
-      "#{root_note.name}#{quality.name}"
+      "#{root_note}#{quality}"
     end
+
+    alias to_s name
 
     def pretty_name
-      return @notes.names.join('/') unless named?
       "#{root_note.pretty_name}#{quality.name}"
-    end
-
-    def named?
-      notes.size >= 3 &&
-        !root_note.nil? &&
-        !quality&.name.nil?
     end
 
     def intervals

@@ -21,7 +21,7 @@ module Coltrane
       @notes =
         case arg
         when NoteSet then arg.notes
-        when Array   then arg.map { |n| n.is_a?(Note) ? n : Note[n] }
+        when Array   then arg.map { |n| n.is_a?(Note) ? n : Note[n] }.uniq
         else raise InvalidNotesError, arg
         end
     end
@@ -44,6 +44,10 @@ module Coltrane
 
     def names
       map(&:name)
+    end
+
+    def numbers
+      map(&:number)
     end
 
     def transpose_to(note_name)

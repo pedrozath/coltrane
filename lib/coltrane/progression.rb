@@ -6,12 +6,54 @@ module Coltrane
   # Ex: Progression.new('I-IV-V', key: 'Am')
   class Progression
     extend ClassicProgressions
-    attr_reader :scale, :chords
+    attr_reader :scale, :chords, :notation
 
-    def initialize(roman_notation, roman_chords: [], key: nil, scale: nil)
+    def self.find(*chords)
+      # chords.map! { |c| Chord.new(name: c) } if chords[0].is_a?(String)
+      # scales = Scale.having_chords(*chords).scales.map(&:pretty_name)
+      # scales.reduce([]) do |memo, scale|
+      #   memo
+      # end
+    end
+
+    def initialize(notation=nil, chords: nil, roman_chords: nil, key: nil, scale: nil)
+      if notation.nil? && chords.nil? && roman_chords.nil? || key.nil? && scale.nil?
+        raise WrongKeywordsError,
+          '[chords:, [scale: || key:]] '\
+          '[roman_chords:, [scale: || key:]] '\
+          '[notation:, [scale: || key:]] '\
+      end
+
       @scale  = scale || Scale.from_key(key)
-      rchords = roman_chords.any? ? roman_chords : roman_notation.split('-')
-      @chords = rchords.map {|c| RomanChord.new(c, scale: @scale).chord }
+      @chords =
+        if !chords.nil?
+          chords
+        elsif !roman_chords.nil?
+          roman_chords.map(&:chord)
+        elsif !notation.nil?
+          @notation = notation
+          notation.split('-').map {|c| RomanChord.new(c, scale: @scale).chord }
+        end
+    end
+
+    def interval_sequence
+      @interval_sequence ||= IntervalSequence(notes: @root_notes)
+    end
+
+    def root_notes
+      @root_notes ||= @chords.map(&:root_note)
+    end
+
+    def roman_chords
+      @roman_chords ||= RomanChord.new()
+    end
+
+    def notation
+      @notation || @scale
+    end
+
+    def rotate
+
     end
   end
 end

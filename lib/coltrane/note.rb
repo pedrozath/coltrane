@@ -7,6 +7,7 @@ module Coltrane
 
     attr_reader :name, :number
     alias id number
+    alias to_s name
 
     NOTES = {
       'C'  => 0,
@@ -78,7 +79,7 @@ module Coltrane
     def -(other)
       case other
       when Numeric then Note[number - other]
-      when Note    then Interval.new(other.number - number)
+      when Note    then Interval[other.number - number]
       end
     end
 

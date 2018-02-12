@@ -59,8 +59,7 @@ module Coltrane
     end
 
     def degree_of_note(note)
-      note = notes.map(&:name).index(note.name)
-      return note + 1 unless note.nil?
+      notes.index(note)
     end
 
     def &(other)
@@ -90,8 +89,13 @@ module Coltrane
     def tertians(n = 3)
       degrees.size.times.reduce([]) do |memo, d|
         ns = NoteSet[ *Array.new(n) { |i| notes[(d + (i * 2)) % size] } ]
-        chord = Chord.new(notes: ns)
-        chord.named? ? memo + [chord] : memo
+        begin
+          chord = Chord.new(notes: ns)
+        rescue ChordNotFoundError
+          memo
+        else
+          memo + [chord]
+        end
       end
     end
 
@@ -112,16 +116,17 @@ module Coltrane
     end
 
     def all_chords
-      (3..size).reduce([]) { |memo, s| memo + chords(s) }
+      chords
     end
 
-    def chords(size)
+    def chords(size = 3..12)
+      size = (size..size) if size.is_a?(Integer)
       included_names = []
-      scale_rotations = interval_sequence.inversions.map(&:intervals_semitones)
-      ChordQuality::CHORD_QUALITIES.reduce([]) do |memo1, (qname, qintervals)|
-        next memo1 if qintervals.size != size
+      scale_rotations = interval_sequence.inversions
+      ChordQuality.intervals_per_name.reduce([]) do |memo1, (qname, qintervals)|
+        next memo1 unless size.include?(qintervals.size)
         memo1 + scale_rotations.each_with_index.reduce([]) do |memo2, (rot, index)|
-          if (rot & qintervals).size == size
+          if (rot & qintervals).size == qintervals.size
             memo2 + [ Chord.new(root_note: degree(index+1),
                                 quality: ChordQuality.new(name: qname)) ]
           else

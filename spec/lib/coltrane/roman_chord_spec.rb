@@ -38,4 +38,13 @@ RSpec.describe RomanChord do
     expect(RomanChord.new('Im7', key: key).chord.name).to eq Chord.new(name: 'Cm7').name
   end
 
+  it 'can return a notation from chord' do
+    expect(RomanChord.new(chord: 'CM', key: key).notation).to eq('I')
+    expect(RomanChord.new(chord: 'Dm', key: key).notation).to eq('ii')
+    expect(RomanChord.new(chord: 'Fdim', key: key).notation).to eq('ivdim')
+    expect(RomanChord.new(chord: 'Bm7b5', key: key).notation).to eq('viim7b5')
+    expect(RomanChord.new(chord: 'C7', key: key).notation).to eq('I7')
+    expect(RomanChord.new(chord: 'Cm7', key: key).notation).to eq('i7')
+  end
+
 end

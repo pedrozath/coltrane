@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require 'yaml'
 
 require 'forwardable'
 require 'facets/multiton'
@@ -16,7 +17,6 @@ require 'coltrane/note_set'
 require 'coltrane/interval'
 require 'coltrane/interval_sequence'
 
-require 'coltrane/qualities'
 require 'coltrane/chord_quality'
 
 require 'coltrane/chord'
