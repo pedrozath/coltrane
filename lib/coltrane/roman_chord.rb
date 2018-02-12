@@ -90,6 +90,12 @@ module Coltrane
       ].join
     end
 
+    def function
+      return if @scale.name != 'Major'
+      %w[Tonic Supertonic Mediant Subdominant
+        Dominant Submediant Leading][degree - 1]
+    end
+
     private
 
     def regexed_notation

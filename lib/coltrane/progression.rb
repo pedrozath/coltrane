@@ -5,14 +5,23 @@ module Coltrane
   # Allows the creation of chord progressions using standard notations.
   # Ex: Progression.new('I-IV-V', key: 'Am')
   class Progression
+    extend NotableProgressions
+    include Changes
     attr_reader :scale, :chords, :notation
 
     def self.find(*chords)
-      chords.map! { |c| Chord.new(name: c) } if chords[0].is_a?(String)
-      scales = Scale.having_chords(*chords).scales
-      scales.reduce([]) do |memo, scale|
+      if chords[0].is_a?(String)
+        chords.map! { |c| Chord.new(name: c) }
+      end
+
+      root_notes = NoteSet[*chords.map(&:root_note)]
+
+      scales = Scale.having_notes(*root_notes).scales
+      progressions = scales.reduce([]) do |memo, scale|
         memo + [Progression.new(chords: chords, scale: scale)]
       end
+
+      progressions.sort_by(&:notes_out_size)
     end
 
     def initialize(notation=nil, chords: nil, roman_chords: nil, key: nil, scale: nil)
@@ -51,6 +60,18 @@ module Coltrane
 
     def notation
       roman_chords.map(&:notation).join('-')
+    end
+
+    def notes
+      NoteSet[*chords.map(&:notes).map(&:notes).flatten]
+    end
+
+    def notes_out
+      notes - scale.notes
+    end
+
+    def notes_out_size
+      notes_out.size
     end
   end
 end

@@ -69,19 +69,9 @@ puts Coltrane::Scale.having_chord('Cmaj7').scales.map(&:name)
 # => ["C Major", "G Major", "E Natural Minor", "A Natural Minor", "E Harmonic Minor", "B Flamenco"]
 ```
 
-## Roadmap
+## Changelog
 
-There's a lot of things that need to be done on this library, specially on the CLI:
-
-- [ ] Separate into 2 gems: `coltrane` and `coltrane-cli`
-- [ ] Make all output more colorful
-- [ ] Refactor the CLI into a more succinct and elegantly organized architecture
-- [ ] Amplify the test coverage
-- [ ] Move Scale#chords method to NoteSet
-- [ ] Write tests for the caching
-- [ ] Write up a caching cleaning command
-- [ ] Include CLI commands to output chord progressions
-- [ ] Include a command to output a pretty HTML document containing the query
+See the changelog [here](CHANGELOG.md)
 
 ## Contributing
 

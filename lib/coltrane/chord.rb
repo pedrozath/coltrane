@@ -2,8 +2,10 @@
 
 module Coltrane
   # It describe a chord
+
   class Chord
     attr_reader :root_note, :quality, :notes
+    include ChordSubstitutions
 
     def initialize(notes: nil, root_note: nil, quality: nil, name: nil)
       if !notes.nil?
@@ -18,7 +20,7 @@ module Coltrane
       elsif !name.nil?
         @root_note, @quality, @notes = parse_from_name(name)
       else
-        raise WrongKeywordsError,
+      raise WrongKeywordsError,
               '[notes:] || [root_note:, quality:] || [name:]'
       end
     end
@@ -57,13 +59,30 @@ module Coltrane
       Chord.new(notes.rotate(-1))
     end
 
+    def +(other)
+      case other
+      when Note, NoteSet, Interval then Chord.new(notes: notes + other)
+      when Chord then Chord.new(notes: notes + other.notes)
+      end
+    end
+
+    def -(other)
+      case other
+      when Note, NoteSet, Interval, Numeric then Chord.new(notes: notes - other)
+      when Chord then Chord.new(notes: notes - other.notes)
+      end
+    end
+
     protected
 
     def parse_from_name(name)
-      _, name, quality_name = name.match(/([A-Z](?:#|b)?)(.*)/).to_a
-      root    = Note[name]
-      quality = ChordQuality.new(name: quality_name)
+      chord_name, bass = name.split('/')
+      chord_regex = %r{([A-Z](?:#|b)?)(.*)}
+      _, root_name, quality_name = chord_name.match(chord_regex).to_a
+      root    = Note[root_name]
+      quality = ChordQuality.new(name: quality_name, bass: bass)
       notes   = quality.notes_for(root)
+      notes  << Note[bass] unless bass.nil?
       [root, quality, notes]
     end
   end

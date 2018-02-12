@@ -34,8 +34,8 @@ module Coltrane
   end
 
   class HasNoNotesError < BadConstructorError
-    def initialize(obj)
-      super "The given object (#{obj.inspect} does not respond to :notes, "\
+    def initialize
+      super "The given object does not respond to :notes, "\
             "thereby it can't be used for this operation)"
     end
   end
