@@ -10,6 +10,14 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - Refactor notes and add pitch frequencies, pitch classes
 
 
+## [1.1.1]
+
+### Fixes
+- Progression specs
+
+### Adds
+- `Progression.find(*%w[AM DM F#m EM])`
+
 ## [1.1.0]
 
 ### Changes

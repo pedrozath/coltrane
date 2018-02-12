@@ -9,11 +9,11 @@ module Coltrane
     attr_reader :scale, :chords, :notation
 
     def self.find(*chords)
-      # chords.map! { |c| Chord.new(name: c) } if chords[0].is_a?(String)
-      # scales = Scale.having_chords(*chords).scales.map(&:pretty_name)
-      # scales.reduce([]) do |memo, scale|
-      #   memo
-      # end
+      chords.map! { |c| Chord.new(name: c) } if chords[0].is_a?(String)
+      scales = Scale.having_chords(*chords).scales
+      scales.reduce([]) do |memo, scale|
+        memo + [Progression.new(chords: chords, scale: scale)]
+      end
     end
 
     def initialize(notation=nil, chords: nil, roman_chords: nil, key: nil, scale: nil)
@@ -45,15 +45,13 @@ module Coltrane
     end
 
     def roman_chords
-      @roman_chords ||= RomanChord.new()
+      @roman_chords ||= chords.map do |c|
+        RomanChord.new(chord: c, scale: scale)
+      end
     end
 
     def notation
-      @notation || @scale
-    end
-
-    def rotate
-
+      roman_chords.map(&:notation).join('-')
     end
   end
 end
