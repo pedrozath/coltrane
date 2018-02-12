@@ -113,6 +113,18 @@ Mercenary.program(:Coltrane) do |p|
     end
   end
 
+  p.command(:'find-progression') do |c|
+    c.syntax 'find-progression <list of chords>'
+    c.description 'Find progressions in scales. Ex: coltrane find-progression AM-DM-F#m-EM'
+    c.action do |(chord_notation)|
+      progressions   = Coltrane::Progression.find(*chord_notation.split('-'))
+      notation_width = progressions.map(&:notation).map(&:size).max
+      progressions.each do |progression|
+        puts "#{progression.notation.ljust(notation_width+1,' ')} in #{progression.scale} (#{progression.notes_out.size} notes out)"
+      end
+    end
+  end
+
   p.command(:list) do |list|
     list.syntax 'list [scales, flavors, instruments (used in --on options), chord-qualities]'
     list.description 'List information.'

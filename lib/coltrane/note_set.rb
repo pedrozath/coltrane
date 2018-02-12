@@ -38,6 +38,10 @@ module Coltrane
       NoteSet[*(notes + other.notes)]
     end
 
+    def -(other)
+      NoteSet[*(notes - other.notes)]
+    end
+
     def pretty_names
       map(&:pretty_name)
     end
