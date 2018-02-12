@@ -36,6 +36,10 @@ module Coltrane
       end
     end
 
+    def to_s
+      "#{tone} #{name}"
+    end
+
     def pretty_name
       "#{tone.name} #{name}"
     end

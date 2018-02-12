@@ -80,7 +80,6 @@ module Coltrane
       elsif result = find_chord([*retrieve_chord_intervals(sus4_sequence)].compact)
         return result
       else
-        binding.pry
         raise ChordNotFoundError
       end
     end
@@ -94,9 +93,9 @@ module Coltrane
       end
     end
 
-    def initialize(name: nil, notes: nil)
+    def initialize(name: nil, notes: nil, bass: nil)
       if !name.nil?
-        @name = name
+        @name = bass.nil? ? name : [name, bass].join('/')
         super(intervals: NAMES[name])
       elsif !notes.nil?
         super(notes: notes)

@@ -47,4 +47,14 @@ RSpec.describe RomanChord do
     expect(RomanChord.new(chord: 'Cm7', key: key).notation).to eq('i7')
   end
 
+  it 'can return its function' do
+    expect(RomanChord.new('I', key: key).function).to eq   'Tonic'
+    expect(RomanChord.new('ii', key: key).function).to eq  'Supertonic'
+    expect(RomanChord.new('iii', key: key).function).to eq 'Mediant'
+    expect(RomanChord.new('IV', key: key).function).to eq  'Subdominant'
+    expect(RomanChord.new('V', key: key).function).to eq   'Dominant'
+    expect(RomanChord.new('vii', key: key).function).to eq 'Leading'
+    expect(RomanChord.new('vii', key: 'Am').function).to be_nil
+  end
+
 end
