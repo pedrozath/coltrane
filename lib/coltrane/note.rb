@@ -79,6 +79,7 @@ module Coltrane
     def -(other)
       case other
       when Numeric then Note[number - other]
+      when Interval then Note[number - other.semitones]
       when Note    then Interval[other.number - number]
       end
     end

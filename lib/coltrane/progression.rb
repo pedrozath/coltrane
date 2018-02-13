@@ -5,6 +5,8 @@ module Coltrane
   # Allows the creation of chord progressions using standard notations.
   # Ex: Progression.new('I-IV-V', key: 'Am')
   class Progression
+    extend NotableProgressions
+    include Changes
     attr_reader :scale, :chords, :notation
 
     def self.find(*chords)

@@ -6,7 +6,7 @@ module Coltrane
     extend Forwardable
 
     def_delegators :@notes, :first, :each, :size, :map, :reduce, :index,
-                   :[], :index, :empty?, :permutation, :include?
+                   :[], :index, :empty?, :permutation, :include?, :<<
 
     attr_reader :notes
 
@@ -35,11 +35,18 @@ module Coltrane
     end
 
     def +(other)
-      NoteSet[*(notes + other.notes)]
+      case other
+      when Note then NoteSet[*(notes + [other])]
+      when NoteSet then NoteSet[*notes, *other.notes]
+      when Interval then NoteSet[*notes.map {|n| n + other}]
+      end
     end
 
     def -(other)
-      NoteSet[*(notes - other.notes)]
+      case other
+      when NoteSet then NoteSet[*(notes - other.notes)]
+      when Interval then NoteSet[*notes.map {|n| n - other}]
+      end
     end
 
     def pretty_names
@@ -52,16 +59,6 @@ module Coltrane
 
     def numbers
       map(&:number)
-    end
-
-    def transpose_to(note_name)
-      transpose_by(root_note.interval_to(note_name).number)
-    end
-
-    def transpose_by(interval)
-      notes.map do |note|
-        note.transpose_by(interval)
-      end
     end
 
     def interval_sequence

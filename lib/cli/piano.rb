@@ -22,7 +22,7 @@ module Coltrane
           when 6 then replace_x(l, white_notes, 2)
           else l
           end
-        end.join + "\n" + hint
+        end.join + "\n#{hint}"
       end
 
       private
