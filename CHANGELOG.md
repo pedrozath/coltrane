@@ -4,6 +4,12 @@
 - Correct Flat/Sharp on scales
 - Refactor notes and add pitch frequencies, pitch classes
 
+## [1.2.3]
+
+### Fixes
+
+- Bug in `progression` command
+
 ## [1.2.2]
 
 ### Fixes

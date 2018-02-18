@@ -107,7 +107,7 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Gives you chords of a progression in a key. Ex: coltrane progression I-IV-iv-V in Am --on guitar'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
-    c.action do |(prog, _, note), on: 'text', flavor: 'notes'|
+    c.action do |(prog, _, key), on: 'text', flavor: 'notes'|
       possible_method = prog.gsub('-', '_')
       progression = if Coltrane::Progression.respond_to?(possible_method)
                       Coltrane::Progression.send(possible_method, note)
