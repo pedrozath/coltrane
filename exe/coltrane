@@ -195,7 +195,7 @@ Mercenary.program(:Coltrane) do |p|
     c.action do
       begin
         puts "\n"
-        print Paint['coltrane: ', '#F88550']
+        print Paint['coltrane ', '#F88550']
         cmd = gets.chomp
         return if ['exit', 'exit', 'q', 'quit', 'stop'].include?(cmd)
         puts "\n"

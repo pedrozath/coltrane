@@ -4,6 +4,12 @@
 - Correct Flat/Sharp on scales
 - Refactor notes and add pitch frequencies, pitch classes
 
+## [1.2.2]
+
+### Fixes
+
+- A bug of the previous functionality that generated a infinite loop if a command wasn't found
+
 ## [1.2.0]
 
 ### Adds
