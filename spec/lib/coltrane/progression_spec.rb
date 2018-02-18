@@ -12,4 +12,11 @@ RSpec.describe Progression do
     results = Progression.find(*%w[AM DM F#m EM])
     expect(results.map(&:notation)).to include('I-IV-vi-V')
   end
+
+  it 'can return some notable progressions' do
+    expect(Progression.jazz('C').chords.map(&:name))
+      .to contain_exactly(*%w[C7 Dm7 G7])
+    expect(Progression.pop('A#').chords.map(&:name))
+      .to contain_exactly(*%w[A#M D#M FM Gm])
+  end
 end

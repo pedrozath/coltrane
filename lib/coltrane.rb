@@ -19,13 +19,15 @@ require 'coltrane/interval_sequence'
 
 require 'coltrane/chord_quality'
 
+require 'coltrane/chord_substitutions'
 require 'coltrane/chord'
 require 'coltrane/roman_chord'
 
 require 'coltrane/classic_scales'
 require 'coltrane/scale'
 
-require 'coltrane/classic_progressions'
+require 'coltrane/notable_progressions'
+require 'coltrane/changes'
 require 'coltrane/progression'
 
 require 'coltrane/mode'

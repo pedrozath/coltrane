@@ -107,9 +107,27 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Gives you chords of a progression in a key. Ex: coltrane progression I-IV-iv-V in Am --on guitar'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
-    c.action do |(notation, _, key), on: 'text', flavor: 'notes'|
-      chords = Coltrane::Progression.new(notation, key: key).chords
-      Coltrane::Cli::Chord.new(*chords, on: on, flavor: flavor)
+    c.action do |(prog, _, note), on: 'text', flavor: 'notes'|
+      possible_method = prog.gsub('-', '_')
+      progression = if Coltrane::Progression.respond_to?(possible_method)
+                      Coltrane::Progression.send(possible_method, note)
+                    else
+                      Coltrane::Progression.new(prog, key: key)
+                    end
+
+      Coltrane::Cli::Chord.new(*progression.chords, on: on, flavor: flavor)
+    end
+  end
+
+  p.command(:'find-progression') do |c|
+    c.syntax 'find-progression <list of chords>'
+    c.description 'Find progressions in scales. Ex: coltrane find-progression AM-DM-F#m-EM'
+    c.action do |(chord_notation)|
+      progressions   = Coltrane::Progression.find(*chord_notation.split('-'))
+      notation_width = progressions.map(&:notation).map(&:size).max
+      progressions.each do |progression|
+        puts "#{progression.notation.ljust(notation_width+1,' ')} in #{progression.scale} (#{progression.notes_out.size} notes out)"
+      end
     end
   end
 
@@ -172,14 +190,25 @@ Mercenary.program(:Coltrane) do |p|
     end
   end
 
-  p.command(:about) do |c|
-    c.description 'Shows this screen'
+  p.command(:start) do |c|
+    c.description 'Starts interactive mode'
     c.action do
-      puts p
+      begin
+        puts "\n"
+        print Paint['coltrane: ', '#F88550']
+        cmd = gets.chomp
+        exit(0) if ['exit', 'exit', 'q', 'quit', 'stop'].include?(cmd)
+        puts "\n"
+        p.go(cmd.split(' '))
+      rescue Exception
+      ensure
+        p.instance_variable_set :'@config', {}
+      end
+      p.execute(['start'], {})
     end
   end
 
-  p.default_command(:about)
+  p.default_command(:start)
 end
 
 # rubocop:enable Metrics/BlockLength

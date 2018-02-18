@@ -1,14 +1,21 @@
 # Changelog
-All notable changes to this project will be documented in this file.
-
-The format is based on [Keep a Changelog](http://keepachangelog.com/en/1.0.0/)
-and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.html).
-
 
 ## [Unreleased]
 - Correct Flat/Sharp on scales
 - Refactor notes and add pitch frequencies, pitch classes
 
+## [1.2.0]
+
+### Adds
+- An interactive mode, so you don't have to type coltrane all the time.
+- Adds notable progressions: You can type `coltrane progression jazz in C`
+- Adds tritone substitution for chord, for the library only for now `Chord.new(name: 'CM7').tritone_substitution`
+- Adds chord unary operators. `+ Note` for adding a note to a chord, `+ Interval or Integer` for transposing the chord
+- Adds slash chords `Chord.new(name: 'CM/B')`
+- Adds chord `#function` for Roman Chords, when they're on Diatonic Major scale, returning `Dominant, Submediant, Tonic, etc`
+
+### Fixes
+- Fixes a bug in Piano
 
 ## [1.1.2]
 
