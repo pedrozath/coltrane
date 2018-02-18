@@ -71,7 +71,7 @@ puts Coltrane::Scale.having_chord('Cmaj7').scales.map(&:name)
 
 ## Changelog
 
-See the changelog [here](CHANGELOG.MD)
+See the changelog [here](CHANGELOG.md)
 
 ## Contributing
 
