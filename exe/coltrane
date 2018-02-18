@@ -197,7 +197,7 @@ Mercenary.program(:Coltrane) do |p|
         puts "\n"
         print Paint['coltrane: ', '#F88550']
         cmd = gets.chomp
-        exit(0) if ['exit', 'exit', 'q', 'quit', 'stop'].include?(cmd)
+        return if ['exit', 'exit', 'q', 'quit', 'stop'].include?(cmd)
         puts "\n"
         p.go(cmd.split(' '))
       rescue Exception
