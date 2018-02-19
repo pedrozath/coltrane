@@ -55,7 +55,7 @@ require 'coltrane'
 puts Coltrane::Scale.major('C').sevenths.map(&:name)
 # => ["CM7", "Dm7", "Em7", "FM7", "G7", "Am7", "Bm7b5"]
 
-puts Coltrane::Scale.having_chord('Cmaj7').scales.map(&:name)
+puts Coltrane::Scale.having_chord('CM7').scales.map(&:name)
 # => ["C Major", "G Major", "E Natural Minor", "A Natural Minor", "E Harmonic Minor", "B Flamenco"]
 ```
 
