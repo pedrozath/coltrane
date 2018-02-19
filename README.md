@@ -33,15 +33,7 @@ Once you install the gem the CLI is instaled in your system and it's ready to be
 It allows you to query for notes and chords and display them on your favorite instrument. No sheet music reading skills needed. It also allows you to find scales with a chord and find chords shared between two scales (that is actually the main goal when I did this project).
 
 Some screenshot examples:
-![Screenshot](img/screen-3.png)
-![Screenshot](img/screen-2.png)
-![Screenshot](img/screen-9.png)
-![Screenshot](img/screen-8.png)
-![Screenshot](img/screen-10.png)
-![Screenshot](img/screen-1.png)
-![Screenshot](img/screen-4.png)
-![Screenshot](img/screen-5.png)
-![Screenshot](img/screen-6.png)
+![Screenshot](img/using-coltrane.gif)
 
 
 ## As a library
