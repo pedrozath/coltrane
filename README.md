@@ -11,6 +11,8 @@ https://gitter.im/coltrane-music/Lobby
 
 ## CLI (Command Line Interface)
 
+![Screenshot](img/using-coltrane.gif)
+
 ### Installation
 
 #### Compiled binary
@@ -31,10 +33,6 @@ Once you install the gem the CLI is instaled in your system and it's ready to be
 ### Usage
 
 It allows you to query for notes and chords and display them on your favorite instrument. No sheet music reading skills needed. It also allows you to find scales with a chord and find chords shared between two scales (that is actually the main goal when I did this project).
-
-Some screenshot examples:
-![Screenshot](img/using-coltrane.gif)
-
 
 ## As a library
 
