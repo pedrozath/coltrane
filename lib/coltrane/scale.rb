@@ -44,14 +44,14 @@ module Coltrane
       "#{tone.name} #{name}"
     end
 
-    alias_method :full_name, :pretty_name
+    alias full_name pretty_name
 
     def degree(d)
       raise WrongDegreeError, d if d < 1 || d > size
       tone + interval_sequence[d - 1].semitones
     end
 
-    alias_method :[], :degree
+    alias [] degree
 
     def degrees
       (1..size)
@@ -76,7 +76,7 @@ module Coltrane
       (self & noteset).size == noteset.size
     end
 
-    alias_method :include?, :include_notes?
+    alias include? include_notes?
 
     def notes
       NoteSet[*degrees.map { |d| degree(d) }]
@@ -119,17 +119,16 @@ module Coltrane
       Progression.new(self, degrees)
     end
 
-
     def chords(size = 3..12)
       size = (size..size) if size.is_a?(Integer)
-      included_names = []
       scale_rotations = interval_sequence.inversions
       ChordQuality.intervals_per_name.reduce([]) do |memo1, (qname, qintervals)|
         next memo1 unless size.include?(qintervals.size)
-        memo1 + scale_rotations.each_with_index.reduce([]) do |memo2, (rot, index)|
+        memo1 + scale_rotations.each_with_index
+                               .reduce([]) do |memo2, (rot, index)|
           if (rot & qintervals).size == qintervals.size
-            memo2 + [ Chord.new(root_note: degree(index+1),
-                                quality: ChordQuality.new(name: qname)) ]
+            memo2 + [Chord.new(root_note: degree(index + 1),
+                               quality: ChordQuality.new(name: qname))]
           else
             memo2
           end
@@ -137,7 +136,6 @@ module Coltrane
       end
     end
 
-    alias_method :all_chords, :chords
-
+    alias all_chords chords
   end
 end

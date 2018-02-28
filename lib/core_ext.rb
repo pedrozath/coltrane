@@ -24,6 +24,7 @@ class String
   end
 end
 
+# Here we add some syntax sugar to make the code more understandable later
 class Integer
   def interval_name
     {
@@ -46,12 +47,17 @@ class Integer
   end
 end
 
+# Here we add some methods better work with Tries
 class Hash
-  def clone_values(from_keys: nil, to_keys: nil, suffix: nil, branch_a: nil, branch_b: nil)
-    branch_a ||= self.dig(*from_keys)
+  def clone_values(from_keys: nil,
+                   to_keys: nil,
+                   suffix: nil,
+                   branch_a: nil,
+                   branch_b: nil)
+    branch_a ||= dig(*from_keys)
     if branch_b.nil?
-      self.create_branch!(*to_keys)
-      branch_b = self.dig(*to_keys)
+      create_branch!(*to_keys)
+      branch_b = dig(*to_keys)
     end
 
     branch_a.each do |key, val|
@@ -73,30 +79,13 @@ class Hash
 
   def deep_dup
     dup_hash = {}
-    self.each do |k,v|
-      if v.is_a?(Hash)
-        dup_hash[k] = v.deep_dup
-      else
-        dup_hash[k] = v.dup
-      end
+    each do |k, v|
+      dup_hash[k] = if v.is_a?(Hash)
+                      v.deep_dup
+                    else
+                      v.dup
+                    end
     end
     dup_hash
   end
 end
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

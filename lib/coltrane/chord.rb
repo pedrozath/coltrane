@@ -20,7 +20,7 @@ module Coltrane
       elsif name
         @root_note, @quality, @notes = parse_from_name(name)
       else
-      raise WrongKeywordsError,
+        raise WrongKeywordsError,
               '[notes:] || [root_note:, quality:] || [name:]'
       end
     end
@@ -29,7 +29,7 @@ module Coltrane
       "#{root_note}#{quality}"
     end
 
-    alias_method :to_s, :name
+    alias to_s name
 
     def pretty_name
       "#{root_note.pretty_name}#{quality.name}"
@@ -77,12 +77,12 @@ module Coltrane
 
     def parse_from_name(name)
       chord_name, bass = name.match?(/\/9/) ? [name, nil] : name.split('/')
-      chord_regex = %r{([A-Z](?:#|b)?)(.*)}
+      chord_regex = /([A-Z](?:#|b)?)(.*)/
       _, root_name, quality_name = chord_name.match(chord_regex).to_a
       root    = Note[root_name]
       quality = ChordQuality.new(name: quality_name, bass: bass)
       notes   = quality.notes_for(root)
-      notes  << Note[bass] unless bass.nil?
+      notes << Note[bass] unless bass.nil?
       [root, quality, notes]
     end
   end

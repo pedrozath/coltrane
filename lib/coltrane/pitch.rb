@@ -31,28 +31,28 @@ module Coltrane
     end
 
     def pitch_class_and_octave_from_frequency(frequency)
-      [PitchClass[frequency], Math.log(f.to_f/TUNING, 2)/12]
+      [PitchClass[frequency], Math.log(f.to_f / TUNING, 2) / 12]
     end
 
-  #   def number_from_name(pitch_string)
-  #     Note[note].number + 12 * octaves.to_i
-  #   end
+    #   def number_from_name(pitch_string)
+    #     Note[note].number + 12 * octaves.to_i
+    #   end
 
-  #   def name
-  #     "#{note.name}#{octave}"
-  #   end
+    #   def name
+    #     "#{note.name}#{octave}"
+    #   end
 
-  #   def octave
-  #     number / 12
-  #   end
+    #   def octave
+    #     number / 12
+    #   end
 
-  #   def note
-  #     Note[number]
-  #   end
+    #   def note
+    #     Note[number]
+    #   end
 
-  #   def +(other)
-  #     Pitch.new(number + (other.is_a?(Pitch) ? other.number : other))
-  #   end
-  # end
+    #   def +(other)
+    #     Pitch.new(number + (other.is_a?(Pitch) ? other.number : other))
+    #   end
+    # end
   end
 end

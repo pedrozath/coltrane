@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Coltrane
-
   # Allows the creation of chord progressions using standard notations.
   # Ex: Progression.new('I-IV-V', key: 'Am')
   class Progression
@@ -10,9 +9,7 @@ module Coltrane
     attr_reader :scale, :chords, :notation
 
     def self.find(*chords)
-      if chords[0].is_a?(String)
-        chords.map! { |c| Chord.new(name: c) }
-      end
+      chords.map! { |c| Chord.new(name: c) } if chords[0].is_a?(String)
 
       root_notes = NoteSet[*chords.map(&:root_note)]
 
@@ -24,12 +21,12 @@ module Coltrane
       progressions.sort_by(&:notes_out_size)
     end
 
-    def initialize(notation=nil, chords: nil, roman_chords: nil, key: nil, scale: nil)
+    def initialize(notation = nil, chords: nil, roman_chords: nil, key: nil, scale: nil)
       if notation.nil? && chords.nil? && roman_chords.nil? || key.nil? && scale.nil?
         raise WrongKeywordsError,
-          '[chords:, [scale: || key:]] '\
-          '[roman_chords:, [scale: || key:]] '\
-          '[notation:, [scale: || key:]] '\
+              '[chords:, [scale: || key:]] '\
+              '[roman_chords:, [scale: || key:]] '\
+              '[notation:, [scale: || key:]] '\
       end
 
       @scale  = scale || Scale.from_key(key)
@@ -40,7 +37,7 @@ module Coltrane
           roman_chords.map(&:chord)
         elsif !notation.nil?
           @notation = notation
-          notation.split('-').map {|c| RomanChord.new(c, scale: @scale).chord }
+          notation.split('-').map { |c| RomanChord.new(c, scale: @scale).chord }
         end
     end
 

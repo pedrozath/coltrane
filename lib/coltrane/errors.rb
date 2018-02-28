@@ -22,8 +22,8 @@ module Coltrane
   end
 
   class WrongArgumentsError < BadConstructorError
-    def initialize(msg)
-      super "Wrong argument(s)."
+    def initialize(_msg)
+      super 'Wrong argument(s).'
     end
   end
 
@@ -41,7 +41,7 @@ module Coltrane
 
   class HasNoNotesError < BadConstructorError
     def initialize
-      super "The given object does not respond to :notes, "\
+      super 'The given object does not respond to :notes, '\
             "thereby it can't be used for this operation)"
     end
   end
@@ -75,7 +75,7 @@ module Coltrane
   class InvalidPitchClassError < ColtraneError
     def initialize(arg)
       super "The given frequency(#{arg}) is not considered "\
-            "part of a pitch class"\
+            'part of a pitch class'\
     end
   end
 

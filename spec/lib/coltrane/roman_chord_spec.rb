@@ -19,14 +19,14 @@ RSpec.describe RomanChord do
   end
 
   it 'detects the quality name' do
-    expect(RomanChord.new('III', key: key).quality.name).to     eq ('M')
-    expect(RomanChord.new('ii', key: key).quality.name).to      eq ('m')
-    expect(RomanChord.new('v7', key: key).quality.name).to      eq ('m7')
-    expect(RomanChord.new('IV7', key: key).quality.name).to     eq ('7')
-    expect(RomanChord.new('iiio', key: key).quality.name).to    eq ('dim')
-    expect(RomanChord.new('iiio7', key: key).quality.name).to   eq ('dim7')
-    expect(RomanChord.new('ivø', key: key).quality.name).to     eq ('m7b5')
-    expect(RomanChord.new('VIIm7b5', key: key).quality.name).to eq ('m7b5')
+    expect(RomanChord.new('III', key: key).quality.name).to     eq 'M'
+    expect(RomanChord.new('ii', key: key).quality.name).to      eq 'm'
+    expect(RomanChord.new('v7', key: key).quality.name).to      eq 'm7'
+    expect(RomanChord.new('IV7', key: key).quality.name).to     eq '7'
+    expect(RomanChord.new('iiio', key: key).quality.name).to    eq 'dim'
+    expect(RomanChord.new('iiio7', key: key).quality.name).to   eq 'dim7'
+    expect(RomanChord.new('ivø', key: key).quality.name).to     eq 'm7b5'
+    expect(RomanChord.new('VIIm7b5', key: key).quality.name).to eq 'm7b5'
   end
 
   it 'detects the chord' do
@@ -56,5 +56,4 @@ RSpec.describe RomanChord do
     expect(RomanChord.new('vii', key: key).function).to eq 'Leading'
     expect(RomanChord.new('vii', key: 'Am').function).to be_nil
   end
-
 end

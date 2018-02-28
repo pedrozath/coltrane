@@ -1,15 +1,13 @@
 # frozen_string_literal: true
 
 module Coltrane
-=begin
-Interval describe the logarithmic distance between 2 frequencies.
-It's measured in cents.
-=end
+  # Interval describe the logarithmic distance between 2 frequencies.
+  # It's measured in cents.
   class Interval
     attr_reader :cents
 
     class << self
-      alias_method :[], :new
+      alias [] new
     end
 
     def initialize(cents)
@@ -32,8 +30,8 @@ It's measured in cents.
       cents == other.cents
     end
 
-    alias_method :eql?, :==
-    alias_method :hash, :cents
+    alias eql? ==
+    alias hash cents
 
     def +(other)
       case other

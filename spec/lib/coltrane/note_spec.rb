@@ -16,7 +16,7 @@ RSpec.describe Note do
   # end
 
   it 'can be created by name' do
-    expect{Note['L'].name}  .to raise_error ColtraneError
+    expect { Note['L'].name } .to raise_error ColtraneError
     expect(Note['C'].name)  .to eq('C')
     expect(Note['C#'].name) .to eq('C#')
     expect(Note['Cb'].name) .to eq('Cb')

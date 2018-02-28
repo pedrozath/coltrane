@@ -66,7 +66,6 @@ Mercenary.program(:Coltrane) do |p|
     end
   end
 
-
   p.command(:scale) do |c|
     c.syntax 'scale <name of scale>-<root note> [--on <instrument>]'
     c.description 'Gives you information about a scale. Ex: coltrane scale natural-minor-Db --on guitar'
@@ -111,7 +110,7 @@ Mercenary.program(:Coltrane) do |p|
     c.option(*@instrument_option)
     c.option(*@flavor_option)
     c.action do |(prog, _, key), on: 'text', flavor: 'notes'|
-      possible_method = prog.gsub('-', '_')
+      possible_method = prog.tr('-', '_')
       progression = if Coltrane::Progression.respond_to?(possible_method)
                       Coltrane::Progression.send(possible_method, key)
                     else
@@ -129,7 +128,7 @@ Mercenary.program(:Coltrane) do |p|
       progressions   = Coltrane::Progression.find(*chord_notation.split('-'))
       notation_width = progressions.map(&:notation).map(&:size).max
       progressions.each do |progression|
-        puts "#{progression.notation.ljust(notation_width+1,' ')} in #{progression.scale} (#{progression.notes_out.size} notes out)"
+        puts "#{progression.notation.ljust(notation_width + 1, ' ')} in #{progression.scale} (#{progression.notes_out.size} notes out)"
       end
     end
   end
@@ -142,7 +141,7 @@ Mercenary.program(:Coltrane) do |p|
            when 'scales' then Coltrane::Scale.known_scales
            when 'flavors' then %w[marks notes intervals degrees]
            when 'instruments' then %w[guitar bass ukulele piano text]
-           when 'chords', 'chord-qualities' then Coltrane::ChordQuality::intervals_per_name.keys.join(' ')
+           when 'chords', 'chord-qualities' then Coltrane::ChordQuality.intervals_per_name.keys.join(' ')
            end
     end
   end
@@ -200,7 +199,7 @@ Mercenary.program(:Coltrane) do |p|
         puts "\n"
         print Paint['coltrane ', '#F88550']
         cmd = gets.chomp
-        return if ['exit', 'exit', 'q', 'quit', 'stop'].include?(cmd)
+        return if %w[exit exit q quit stop].include?(cmd)
         puts "\n"
         p.go(cmd.split(' '))
       rescue Exception

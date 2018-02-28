@@ -24,7 +24,7 @@ module Coltrane
           string_note = Note[string]
           Array.new(@frets + 2) do |i|
             if i.zero?
-              Paint[string, HSL.new(140 + str_i * 20,50,50).html]
+              Paint[string, HSL.new(140 + str_i * 20, 50, 50).html]
             else
               fret = i - 1
               note = string_note + fret
@@ -37,14 +37,14 @@ module Coltrane
 
       def render_special_frets
         '  ' +
-        Array.new(@frets + 2) do |fret|
-          m = SPECIAL_FRETS.include?(fret) ? fret.to_s.rjust(2, 0.to_s) : '  '
-          "#{m}#{'  ' if fret.zero?}"
-        end.join(' ')
+          Array.new(@frets + 2) do |fret|
+            m = SPECIAL_FRETS.include?(fret) ? fret.to_s.rjust(2, 0.to_s) : '  '
+            "#{m}#{'  ' if fret.zero?}"
+          end.join(' ')
       end
 
       def place_empty(str_i)
-        Paint['--', HSL.new(180 + str_i * 3,50,30).html]
+        Paint['--', HSL.new(180 + str_i * 3, 50, 30).html]
       end
 
       def place_mark(note)

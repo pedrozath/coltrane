@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+
 require 'yaml'
 
 require 'forwardable'
@@ -36,6 +37,7 @@ require 'coltrane/progression'
 
 require 'coltrane/mode'
 
+# The main module for working with Music Theory
 module Coltrane
   BASE_OCTAVE = 4
   BASE_PITCH_INTEGER = 9
@@ -50,4 +52,3 @@ module Coltrane
 
   @base_tuning = Frequency[440].octave(-4)
 end
-

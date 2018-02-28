@@ -1,13 +1,11 @@
+# frozen_string_literal: true
+
 module Changes
   def tritone_changes
-    chords.reduce([]) do |
+    # chords.reduce([]) do
   end
 
-  def coltrane_changes
+  def coltrane_changes; end
 
-  end
-
-  def bird_changes
-
-  end
+  def bird_changes; end
 end

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # # frozen_string_literal: true
 
 require 'spec_helper'
@@ -29,7 +31,7 @@ describe 'coltrane' do
     progression II-iii-iv-Vm7b5-IM7 in A#
     find-progression CM7-Am7-D7-Gb6/9-D9-CM11-C+13
   COMMANDS
-  .each do |command|
+             .each do |command|
     it "#{command} should not return an error" do
       expect(`coltrane #{command}`)
         .to_not match(/error/i), -> { `coltrane #{command} --trace` }

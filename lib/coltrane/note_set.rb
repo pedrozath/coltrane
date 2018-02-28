@@ -10,8 +10,8 @@ module Coltrane
 
     attr_reader :notes
 
-    alias_method :root, :first
-    alias_method :all, :notes
+    alias root first
+    alias all notes
 
     def self.[](*notes)
       new(notes)
@@ -38,14 +38,14 @@ module Coltrane
       case other
       when Note then NoteSet[*(notes + [other])]
       when NoteSet then NoteSet[*notes, *other.notes]
-      when Interval then NoteSet[*notes.map {|n| n + other}]
+      when Interval then NoteSet[*notes.map { |n| n + other }]
       end
     end
 
     def -(other)
       case other
       when NoteSet then NoteSet[*(notes - other.notes)]
-      when Interval then NoteSet[*notes.map {|n| n - other}]
+      when Interval then NoteSet[*notes.map { |n| n - other }]
       end
     end
 

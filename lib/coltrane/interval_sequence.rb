@@ -11,7 +11,7 @@ module Coltrane
 
     IntervalClass.all_full_names.each do |full_name|
       define_method "has_#{full_name.underscore}?" do
-        !!(intervals.detect {|i| i.public_send("#{full_name.underscore}?")})
+        !!(intervals.detect { |i| i.public_send("#{full_name.underscore}?") })
       end
     end
 
@@ -22,7 +22,7 @@ module Coltrane
         return priority unless priority.nil?
         @intervals.each do |ix|
           ix.full_names.detect do |ixx|
-            return ixx if ixx.match(/#{i.interval_name}/)
+            return ixx if ixx.match?(/#{i.interval_name}/)
           end
         end
         nil
@@ -31,7 +31,7 @@ module Coltrane
       define_method "#{i.interval_name.underscore}!" do
         @intervals.each do |ix|
           ix.full_names.detect do |ixx|
-            next if ixx.match(/Diminished|Augmented/)
+            next if ixx.match?(/Diminished|Augmented/)
             return ixx if ixx.match? /#{i.interval_name}/
           end
         end
@@ -40,7 +40,7 @@ module Coltrane
 
       # defines methods like :has_fifth?, :has_third?, has_eleventh?:
       define_method "has_#{i.interval_name.underscore}?" do
-        !!@intervals.detect {|ix| ix.full_name.match(/#{i.interval_name}/) }
+        !!@intervals.detect { |ix| ix.full_name.match(/#{i.interval_name}/) }
       end
     end
 
@@ -77,7 +77,7 @@ module Coltrane
       @intervals.include?(IntervalClass[interval_name])
     end
 
-    alias_method :interval_names, :names
+    alias interval_names names
 
     def all
       intervals

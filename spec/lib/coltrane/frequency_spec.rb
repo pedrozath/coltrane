@@ -15,7 +15,7 @@ RSpec.describe Frequency do
     expect(Frequency[440].octave(0))      .to eq(440)
     expect(Frequency[440].octave(1))      .to eq(880)
     expect(Frequency[440].octave_up)      .to eq(880.00)
-    expect(Frequency[440].octave_up(2) )  .to eq(1760.00)
+    expect(Frequency[440].octave_up(2)) .to eq(1760.00)
     expect(Frequency[440].octave_down)    .to eq(220)
     expect(Frequency[440].octave(-1))     .to eq(220)
     expect(Frequency[440].octave_down(2)) .to eq(110)

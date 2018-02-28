@@ -14,7 +14,7 @@ module Coltrane
       'Blues Minor'      => [3, 2, 1, 1, 3, 2],
       'Whole Tone'       => [2, 2, 2, 2, 2, 2],
       'Flamenco'         => [1, 3, 1, 2, 1, 2, 2],
-      'Chromatic'        => [1]*12
+      'Chromatic'        => [1] * 12
     }.freeze
 
     MODES = {
@@ -39,9 +39,9 @@ module Coltrane
       end
     end
 
-    alias_method :minor, :natural_minor
-    alias_method :pentatonic, :pentatonic_major
-    alias_method :blues, :blues_major
+    alias minor natural_minor
+    alias pentatonic pentatonic_major
+    alias blues blues_major
 
     def known_scales
       SCALES.keys
@@ -49,7 +49,7 @@ module Coltrane
 
     # All but the chromatic
     def standard_scales
-      SCALES.reject { |k,v| k == 'Chromatic' }
+      SCALES.reject { |k, _v| k == 'Chromatic' }
     end
 
     def fetch(name, tone = nil)
@@ -96,6 +96,6 @@ module Coltrane
       having_notes(notes)
     end
 
-    alias_method :having_chord, :having_chords
+    alias having_chord having_chords
   end
 end

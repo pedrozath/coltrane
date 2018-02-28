@@ -4,22 +4,22 @@ module Coltrane
   # This class deals with chords in roman notation. Ex: IVº.
   class RomanChord
     DIGITS = %w[I II III IV V VI VII].freeze
-    NOTATION_REGEX = %r{
+    NOTATION_REGEX = /
       (?<degree>b?[ivIV]*)
       (?<quality>.*)
-    }x
+    /x
 
     NOTATION_SUBSTITUTIONS = [
       %w[º dim],
       %w[o dim],
       %w[ø m7b5]
-    ]
+    ].freeze
 
-    def initialize(notation=nil, chord: nil, key: nil, scale: nil)
+    def initialize(notation = nil, chord: nil, key: nil, scale: nil)
       if notation.nil? && chord.nil? || key.nil? && scale.nil?
         raise WrongKeywordsError,
-          '[notation, [scale: || key:]] '\
-          '[chord:, [scale: || key:]] '\
+              '[notation, [scale: || key:]] '\
+              '[chord:, [scale: || key:]] '\
       end
       @scale = scale || Scale.from_key(key)
       if notation
@@ -62,7 +62,7 @@ module Coltrane
     def quality_name
       return @chord.quality.name unless @chord.nil?
       q     = normalize_quality_name(regexed_notation['quality'])
-      minor = 'm' if !q.match?((/dim|m7b5/)) && !upcase?
+      minor = 'm' if !q.match?(/dim|m7b5/) && !upcase?
       q     = [minor, q].join
       q.empty? ? 'M' : q
     end
@@ -79,21 +79,21 @@ module Coltrane
 
     def notation
       q = case quality_name
-      when 'm', 'M' then ''
-      when 'm7', 'M' then '7'
-      else quality_name
+          when 'm', 'M' then ''
+          when 'm7', 'M' then '7'
+          else quality_name
       end
 
       @notation ||= [
         roman_numeral,
-        q,
+        q
       ].join
     end
 
     def function
       return if @scale.name != 'Major'
       %w[Tonic Supertonic Mediant Subdominant
-        Dominant Submediant Leading][degree - 1]
+         Dominant Submediant Leading][degree - 1]
     end
 
     private

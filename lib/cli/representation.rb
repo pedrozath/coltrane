@@ -31,7 +31,7 @@ module Coltrane
 
       def hint
         case @flavor
-        when :marks     then ''
+        when :marks then ''
         # when :notes     then "(\u266E means the note is natural, not flat nor sharp)"
         when :intervals
           <<~DESC

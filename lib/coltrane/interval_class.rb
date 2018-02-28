@@ -1,30 +1,30 @@
-module Coltrane
-=begin
-Interval class here is not related to the Object Oriented Programming context
-but to the fact that there is a class of intervals that can all be categorized
-as having the same quality.
+# frozen_string_literal: true
 
-This class in specific still takes into account the order of intervals.
-C to D is a major second, but D to C is a minor seventh.
-=end
+module Coltrane
+  # Interval class here is not related to the Object Oriented Programming context
+  # but to the fact that there is a class of intervals that can all be categorized
+  # as having the same quality.
+  #
+  # This class in specific still takes into account the order of intervals.
+  # C to D is a major second, but D to C is a minor seventh.
   class IntervalClass < Interval
-    INTERVALS = %w[P1 m2 M2 m3 M3 P4 A4 P5 m6 M6 m7 M7 ]
+    INTERVALS = %w[P1 m2 M2 m3 M3 P4 A4 P5 m6 M6 m7 M7].freeze
 
     def self.split(interval)
       interval.scan(/(\w)(\d\d?)/)[0]
     end
 
     def self.full_name(interval)
-      q,n = split(interval)
+      q, n = split(interval)
       "#{q.interval_quality} #{n.to_i.interval_name}"
     end
 
     # Create full names and methods such as major_third? minor_seventh?
     # TODO: It's a mess and it really needs a refactor someday
-    NAMES = INTERVALS.each_with_index.reduce({}) do |memo, (interval, index)|
+    NAMES = INTERVALS.each_with_index.each_with_object({}) do |(interval, index), memo|
       memo[interval] ||= []
       2.times do |o|
-        q,i = split(interval)
+        q, i = split(interval)
         num = o * 7 + i.to_i
         prev_q = split(INTERVALS[(index - 1) % 12])[0]
         next_q = split(INTERVALS[(index + 1) % 12])[0]
@@ -33,7 +33,6 @@ C to D is a major second, but D to C is a minor seventh.
         next if q == 'A'
         memo[interval] << full_name("A#{(num - 1 - 1) % 14 + 1}") if prev_q.match? /M|P/
       end
-      memo
     end
 
     ALL_FULL_NAMES = NAMES.values.flatten
@@ -43,7 +42,7 @@ C to D is a major second, but D to C is a minor seventh.
         define_method "#{the_full_name.underscore}?" do
           name == interval_name
         end
-        IntervalClass.class.define_method "#{the_full_name.underscore}" do
+        IntervalClass.class.define_method the_full_name.underscore.to_s do
           IntervalClass.new(interval_name)
         end
       end
@@ -99,9 +98,7 @@ C to D is a major second, but D to C is a minor seventh.
 
     def self.interval_by_full_name(arg)
       NAMES.invert.each do |full_names, interval_name|
-        if full_names.include?(arg)
-          return INTERVALS.index(interval_name)
-        end
+        return INTERVALS.index(interval_name) if full_names.include?(arg)
       end
       raise IntervalNotFoundError, arg
     end

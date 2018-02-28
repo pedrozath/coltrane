@@ -79,5 +79,4 @@ RSpec.describe IntervalSequence do
     expect(IntervalSequence.new(intervals: [0, 2, 5, 7, 10]).has_second?)
       .to be_truthy
   end
-
 end

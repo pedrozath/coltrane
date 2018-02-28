@@ -1,15 +1,15 @@
+# frozen_string_literal: true
+
 module Coltrane
-=begin
-
-Pitch classes, and by classes here we don't mean in the sense of a ruby class
-are all the classes of pitches (frequencies) that are in a whole number of
-octaves apart.
-
-For example, C1, C2, C3 are all pitches from the C pitch class. Take a look into
-Notes description if you somehow feel this is confuse and that it could just be
-called as notes instead.
-
-=end
+  #
+  # Pitch classes, and by classes here we don't mean in the sense of a ruby class
+  # are all the classes of pitches (frequencies) that are in a whole number of
+  # octaves apart.
+  #
+  # For example, C1, C2, C3 are all pitches from the C pitch class. Take a look into
+  # Notes description if you somehow feel this is confuse and that it could just be
+  # called as notes instead.
+  #
   class PitchClass
     attr_reader :integer
 
@@ -38,14 +38,14 @@ called as notes instead.
       integer == other.integer
     end
 
-    alias_method :eql?, :==
-    alias_method :hash, :integer
+    alias eql? ==
+    alias hash integer
 
     def true_notation
       NOTATION[integer]
     end
 
-    alias_method :name, :true_notation
+    alias name true_notation
 
     def pretty_name
       name.tr('b', "\u266D").tr('#', "\u266F")
@@ -55,8 +55,8 @@ called as notes instead.
       notation.match? /#|b/
     end
 
-    alias_method :notation, :true_notation
-    alias_method :to_s, :true_notation
+    alias notation true_notation
+    alias to_s true_notation
 
     def +(other)
       case other
@@ -80,11 +80,11 @@ called as notes instead.
       @fundamental_frequency ||=
         Frequency[
           Coltrane.base_tuning *
-            (2 ** ((integer - Coltrane::BASE_PITCH_INTEGER.to_f)/12))
+          (2**((integer - Coltrane::BASE_PITCH_INTEGER.to_f) / 12))
         ]
     end
 
-    alias_method :frequency, :fundamental_frequency
+    alias frequency fundamental_frequency
 
     def self.size
       NOTATION.size
@@ -106,9 +106,8 @@ called as notes instead.
     def frequency_to_integer(f)
       begin
         (Coltrane::BASE_PITCH_INTEGER +
-          size * Math.log(f.to_f/Coltrane.base_tuning.to_f, 2)) % size
+          size * Math.log(f.to_f / Coltrane.base_tuning.to_f, 2)) % size
       end.round
     end
-
   end
 end

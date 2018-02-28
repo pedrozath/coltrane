@@ -1,25 +1,24 @@
 # frozen_string_literal: true
 
 module Coltrane
-=begin
-Notes are different ways of calling pitch classes. In the context of equal
-tempered scales, they're more like a conceptual subject for
-matters of convention than an actual thing.
-
-Take for example A# and Bb. Those are different notes. Nevertheless, in the
-context of equal tempered scales they represent pretty much the same frequency.
-
-The theory of notes have changed too much in the course of time, which lead us
-with a lot of conventions and strategies when dealing with music. That's what
-this class is for.
-=end
+  # Notes are different ways of calling pitch classes. In the context of equal
+  # tempered scales, they're more like a conceptual subject for
+  # matters of convention than an actual thing.
+  #
+  # Take for example A# and Bb. Those are different notes. Nevertheless, in the
+  # context of equal tempered scales they represent pretty much the same
+  # frequency.
+  #
+  # The theory of notes have changed too much in the course of time, which
+  # lead us with a lot of conventions and strategies when dealing with music.
+  # That's what this class is for.
   class Note < PitchClass
-    attr_accessor :alteration
+    attr_reader :alteration
 
     ALTERATIONS = {
       'b' => -1,
       '#' => 1
-    }
+    }.freeze
 
     def initialize(arg)
       note_name = case arg
@@ -31,7 +30,7 @@ this class is for.
 
       chars  = note_name.chars
       letter = chars.shift
-      raise InvalidNoteError, arg unless ('A'..'G').include?(letter)
+      raise InvalidNoteError, arg unless ('A'..'G').cover?(letter)
       @alteration = chars.reduce(0) do |alt, symbol|
         raise InvalidNoteError, arg unless ALTERATIONS.include?(symbol)
         alt + ALTERATIONS[symbol]
@@ -44,7 +43,7 @@ this class is for.
     end
 
     def name
-      "#{base_pitch_class.to_s}#{accidents}".gsub(/#b|b#/, '')
+      "#{base_pitch_class}#{accidents}".gsub(/#b|b#/, '')
     end
 
     def base_pitch_class
@@ -56,11 +55,11 @@ this class is for.
     end
 
     def alter(x)
-      Note.new(name).tap {|n| n.alteration = x}
+      Note.new(name).tap { |n| n.alteration = x }
     end
 
     def accidents
-      (@alteration > 0 ? '#' : 'b') * @alteration.abs
+      (@alteration > 0 ? '#' : 'b') * alteration.abs
     end
 
     def interval_to(note_name)

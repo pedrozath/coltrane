@@ -41,5 +41,4 @@ RSpec.describe IntervalClass do
     expect(IntervalClass.perfect_octave).to eq(IntervalClass['P1'])
     expect(IntervalClass.minor_second).to   eq(IntervalClass['m2'])
   end
-
 end

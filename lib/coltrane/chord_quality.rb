@@ -9,7 +9,7 @@ module Coltrane
 
     def self.chord_trie
       trie = YAML.load_file(
-        File.expand_path("#{'../'*3}data/qualities.yml", __FILE__)
+        File.expand_path("#{'../' * 3}data/qualities.yml", __FILE__)
       )
 
       trie.clone_values from_keys: ['Perfect Unison', 'Major Third'],
@@ -26,7 +26,7 @@ module Coltrane
       hash ||= chord_trie
       return quality_names if hash.empty?
       if hash['name']
-        quality_names.merge! hash.delete('name') => intervals.map {|n| IntervalClass.new(n) }
+        quality_names[hash.delete('name')] = intervals.map { |n| IntervalClass.new(n) }
       end
       hash.reduce(quality_names) do |memo, (interval, values)|
         memo.merge intervals_per_name(hash:  values,
@@ -74,16 +74,16 @@ module Coltrane
 
     def get_name
       find_chord(retrieve_chord_intervals.compact) ||
-      find_chord(retrieve_chord_intervals(sus2_sequence).compact) ||
-      find_chord(retrieve_chord_intervals(sus4_sequence).compact) ||
-      raise(ChordNotFoundError)
+        find_chord(retrieve_chord_intervals(sus2_sequence).compact) ||
+        find_chord(retrieve_chord_intervals(sus4_sequence).compact) ||
+        raise(ChordNotFoundError)
     end
 
     def suspension_type
       if has_major_second?
         'sus2'
       else has_fourth?
-        'sus4'
+           'sus4'
       end
     end
 
@@ -99,7 +99,7 @@ module Coltrane
       end
     end
 
-    alias_method :to_s, :name
+    alias to_s name
 
     private
 
