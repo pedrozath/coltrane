@@ -3,56 +3,90 @@
 module Coltrane
   # It describes a pitch, like E4 or Bb5. It's like a note, but it has an octave
   class Pitch
-    attr_reader :pitch_class, :octave
+    attr_reader :integer
 
     def initialize(notation_arg = nil,
-                   pitch_class: nil,
+                   note: nil,
                    octave: nil,
                    notation: nil,
                    frequency: nil)
 
-      @pitch_class, @octave =
-        if notation_arg || notation
-          pitch_class_and_octave_from_notation(notation_arg || notation)
-        elsif pitch_class && octave
-          [pitch_class, octave]
+      @integer = begin
+        if (n = notation_arg || notation)
+          n.is_a?(Integer) ? n : integer_from_notation(n)
+        elsif note && octave
+          integer_from_note_and_octave(Note[note], octave)
         elsif frequency
-          pitch_class_and_octave_from_frequency(frequency)
+          integer_from_frequency(frequency)
         else
-          raise InvalidArgumentsError
+          raise(InvalidArgumentsError)
         end
+      end
+    end
+
+    def self.[](*args)
+      new *args
+    end
+
+    def scientific_notation
+      "#{pitch_class}#{octave}"
+    end
+
+    def pitch_class
+      PitchClass[integer]
+    end
+
+    def octave
+      (integer / 12) - 1
+    end
+
+    alias notation scientific_notation
+    alias name     scientific_notation
+    alias to_s     scientific_notation
+
+    alias hash integer
+    alias midi integer
+
+    def ==(other)
+      integer == other.integer
+    end
+
+    def frequency
+      pitch_class.frequency.octave(octave)
+    end
+
+    alias eql? ==
+    alias eq ==
+
+    def +(other)
+      case other
+      when Integer then Pitch[integer + other]
+      end
+    end
+
+    def -(other)
+      case other
+      when Integer then Pitch[integer - other]
+      end
     end
 
     private
 
-    def pitch_class_and_octave_from_notation(name)
-      pitch_class_notation, octaves = *name.match(/(.*)(\d)/)
-      [PitchClass.new(pitch_class_notation), octaves.to_f]
+    def integer_from_notation(the_notation)
+      _, n, o = *the_notation.match(/(\D+)(\d+)/)
+      integer_from_note_and_octave(Note[n], o)
     end
 
-    def pitch_class_and_octave_from_frequency(frequency)
-      [PitchClass[frequency], Math.log(f.to_f / TUNING, 2) / 12]
+    def integer_from_note_and_octave(p, o)
+      12 * (o.to_i + 1) + p.integer
     end
 
-    #   def number_from_name(pitch_string)
-    #     Note[note].number + 12 * octaves.to_i
-    #   end
+    def integer_from_frequency(f)
+      octave_from_frequency(f) * 12 + PitchClass[f].integer
+    end
 
-    #   def name
-    #     "#{note.name}#{octave}"
-    #   end
-
-    #   def octave
-    #     number / 12
-    #   end
-
-    #   def note
-    #     Note[number]
-    #   end
-
-    #   def +(other)
-    #     Pitch.new(number + (other.is_a?(Pitch) ? other.number : other))
-    #   end
-    # end
+    def octave_from_frequency(f)
+      Math.log(f.to_f / PitchClass['C'].frequency.to_f, 2).ceil
+    end
   end
 end

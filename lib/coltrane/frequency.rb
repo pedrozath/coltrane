@@ -21,7 +21,7 @@ module Coltrane
     end
 
     def octave(n)
-      frequency * 2**n
+      Frequency[frequency * 2**n]
     end
 
     def ==(other)
