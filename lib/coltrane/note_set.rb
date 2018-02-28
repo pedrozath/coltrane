@@ -10,8 +10,8 @@ module Coltrane
 
     attr_reader :notes
 
-    alias root first
-    alias all notes
+    alias_method :root, :first
+    alias_method :all, :notes
 
     def self.[](*notes)
       new(notes)
@@ -57,8 +57,8 @@ module Coltrane
       map(&:name)
     end
 
-    def numbers
-      map(&:number)
+    def integers
+      map(&:integer)
     end
 
     def interval_sequence

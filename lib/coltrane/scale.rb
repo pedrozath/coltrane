@@ -8,11 +8,11 @@ module Coltrane
 
     def initialize(*distances, tone: 'C', mode: 1, name: nil, notes: nil)
       @name = name
-      if !distances.nil? && !tone.nil?
+      if distances.any? && tone
         @tone              = Note[tone]
         distances          = distances.rotate(mode - 1)
         @interval_sequence = IntervalSequence.new(distances: distances)
-      elsif !notes.nil?
+      elsif notes
         ds = NoteSet[*notes].interval_sequence.distances
         new(*ds, tone: notes.first)
       else
@@ -44,14 +44,14 @@ module Coltrane
       "#{tone.name} #{name}"
     end
 
-    alias full_name pretty_name
+    alias_method :full_name, :pretty_name
 
     def degree(d)
       raise WrongDegreeError, d if d < 1 || d > size
       tone + interval_sequence[d - 1].semitones
     end
 
-    alias [] degree
+    alias_method :[], :degree
 
     def degrees
       (1..size)
@@ -76,7 +76,7 @@ module Coltrane
       (self & noteset).size == noteset.size
     end
 
-    alias include? include_notes?
+    alias_method :include?, :include_notes?
 
     def notes
       NoteSet[*degrees.map { |d| degree(d) }]
@@ -119,9 +119,6 @@ module Coltrane
       Progression.new(self, degrees)
     end
 
-    def all_chords
-      chords
-    end
 
     def chords(size = 3..12)
       size = (size..size) if size.is_a?(Integer)
@@ -139,5 +136,8 @@ module Coltrane
         end
       end
     end
+
+    alias_method :all_chords, :chords
+
   end
 end

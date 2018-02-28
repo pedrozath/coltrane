@@ -18,7 +18,7 @@ RSpec.describe Scale do
 
     scale = Scale.from_key('Bb')
     expect(scale.name).to eq('Major')
-    expect(scale.tone.number).to eq(Note['A#'].number)
+    expect(scale.tone.integer).to eq(Note['A#'].integer)
 
     scale = Scale.from_key('DM')
     expect(scale.name).to eq('Major')
@@ -85,9 +85,9 @@ RSpec.describe Scale do
     expect(scale_search.scales.map(&:full_name)).to include('C Major')
     expect(scale_search.scales.map(&:full_name)).to_not include('F# Major')
     expect(scale_search.scales.map(&:full_name)).to_not include('Gb Major')
-    expect(scale_search.results['Major'][Note['C'].id].size).to eq(3)
-    expect(scale_search.results['Major'][Note['D#'].id].size).to eq(2)
-    expect(scale_search.results['Major'][Note['E'].id].size).to eq(1)
+      expect(scale_search.results['Major'][Note['C'].integer].size).to eq(3)
+    expect(scale_search.results['Major'][Note['D#'].integer].size).to eq(2)
+    expect(scale_search.results['Major'][Note['E'].integer].size).to eq(1)
   end
 
   it 'can return a specific note from the scale' do

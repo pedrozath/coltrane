@@ -40,7 +40,8 @@ Mercenary.program(:Coltrane) do |p|
     'Chooses which <additional></additional> information to display: marks, notes, intervals or degrees'
   ]
 
-  p.command(:notes) do |c|
+  p.command(:note) do |c|
+    c.alias(:notes)
     c.syntax 'notes <notes separated by space> [--on <instrument>]'
     c.description 'Shows the given notes.'
     c.option(*@instrument_option)
@@ -53,6 +54,7 @@ Mercenary.program(:Coltrane) do |p|
   end
 
   p.command(:chord) do |c|
+    c.alias(:chords)
     c.syntax 'chord <chord-name> [--on <instrument>]'
     c.description 'Shows the given chord. Ex: coltrane chord Cmaj7 --on piano'
     c.option(*@instrument_option)
@@ -63,6 +65,7 @@ Mercenary.program(:Coltrane) do |p|
       Coltrane::Cli::Chord.new(*chords, notes: notes&.split('-'), on: on, flavor: flavor)
     end
   end
+
 
   p.command(:scale) do |c|
     c.syntax 'scale <name of scale>-<root note> [--on <instrument>]'
@@ -110,7 +113,7 @@ Mercenary.program(:Coltrane) do |p|
     c.action do |(prog, _, key), on: 'text', flavor: 'notes'|
       possible_method = prog.gsub('-', '_')
       progression = if Coltrane::Progression.respond_to?(possible_method)
-                      Coltrane::Progression.send(possible_method, note)
+                      Coltrane::Progression.send(possible_method, key)
                     else
                       Coltrane::Progression.new(prog, key: key)
                     end
@@ -139,7 +142,7 @@ Mercenary.program(:Coltrane) do |p|
            when 'scales' then Coltrane::Scale.known_scales
            when 'flavors' then %w[marks notes intervals degrees]
            when 'instruments' then %w[guitar bass ukulele piano text]
-           when 'chords', 'chord-qualities' then Coltrane::Qualities::CHORD_QUALITIES.keys.sort.join(' ')
+           when 'chords', 'chord-qualities' then Coltrane::ChordQuality::intervals_per_name.keys.join(' ')
            end
     end
   end

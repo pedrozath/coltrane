@@ -21,6 +21,12 @@ module Coltrane
     end
   end
 
+  class WrongArgumentsError < BadConstructorError
+    def initialize(msg)
+      super "Wrong argument(s)."
+    end
+  end
+
   class InvalidNoteError < BadConstructorError
     def initialize(note)
       super "#{note} is not a valid note"
@@ -63,6 +69,25 @@ module Coltrane
             "If you're sure this interval exists, "\
             "would you mind to suggest it's inclusion here: "\
             'https://github.com/pedrozath/coltrane/issues '\
+    end
+  end
+
+  class InvalidPitchClassError < ColtraneError
+    def initialize(arg)
+      super "The given frequency(#{arg}) is not considered "\
+            "part of a pitch class"\
+    end
+  end
+
+  class InvalidNoteSymbolError < ColtraneError
+    def initialize(arg)
+      super "The musical notation included an unrecognizable symbol (#{arg})."
+    end
+  end
+
+  class InvalidNoteLetterError < ColtraneError
+    def initialize(arg)
+      super "The musical notation included an unrecognizable letter (#{arg})."
     end
   end
 end

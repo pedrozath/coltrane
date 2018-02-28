@@ -26,7 +26,7 @@ module Coltrane
       hash ||= chord_trie
       return quality_names if hash.empty?
       if hash['name']
-        quality_names.merge! hash.delete('name') => intervals.map {|n| Interval[n] }
+        quality_names.merge! hash.delete('name') => intervals.map {|n| IntervalClass.new(n) }
       end
       hash.reduce(quality_names) do |memo, (interval, values)|
         memo.merge intervals_per_name(hash:  values,
@@ -65,7 +65,7 @@ module Coltrane
       ints = IntervalSequence.new(intervals: self)
       chord_sequence.map do |int_sym|
         next unless interval_name = ints.public_send(int_sym)
-        ints.delete(Interval[interval_name])
+        ints.delete_if { |i| i.cents == IntervalClass.new(interval_name).cents }
         interval_name
       end
     end
@@ -73,17 +73,11 @@ module Coltrane
     public
 
     def get_name
-      if result = find_chord([*retrieve_chord_intervals].compact)
-        return result
-      elsif result = find_chord([*retrieve_chord_intervals(sus2_sequence)].compact)
-        return result
-      elsif result = find_chord([*retrieve_chord_intervals(sus4_sequence)].compact)
-        return result
-      else
-        raise ChordNotFoundError
-      end
+      find_chord(retrieve_chord_intervals.compact) ||
+      find_chord(retrieve_chord_intervals(sus2_sequence).compact) ||
+      find_chord(retrieve_chord_intervals(sus4_sequence).compact) ||
+      raise(ChordNotFoundError)
     end
-
 
     def suspension_type
       if has_major_second?
@@ -94,10 +88,10 @@ module Coltrane
     end
 
     def initialize(name: nil, notes: nil, bass: nil)
-      if !name.nil?
+      if name
         @name = bass.nil? ? name : [name, bass].join('/')
-        super(intervals: NAMES[name])
-      elsif !notes.nil?
+        super(intervals: intervals_from_name(name))
+      elsif notes
         super(notes: notes)
         @name = get_name
       else
@@ -105,6 +99,12 @@ module Coltrane
       end
     end
 
-    alias to_s name
+    alias_method :to_s, :name
+
+    private
+
+    def intervals_from_name(name)
+      NAMES[name] || NAMES["M#{name}"] || raise(ChordNotFoundError)
+    end
   end
 end

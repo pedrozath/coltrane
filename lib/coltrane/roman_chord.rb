@@ -22,9 +22,9 @@ module Coltrane
           '[chord:, [scale: || key:]] '\
       end
       @scale = scale || Scale.from_key(key)
-      if !notation.nil?
+      if notation
         @notation = notation
-      elsif !chord.nil?
+      elsif chord
         @chord = chord.is_a?(String) ? Chord.new(name: chord) : chord
       end
     end

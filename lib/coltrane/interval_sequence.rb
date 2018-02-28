@@ -7,9 +7,9 @@ module Coltrane
     attr_reader :intervals
 
     def_delegators :@intervals, :map, :each, :[], :size,
-                   :reduce, :delete
+                   :reduce, :delete, :reject!, :delete_if
 
-    Interval::ALL_FULL_NAMES.each do |full_name|
+    IntervalClass.all_full_names.each do |full_name|
       define_method "has_#{full_name.underscore}?" do
         !!(intervals.detect {|i| i.public_send("#{full_name.underscore}?")})
       end
@@ -45,15 +45,16 @@ module Coltrane
     end
 
     def initialize(notes: nil, intervals: nil, distances: nil)
-      if !notes.nil?
+      if notes
         notes = NoteSet[*notes] if notes.is_a?(Array)
         @intervals = intervals_from_notes(notes)
-      elsif !intervals.nil?
-        @intervals = intervals.map { |i| Interval[i] }
-      elsif !distances.nil?
+      elsif intervals
+        @intervals = intervals.map { |i| IntervalClass[i] }
+      elsif distances
         @distances = distances
         @intervals = intervals_from_distances(distances)
       else
+        require 'pry'; binding.pry
         raise 'Provide: [notes:] || [intervals:] || [distances:]'
       end
     end
@@ -73,10 +74,10 @@ module Coltrane
     end
 
     def has?(interval_name)
-      @intervals.include?(Interval[interval_name])
+      @intervals.include?(IntervalClass[interval_name])
     end
 
-    alias interval_names names
+    alias_method :interval_names, :names
 
     def all
       intervals
@@ -144,13 +145,13 @@ module Coltrane
     private
 
     def intervals_from_distances(distances)
-      distances[0..-2].reduce([Interval[0]]) do |memo, d|
+      distances[0..-2].reduce([IntervalClass[0]]) do |memo, d|
         memo + [memo.last + d]
       end
     end
 
     def intervals_from_notes(notes)
-      notes.map { |n| notes.root - n }.sort_by(&:semitones)
+      notes.map { |n| n - notes.root }.sort_by(&:semitones)
     end
   end
 end

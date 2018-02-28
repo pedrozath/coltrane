@@ -57,7 +57,7 @@ module Coltrane
           else raise WrongFlavorError
           end
 
-        base_hue = (180 + note.number * 10) % 360 # + 260
+        base_hue = (180 + note.integer * 10) % 360 # + 260
         Paint[
           mark,
           HSL.new(0, 0, 100).html,

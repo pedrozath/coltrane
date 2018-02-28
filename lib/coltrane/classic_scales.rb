@@ -39,9 +39,9 @@ module Coltrane
       end
     end
 
-    alias minor natural_minor
-    alias pentatonic pentatonic_major
-    alias blues blues_major
+    alias_method :minor, :natural_minor
+    alias_method :pentatonic, :pentatonic_major
+    alias_method :blues, :blues_major
 
     def known_scales
       SCALES.keys
@@ -75,17 +75,17 @@ module Coltrane
 
     def having_notes(notes)
       format = { scales: [], results: {} }
-      OpenStruct.new(
+      OpenStruct.new begin
         standard_scales.each_with_object(format) do |(name, intervals), output|
-          Note.all.each.map do |tone|
+          PitchClass.all.each.map do |tone|
             scale = new(*intervals, tone: tone, name: scale)
             output[:results][name] ||= {}
-            next if output[:results][name].key?(tone.number)
+            next if output[:results][name].key?(tone.integer)
             output[:scales] << scale if scale.include?(notes)
-            output[:results][name][tone.number] = scale.notes & notes
+            output[:results][name][tone.integer] = scale.notes & notes
           end
         end
-      )
+      end
     end
 
     def having_chords(*chords)
@@ -96,6 +96,6 @@ module Coltrane
       having_notes(notes)
     end
 
-    alias having_chord having_chords
+    alias_method :having_chord, :having_chords
   end
 end

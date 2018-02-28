@@ -47,9 +47,9 @@ RSpec.describe IntervalSequence do
 
   it 'returns interval by ordinal' do
     expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).third)
-      .to eq(Interval.minor_third.full_name)
+      .to eq(IntervalClass.minor_third.full_name)
     expect(IntervalSequence.new(intervals: [0, 3, 5, 7, 10]).third)
-      .to_not eq(Interval.major_third.full_name)
+      .to_not eq(IntervalClass.major_third.full_name)
     expect(IntervalSequence.new(intervals: [0, 3, 7, 10]).fifth)
       .to eq('Perfect Fifth')
     expect(IntervalSequence.new(intervals: [0, 3, 8, 10]).fifth)

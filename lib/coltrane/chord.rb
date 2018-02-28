@@ -8,16 +8,16 @@ module Coltrane
     include ChordSubstitutions
 
     def initialize(notes: nil, root_note: nil, quality: nil, name: nil)
-      if !notes.nil?
+      if notes
         notes      = NoteSet[*notes] if notes.is_a?(Array)
         @notes     = notes
         @root_note = notes.first
         @quality   = ChordQuality.new(notes: notes)
-      elsif !root_note.nil? && !quality.nil?
+      elsif root_note && quality
         @notes     = quality.notes_for(root_note)
         @root_note = root_note
         @quality   = quality
-      elsif !name.nil?
+      elsif name
         @root_note, @quality, @notes = parse_from_name(name)
       else
       raise WrongKeywordsError,
@@ -29,7 +29,7 @@ module Coltrane
       "#{root_note}#{quality}"
     end
 
-    alias to_s name
+    alias_method :to_s, :name
 
     def pretty_name
       "#{root_note.pretty_name}#{quality.name}"
@@ -76,7 +76,7 @@ module Coltrane
     protected
 
     def parse_from_name(name)
-      chord_name, bass = name.split('/')
+      chord_name, bass = name.match?(/\/9/) ? [name, nil] : name.split('/')
       chord_regex = %r{([A-Z](?:#|b)?)(.*)}
       _, root_name, quality_name = chord_name.match(chord_regex).to_a
       root    = Note[root_name]

@@ -10,11 +10,15 @@ require 'coltrane/version'
 require 'coltrane/errors'
 require 'coltrane/cadence'
 
-require 'coltrane/note'
+require 'coltrane/frequency'
 require 'coltrane/pitch'
+require 'coltrane/pitch_class'
+require 'coltrane/note'
 require 'coltrane/note_set'
 
 require 'coltrane/interval'
+require 'coltrane/interval_class'
+require 'coltrane/unordered_interval_class'
 require 'coltrane/interval_sequence'
 
 require 'coltrane/chord_quality'
@@ -31,3 +35,19 @@ require 'coltrane/changes'
 require 'coltrane/progression'
 
 require 'coltrane/mode'
+
+module Coltrane
+  BASE_OCTAVE = 4
+  BASE_PITCH_INTEGER = 9
+
+  def self.tuning=(f)
+    @base_tuning = Frequency[f].octave(-4)
+  end
+
+  def self.base_tuning
+    @base_tuning
+  end
+
+  @base_tuning = Frequency[440].octave(-4)
+end
+

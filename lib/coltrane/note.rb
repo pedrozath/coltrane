@@ -1,98 +1,70 @@
 # frozen_string_literal: true
 
 module Coltrane
-  # Describes a musical note, independent of octave (that'd be pitch)
-  class Note
-    include Multiton
+=begin
+Notes are different ways of calling pitch classes. In the context of equal
+tempered scales, they're more like a conceptual subject for
+matters of convention than an actual thing.
 
-    attr_reader :name, :number
-    alias id number
-    alias to_s name
+Take for example A# and Bb. Those are different notes. Nevertheless, in the
+context of equal tempered scales they represent pretty much the same frequency.
 
-    NOTES = {
-      'C'  => 0,
-      'C#' => 1,
-      'Db' => 1,
-      'D'  => 2,
-      'D#' => 3,
-      'Eb' => 3,
-      'E'  => 4,
-      'F'  => 5,
-      'F#' => 6,
-      'Gb' => 6,
-      'G'  => 7,
-      'G#' => 8,
-      'Ab' => 8,
-      'A'  => 9,
-      'A#' => 10,
-      'Bb' => 10,
-      'B'  => 11
-    }.freeze
+The theory of notes have changed too much in the course of time, which lead us
+with a lot of conventions and strategies when dealing with music. That's what
+this class is for.
+=end
+  class Note < PitchClass
+    attr_accessor :alteration
 
-    def initialize(name)
-      @name = name
-      @number = NOTES[name]
+    ALTERATIONS = {
+      'b' => -1,
+      '#' => 1
+    }
+
+    def initialize(arg)
+      note_name = case arg
+                  when String then arg
+                  when PitchClass then arg.true_notation
+                  when Numeric, Frequency then PitchClass.new(arg).true_notation
+                  else raise(WrongArgumentsError, arg)
+                  end
+
+      chars  = note_name.chars
+      letter = chars.shift
+      raise InvalidNoteError, arg unless ('A'..'G').include?(letter)
+      @alteration = chars.reduce(0) do |alt, symbol|
+        raise InvalidNoteError, arg unless ALTERATIONS.include?(symbol)
+        alt + ALTERATIONS[symbol]
+      end
+      super((PitchClass[letter].integer + @alteration) % PitchClass.size)
     end
-
-    private_class_method :new
 
     def self.[](arg)
-      name =
-        case arg
-        when Note then return arg
-        when String then find_note(arg)
-        when Numeric then NOTES.key(arg % 12)
-        else
-          raise InvalidNoteError, "Wrong type: #{arg.class}"
-        end
-
-      new(name) || (raise InvalidNoteError, arg.to_s)
+      new(arg)
     end
 
-    def self.all
-      %w[C C# D D# E F F# G G# A A# B].map { |n| Note[n] }
+    def name
+      "#{base_pitch_class.to_s}#{accidents}".gsub(/#b|b#/, '')
     end
 
-    def self.find_note(str)
-      NOTES.each_key { |k, _v| return k if str.casecmp?(k) }
-      nil
+    def base_pitch_class
+      PitchClass[integer - alteration]
     end
 
-    def pretty_name
-      @name.tr('b', "\u266D").tr('#', "\u266F")
+    def alteration=(a)
+      @alteration = a unless PitchClass[integer - a].accidental?
     end
 
-    alias to_s name
-
-    def accident?
-      [1, 3, 6, 8, 10].include?(number)
+    def alter(x)
+      Note.new(name).tap {|n| n.alteration = x}
     end
 
-    def +(other)
-      case other
-      when Interval then Note[number + other.semitones]
-      when Numeric  then Note[number + other]
-      when Note     then Chord.new(number + other.number)
-      end
-    end
-
-    def -(other)
-      case other
-      when Numeric then Note[number - other]
-      when Interval then Note[number - other.semitones]
-      when Note    then Interval[other.number - number]
-      end
+    def accidents
+      (@alteration > 0 ? '#' : 'b') * @alteration.abs
     end
 
     def interval_to(note_name)
       Note[note_name] - self
-    end
-
-    def enharmonic?(other)
-      case other
-      when String then number == Note[other].number
-      when Note then number == other.number
-      end
     end
   end
 end
