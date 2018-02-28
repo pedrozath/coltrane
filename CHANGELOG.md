@@ -2,7 +2,20 @@
 
 ## [Unreleased]
 - Correct Flat/Sharp on scales
-- Refactor notes and add pitch frequencies, pitch classes
+
+## [2.0.0]
+
+### Changes
+
+- Code has been completely refactored. Things are organized around frequencies.
+  Intervals are backed by cents, which is an logarithmic measure used to measure
+  the distance between 2 frequencies.
+
+  We have now a distinction between PitchClass and Note. The first is a generic
+  concept of Notes while the latter deals with sharps and flats logic.
+
+  That refactor will allow us to in the next versions refactor scales so that
+  they output proper sharps and flats (https://github.com/pedrozath/coltrane/issues/3).
 
 ## [1.2.3]
 
