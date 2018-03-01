@@ -8,6 +8,7 @@ require 'bundler'
 Bundler.require(:test)
 
 require 'coltrane'
+require 'coltrane_instruments'
 include Coltrane
 
 RSpec.configure do |config|

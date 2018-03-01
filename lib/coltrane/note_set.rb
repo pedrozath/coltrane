@@ -6,7 +6,7 @@ module Coltrane
     extend Forwardable
 
     def_delegators :@notes, :first, :each, :size, :map, :reduce, :index,
-                   :[], :index, :empty?, :permutation, :include?, :<<
+                   :[], :index, :empty?, :permutation, :include?, :<<, :any?
 
     attr_reader :notes
 
@@ -21,7 +21,7 @@ module Coltrane
       @notes =
         case arg
         when NoteSet then arg.notes
-        when Array   then arg.map { |n| n.is_a?(Note) ? n : Note[n] }.uniq
+        when Array   then arg.compact.map { |n| n.is_a?(PitchClass) ? n : Note[n] }.uniq
         else raise InvalidNotesError, arg
         end
     end
