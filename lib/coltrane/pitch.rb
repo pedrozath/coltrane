@@ -82,7 +82,7 @@ module Coltrane
     end
 
     def integer_from_frequency(f)
-      octave_from_frequency(f) * 12 + PitchClass[f].integer
+      octave_from_frequency(f) * 12 + PitchClass.new(frequency: f).integer
     end
 
     def octave_from_frequency(f)

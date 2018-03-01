@@ -12,6 +12,7 @@ module Coltrane
   #
   class PitchClass
     attr_reader :integer
+    include Comparable
 
     NOTATION = %w[C C# D D# E F F# G G# A A# B].freeze
 
@@ -19,14 +20,14 @@ module Coltrane
       NOTATION.map { |n| new(n) }
     end
 
-    def initialize(arg, frequency: nil)
+    def initialize(arg=nil, frequency: nil)
       @integer = case arg
                  when String then NOTATION.index(arg)
-                 when Frequency, Float then frequency_to_integer(Frequency.new(arg))
-                 when Integer then (arg % 12)
-                 when NilClass then frequency_to_integer(Frequency.new(frequency))
+                 when Frequency then frequency_to_integer(Frequency.new(arg))
+                 when Numeric then (arg % 12)
+                 when nil then frequency_to_integer(Frequency.new(frequency))
                  when PitchClass then arg.integer
-                 else raise(InvalidArgumentError)
+                 else raise(WrongArgumentsError)
                  end
     end
 
@@ -55,25 +56,37 @@ module Coltrane
       notation.match? /#|b/
     end
 
+    def sharp?
+      notation.match? /#/
+    end
+
+    def flat?
+      notation.match? /b/
+    end
+
     alias notation true_notation
     alias to_s true_notation
 
     def +(other)
       case other
-      when Interval   then PitchClass[integer + other.semitones]
-      when Integer    then PitchClass[integer + other]
-      when PitchClass then Note.new(integer + other.integer)
-      when Frequency  then PitchClass.new(frequency: frequency + other)
+      when Interval   then self.class[integer + other.semitones]
+      when Integer    then self.class[integer + other]
+      when PitchClass then self.class[integer + other.integer]
+      when Frequency  then self.class.new(frequency: frequency + other)
       end
     end
 
     def -(other)
       case other
-      when Interval   then PitchClass[integer - other.semitones]
-      when Integer    then PitchClass[integer - other]
+      when Interval   then self.class[integer - other.semitones]
+      when Integer    then self.class[integer - other]
       when PitchClass then IntervalClass[frequency / other.frequency]
-      when Frequency  then PitchClass.new(frequency: frequency - other)
+      when Frequency  then self.class.new(frequency: frequency - other)
       end
+    end
+
+    def <=>(other)
+      integer <=> other.integer
     end
 
     def fundamental_frequency

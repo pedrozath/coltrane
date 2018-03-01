@@ -7,11 +7,10 @@ module Coltrane
       SPECIAL_FRETS = [3, 5, 7, 9, 12, 15, 17, 19].freeze
 
       include Color
-      def initialize(notes, flavor, tuning: %w[E A D G B E], frets: 22)
+      def initialize(notes, tuning: %w[E A D G B E], frets: 22)
         @notes    = notes
         @tuning   = tuning.reverse
         @frets    = frets
-        @flavor   = flavor
         @ref_note = @notes.first
       end
 
@@ -48,14 +47,13 @@ module Coltrane
       end
 
       def place_mark(note)
-        mark =
-          case @flavor
-          when :notes     then note.pretty_name.ljust(2, ' ')
-          when :intervals then (@ref_note - note).name.ljust(2, '-')
-          when :degrees   then @notes.degree(note).to_s.rjust(2, '0')
-          when :marks     then '  ' # '◼◼'
-          else raise WrongFlavorError
-          end
+        mark = case Cli.config.flavor
+               when :notes     then note.pretty_name.ljust(2, ' ')
+               when :intervals then (@ref_note - note).name.ljust(2, '-')
+               when :degrees   then @notes.degree(note).to_s.rjust(2, '0')
+               when :marks     then '  ' # '◼◼'
+               else raise WrongFlavorError
+               end
 
         base_hue = (180 + note.integer * 10) % 360 # + 260
         Paint[

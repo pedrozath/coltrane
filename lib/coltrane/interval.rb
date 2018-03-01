@@ -4,10 +4,16 @@ module Coltrane
   # Interval describe the logarithmic distance between 2 frequencies.
   # It's measured in cents.
   class Interval
+    include Comparable
+
     attr_reader :cents
 
     class << self
       alias [] new
+
+      def method_missing(method, *args)
+        IntervalClass.send(method, *args)
+      end
     end
 
     def initialize(cents)
@@ -45,6 +51,14 @@ module Coltrane
       when Numeric then Interval[cents - other]
       when Interval then Interval[cents - other.cents]
       end
+    end
+
+    def -@
+      Interval[-cents]
+    end
+
+    def <=>(other)
+      cents <=> other.cents
     end
   end
 end

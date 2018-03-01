@@ -6,7 +6,7 @@ module Coltrane
     class Ukulele < Guitar
       SPECIAL_FRETS = [5, 7, 9, 12].freeze
 
-      def initialize(notes, flavor, tuning: %w[G C E A], frets: 12)
+      def initialize(notes, tuning: %w[G C E A], frets: 12)
         super
       end
     end

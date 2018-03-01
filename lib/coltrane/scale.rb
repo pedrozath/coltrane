@@ -4,6 +4,10 @@ module Coltrane
   # Musical scale creation and manipulation
   class Scale
     extend ClassicScales
+    extend Forwardable
+
+    def_delegators :notes, :accidentals, :sharps, :flats
+
     attr_reader :interval_sequence, :tone
 
     def initialize(*distances, tone: 'C', mode: 1, name: nil, notes: nil)
@@ -13,8 +17,10 @@ module Coltrane
         distances          = distances.rotate(mode - 1)
         @interval_sequence = IntervalSequence.new(distances: distances)
       elsif notes
-        ds = NoteSet[*notes].interval_sequence.distances
-        new(*ds, tone: notes.first)
+        @notes             = NoteSet[*notes]
+        @tone              = @notes.first
+        ds                 = @notes.interval_sequence.distances
+        @interval_sequence = IntervalSequence.new(distances: ds)
       else
         raise WrongKeywordsError, '[*distances, tone: "C", mode: 1] || [notes:]'
       end
@@ -79,7 +85,7 @@ module Coltrane
     alias include? include_notes?
 
     def notes
-      NoteSet[*degrees.map { |d| degree(d) }]
+      @notes ||= NoteSet[*degrees.map { |d| degree(d) }]
     end
 
     def interval(i)

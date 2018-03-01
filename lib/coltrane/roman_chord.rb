@@ -4,10 +4,7 @@ module Coltrane
   # This class deals with chords in roman notation. Ex: IVº.
   class RomanChord
     DIGITS = %w[I II III IV V VI VII].freeze
-    NOTATION_REGEX = /
-      (?<degree>b?[ivIV]*)
-      (?<quality>.*)
-    /x
+    NOTATION_REGEX = /(b?[ivIV]*)(.*)/
 
     NOTATION_SUBSTITUTIONS = [
       %w[º dim],
@@ -21,7 +18,7 @@ module Coltrane
               '[notation, [scale: || key:]] '\
               '[chord:, [scale: || key:]] '\
       end
-      @scale = scale || Scale.from_key(key)
+      @scale = scale || Key[key]
       if notation
         @notation = notation
       elsif chord
@@ -31,7 +28,7 @@ module Coltrane
 
     def degree
       return @scale.degree_of_note(root_note) unless @chord.nil?
-      d      = regexed_notation['degree']
+      d      = regexed_notation[:degree]
       @flats = d.count('b')
       d      = d.delete('b')
       @degree ||= DIGITS.index(d.upcase) + 1
@@ -43,7 +40,7 @@ module Coltrane
     end
 
     def upcase?
-      !!(regexed_notation['degree'][0].match /[[:upper:]]/)
+      !!(regexed_notation[:degree][0].match /[[:upper:]]/)
     end
 
     def chord
@@ -61,8 +58,8 @@ module Coltrane
 
     def quality_name
       return @chord.quality.name unless @chord.nil?
-      q     = normalize_quality_name(regexed_notation['quality'])
-      minor = 'm' if !q.match?(/dim|m7b5/) && !upcase?
+      q     = normalize_quality_name(regexed_notation[:quality])
+      minor = 'm' if (!q.match? /dim|m7b5/) && !upcase?
       q     = [minor, q].join
       q.empty? ? 'M' : q
     end
@@ -99,7 +96,10 @@ module Coltrane
     private
 
     def regexed_notation
-      @regexed_notation ||= @notation.match(NOTATION_REGEX).named_captures
+      @regexed_notation ||= begin
+        matchdata = @notation.match(NOTATION_REGEX)
+        { degree: matchdata[1], quality: matchdata[2] }
+      end
     end
 
     def normalize_quality_name(quality_name)

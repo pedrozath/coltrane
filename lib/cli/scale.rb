@@ -27,8 +27,8 @@ module Coltrane
       def self.render_search(searched_notes)
         search = Coltrane::Scale.having_notes(searched_notes)
         output = []
-        scale_width = search.results.keys.map(&:size).max
-        search.results.each do |name, scales_by_tone|
+        scale_width = search[:results].keys.map(&:size).max
+        search[:results].each do |name, scales_by_tone|
           output << name.ljust(scale_width + 1, ' ')
           scales_by_tone.each do |tone_number, notes|
             p     = (notes.size.to_f / searched_notes.size) * 100
@@ -43,9 +43,9 @@ module Coltrane
         puts output.join
       end
 
-      def initialize(scale, on: :text, flavor: 'degrees')
+      def initialize(scale)
         desc = "This is the #{scale.tone.name} #{scale.name} scale:"
-        Coltrane::Cli::Notes.new(scale.notes, on: on, desc: desc, flavor: flavor)
+        Coltrane::Cli::Notes.new(scale.notes)
       end
     end
   end

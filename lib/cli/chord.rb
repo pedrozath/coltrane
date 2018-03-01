@@ -4,7 +4,15 @@ module Coltrane
   module Cli
     # Interfaces chord functionality with the lib
     class Chord
-      def initialize(*chords, on: :text, flavor: 'intervals', notes: nil)
+      def initialize(*chords, notes: nil)
+        Cli.config do |c|
+          if c.on == :guitar
+            c.on = :guitar_chords
+          elsif c.on == :guitar_arm
+            c.on = :guitar
+          end
+        end
+
         @chords =
           if !chords.empty?
             if chords[0].is_a?(String)
@@ -18,9 +26,8 @@ module Coltrane
 
         @chords.each do |chord|
           desc = "#{chord.name} chord:"
-          Coltrane::Cli::Notes.new chord.notes, on: on,
-                                                desc: desc,
-                                                flavor: flavor
+          Coltrane::Cli::Notes.new chord.notes, desc: desc
+          ColtraneSynth::Base.play(chord, 1) if Cli.config.sound
         end
       end
     end

@@ -11,26 +11,20 @@ module Coltrane
         @@types[subclass.to_s.split('::').last.underscore.to_sym] = subclass
       end
 
-      def self.build(type, notes, flavor)
-        raise WrongFlavorError unless ACCEPTED_FLAVORS.include?(flavor)
-        type = case type
-               when :ukelele then :ukulele
-               when :bass then :bass_guitar
-               else type
-               end
-
+      def self.build(notes)
+        type = Cli.config.on
+        raise WrongFlavorError unless ACCEPTED_FLAVORS.include?(Cli.config.flavor)
         raise(WrongRepresentationTypeError, type) unless @@types.include?(type)
-        @@types[type].new(notes, flavor)
+        @@types[type].new(notes)
       end
 
-      def initialize(notes, flavor)
+      def initialize(notes)
         @notes    = notes
-        @flavor   = flavor
         @ref_note = notes.first
       end
 
       def hint
-        case @flavor
+        case Cli.config.flavor
         when :marks then ''
         # when :notes     then "(\u266E means the note is natural, not flat nor sharp)"
         when :intervals

@@ -6,7 +6,8 @@ module Coltrane
     extend Forwardable
 
     def_delegators :@notes, :first, :each, :size, :map, :reduce, :index,
-                   :[], :index, :empty?, :permutation, :include?, :<<, :any?
+                   :[], :index, :empty?, :permutation, :include?, :<<, :any?,
+                   :count, :rotate
 
     attr_reader :notes
 
@@ -59,6 +60,26 @@ module Coltrane
 
     def integers
       map(&:integer)
+    end
+
+    def accidentals
+      count(&:accidental?)
+    end
+
+    def sharps
+      count(&:sharp?)
+    end
+
+    def flats
+      count(&:flat?)
+    end
+
+    def alter(alteration)
+      NoteSet[*map {|n| n.alter(alteration)}]
+    end
+
+    def alter_accidentals(alteration)
+      NoteSet[*map {|n| n.alter(alteration) if n.accidental?}]
     end
 
     def interval_sequence

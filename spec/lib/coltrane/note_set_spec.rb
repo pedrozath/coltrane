@@ -13,4 +13,9 @@ RSpec.describe NoteSet do
     expect(intersection_notes.names).to include('D', 'F')
     expect(intersection_notes.names).to_not include('A', 'G')
   end
+
+  it 'can output how much accidentals' do
+    expect(NoteSet[*%w[C# G# A B Bb]].sharps).to eq(2)
+    expect(NoteSet[*%w[C# G# A B Bb]].flats).to eq(1)
+  end
 end
