@@ -19,6 +19,8 @@ module Coltrane
       "#{q.interval_quality} #{n.to_i.interval_name}"
     end
 
+    def self.method_missing; end
+
     # Create full names and methods such as major_third? minor_seventh?
     # TODO: It's a mess and it really needs a refactor someday
     NAMES = INTERVALS.each_with_index.each_with_object({}) do |(interval, index), memo|
@@ -92,6 +94,10 @@ module Coltrane
 
     def -(other)
       IntervalClass[semitones - other]
+    end
+
+    def -@
+      IntervalClass[-semitones]
     end
 
     private

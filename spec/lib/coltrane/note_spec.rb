@@ -57,4 +57,12 @@ RSpec.describe Note do
     expect(Note['F#'].alter(+1).name).to    eq('F#')
     expect(Note['F#'].alter(-1).name).to    eq('Gb')
   end
+
+  it 'can be outputted as a specific letter' do
+    expect(Note['C'].as('B').name).to eq('B#')
+    expect(Note['A'].as('C').name).to eq('Cbbb')
+    expect(Note['B'].as('C').name).to eq('Cb')
+    expect(Note['A'].as('F').name).to eq('F####')
+    expect(Note['F'].as('E').name).to eq('E#')
+  end
 end

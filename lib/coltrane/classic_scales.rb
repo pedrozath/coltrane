@@ -4,10 +4,8 @@ module Coltrane
   # This module deals with well known scales on music
   module ClassicScales
     SCALES = {
-      'Major'            => [2, 2, 1, 2, 2, 2, 1],
       'Pentatonic Major' => [2, 2, 3, 2, 3],
       'Blues Major'      => [2, 1, 1, 3, 2, 3],
-      'Natural Minor'    => [2, 1, 2, 2, 1, 2, 2],
       'Harmonic Minor'   => [2, 1, 2, 2, 1, 3, 1],
       'Hungarian Minor'  => [2, 1, 2, 1, 1, 3, 1],
       'Pentatonic Minor' => [3, 2, 2, 3, 2],
@@ -17,9 +15,15 @@ module Coltrane
       'Chromatic'        => [1] * 12
     }.freeze
 
-    MODES = {
-      'Major' => %w[Ionian Dorian Phrygian Lydian Mixolydian Aeolian Locrian]
-    }.freeze
+    GREEK_MODES = %w[
+      Ionian
+      Dorian
+      Phrygian
+      Lydian
+      Mixolydian
+      Aeolian
+      Locrian
+    ].freeze
 
     # Creates factories for scales
     SCALES.each do |name, distances|
@@ -28,62 +32,51 @@ module Coltrane
       end
     end
 
-    # Creates factories for Greek Modes and possibly others
-    MODES.each do |scale, modes|
-      modes.each_with_index do |mode, index|
-        mode_name = mode
-        mode_n = index + 1
-        define_method mode.underscore do |tone = 'C'|
-          new(*SCALES[scale], tone: tone, mode: mode_n, name: mode_name)
-        end
+    # Creates factories for Greek Modes
+    GREEK_MODES.each_with_index do |mode, index|
+      mode_name = mode
+      mode_n = index + 1
+      define_method mode.underscore do |tone = 'C'|
+        new(notes: DiatonicScale.new(tone).notes.rotate(index))
       end
     end
 
-    alias minor natural_minor
+    # Factories for the diatonic scale
+    def major(note='C')
+      DiatonicScale.new(note)
+    end
+
+    def minor(note='A')
+      DiatonicScale.new(note, major: false)
+    end
+
+    alias diatonic major
+    alias natural_minor minor
     alias pentatonic pentatonic_major
     alias blues blues_major
 
     def known_scales
-      SCALES.keys
+      SCALES.keys + ['Major', 'Natural Minor']
     end
 
-    # All but the chromatic
+    # List of scales appropriate for search
     def standard_scales
-      SCALES.reject { |k, _v| k == 'Chromatic' }
+      known_scales - ['Chromatic']
     end
 
     def fetch(name, tone = nil)
       Coltrane::Scale.public_send(name, tone)
     end
 
-    def from_key(key)
-      key_regex = /([A-G][#b]?)([mM]?)/
-      _, note, s = *key.match(key_regex)
-      scale = s == 'm' ? :minor : :major
-      Scale.public_send(scale, note)
-    end
-
-    # Will output a OpenStruct like the following:
-    # {
-    #   scales: [array of scales]
-    #   results: {
-    #     scale_name: {
-    #       note_number => found_notes
-    #     }
-    #   }
-    # }
-
     def having_notes(notes)
       format = { scales: [], results: {} }
-      OpenStruct.new begin
-        standard_scales.each_with_object(format) do |(name, intervals), output|
-          PitchClass.all.each.map do |tone|
-            scale = new(*intervals, tone: tone, name: scale)
-            output[:results][name] ||= {}
-            next if output[:results][name].key?(tone.integer)
-            output[:scales] << scale if scale.include?(notes)
-            output[:results][name][tone.integer] = scale.notes & notes
-          end
+      standard_scales.each_with_object(format) do |name, output|
+        PitchClass.all.each.map do |tone|
+          scale = send(name.underscore, tone)
+          output[:results][name] ||= {}
+          next if output[:results][name].key?(tone.integer)
+          output[:scales] << scale if scale.include?(notes)
+          output[:results][name][tone.integer] = scale.notes & notes
         end
       end
     end

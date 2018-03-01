@@ -54,7 +54,6 @@ module Coltrane
         @distances = distances
         @intervals = intervals_from_distances(distances)
       else
-        require 'pry'; binding.pry
         raise 'Provide: [notes:] || [intervals:] || [distances:]'
       end
     end

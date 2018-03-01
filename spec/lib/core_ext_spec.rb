@@ -17,6 +17,10 @@ RSpec.describe Hash do
       YML
     end
 
+    it 'has a dig replacement' do
+      expect({a: {b: {c: {d: 2}}}}.dig(:a, :b, :c, :d)).to eq(2)
+    end
+
     it 'can clone values from one branch to other appending suffixes' do
       trie.clone_values from_keys: %w[a b],
                         to_keys: %w[a test],

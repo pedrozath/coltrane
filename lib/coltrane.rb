@@ -1,44 +1,15 @@
 # frozen_string_literal: true
 
-require 'yaml'
-
+require 'json'
 require 'forwardable'
-require 'facets/multiton'
 require 'core_ext'
 require 'ostruct'
 
-require 'coltrane/version'
-require 'coltrane/errors'
-require 'coltrane/cadence'
-
-require 'coltrane/frequency'
-require 'coltrane/pitch'
-require 'coltrane/pitch_class'
-require 'coltrane/note'
-require 'coltrane/note_set'
-
-require 'coltrane/interval'
-require 'coltrane/interval_class'
-require 'coltrane/unordered_interval_class'
-require 'coltrane/interval_sequence'
-
-require 'coltrane/chord_quality'
-
-require 'coltrane/chord_substitutions'
-require 'coltrane/chord'
-require 'coltrane/roman_chord'
-
-require 'coltrane/classic_scales'
-require 'coltrane/scale'
-
-require 'coltrane/notable_progressions'
-require 'coltrane/changes'
-require 'coltrane/progression'
-
-require 'coltrane/mode'
 
 # The main module for working with Music Theory
 module Coltrane
+  autoload :Frequency,              'coltrane/frequency'
+
   BASE_OCTAVE = 4
   BASE_PITCH_INTEGER = 9
 
@@ -51,4 +22,36 @@ module Coltrane
   end
 
   @base_tuning = Frequency[440].octave(-4)
+
+  require 'coltrane/version'
+  require 'coltrane/errors'
+
+  autoload :Pitch,                  'coltrane/pitch'
+  autoload :Voicing,                'coltrane/voicing'
+
+  autoload :PitchClass,             'coltrane/pitch_class'
+  autoload :Note,                   'coltrane/note'
+  autoload :NoteSet,                'coltrane/note_set'
+
+  autoload :Interval,               'coltrane/interval'
+  autoload :IntervalClass,          'coltrane/interval_class'
+  autoload :UnorderedIntervalClass, 'coltrane/unordered_interval_class'
+  autoload :IntervalSequence,       'coltrane/interval_sequence'
+  autoload :Qualities,              'coltrane/qualities'
+  autoload :ChordQuality,           'coltrane/chord_quality'
+  autoload :Chord,                  'coltrane/chord'
+  autoload :ChordSubstitutions,     'coltrane/chord_substitutions'
+  autoload :RomanChord,             'coltrane/roman_chord'
+
+  autoload :ClassicScales,          'coltrane/classic_scales'
+  autoload :Scale,                  'coltrane/scale'
+  autoload :CircleOfFifths,         'coltrane/circle_of_fifths'
+  autoload :DiatonicScale,          'coltrane/diatonic_scale'
+  autoload :Key,                    'coltrane/key'
+
+  autoload :NotableProgressions,    'coltrane/notable_progressions'
+  autoload :Changes,                'coltrane/changes'
+  autoload :Cadence,                'coltrane/cadence'
+  autoload :Progression,            'coltrane/progression'
+  autoload :Mode,                   'coltrane/mode'
 end

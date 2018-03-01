@@ -30,9 +30,9 @@ module Coltrane
 
       chars  = note_name.chars
       letter = chars.shift
-      raise InvalidNoteError, arg unless ('A'..'G').cover?(letter)
+      raise InvalidNoteLetterError, arg unless ('A'..'G').cover?(letter)
       @alteration = chars.reduce(0) do |alt, symbol|
-        raise InvalidNoteError, arg unless ALTERATIONS.include?(symbol)
+        raise InvalidNoteLetterError, arg unless ALTERATIONS.include?(symbol)
         alt + ALTERATIONS[symbol]
       end
       super((PitchClass[letter].integer + @alteration) % PitchClass.size)
@@ -58,12 +58,47 @@ module Coltrane
       Note.new(name).tap { |n| n.alteration = x }
     end
 
+    def sharp?
+      alteration == 1
+    end
+
+    def double_sharp?
+      alteration == 2
+    end
+
+    def flat?
+      alteration == -1
+    end
+
+    def double_flat?
+      alteration == -2
+    end
+
+    def natural?
+      alteration == 0
+    end
+
     def accidents
       (@alteration > 0 ? '#' : 'b') * alteration.abs
     end
 
+    def -(other)
+      result = super(other)
+      result.is_a?(Note) ? result.alter(alteration) : result
+    end
+
+    def +(other)
+      result = super(other)
+      result.is_a?(Note) ? result.alter(alteration) : result
+    end
+
     def interval_to(note_name)
       Note[note_name] - self
+    end
+
+    def as(letter)
+      a = (self - Note[letter])
+      alter([a.semitones, -((-a).semitones)].min_by(&:abs))
     end
   end
 end

@@ -48,15 +48,15 @@ module Coltrane
     end
 
     def next_inversion
-      Chord.new(notes.rotate(1))
+      Chord.new(notes: notes.rotate(1))
     end
 
     def invert(n = 1)
-      Chord.new(notes.rotate(n))
+      Chord.new(notes: notes.rotate(n))
     end
 
     def previous_inversion
-      Chord.new(notes.rotate(-1))
+      Chord.new(notes: notes.rotate(-1))
     end
 
     def +(other)

@@ -13,7 +13,7 @@ module Coltrane
 
       root_notes = NoteSet[*chords.map(&:root_note)]
 
-      scales = Scale.having_notes(*root_notes).scales
+      scales = Scale.having_notes(*root_notes)[:scales]
       progressions = scales.reduce([]) do |memo, scale|
         memo + [Progression.new(chords: chords, scale: scale)]
       end
@@ -29,7 +29,7 @@ module Coltrane
               '[notation:, [scale: || key:]] '\
       end
 
-      @scale  = scale || Scale.from_key(key)
+      @scale  = scale || Key[key]
       @chords =
         if !chords.nil?
           chords

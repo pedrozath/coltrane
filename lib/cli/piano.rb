@@ -37,7 +37,7 @@ module Coltrane
 
       def replacer(note)
         # TODO: Maybe extract this method into its own class/module
-        case @flavor
+        case Cli.config.flavor
         when :intervals then (@ref_note - note).name
         when :marks then '◼ '
         when :degrees then @notes.degree(note).to_s.rjust(2, '0')

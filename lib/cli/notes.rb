@@ -4,13 +4,12 @@ module Coltrane
   module Cli
     # Interfaces notes outputting functionality with the lib
     class Notes
-      def initialize(notes, on: 'text', desc: nil, flavor: 'notes')
+      def initialize(notes, desc: nil)
         @desc   = desc || 'The notes you supplied:'
-        flavor  = flavor.underscore.to_sym
-        on      = on.to_sym
         notes   = Coltrane::NoteSet.new(notes)
-        @representation = Representation.build(on, notes, flavor)
+        @representation = Representation.build(notes)
         render
+        # notes.each {|n| ColtraneSynth::Base.play(n, 0.1) } if Cli.config.sound
       end
 
       def render

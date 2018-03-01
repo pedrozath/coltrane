@@ -5,8 +5,6 @@
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
-require 'core_ext'
-require 'coltrane'
 require 'cli'
 
 full_color_terminals = %w[iTerm.app]
@@ -37,7 +35,13 @@ Mercenary.program(:Coltrane) do |p|
   @flavor_option = [
     :flavor,
     '--flavor FLAVOR',
-    'Chooses which <additional></additional> information to display: marks, notes, intervals or degrees'
+    'Chooses which additional information to display: marks, notes, intervals or degrees'
+  ]
+
+  @sound_option = [
+    :sound,
+    '--sound',
+    'beta/macOS only: plays the sound of related notes/chords'
   ]
 
   p.command(:note) do |c|
@@ -46,10 +50,16 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Shows the given notes.'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
+    c.option(*@sound_option)
     c.action do |(notes), on: 'text', flavor: 'notes'|
+      Coltrane::Cli.config do |c|
+        c.on     = on.to_sym
+        c.flavor = flavor.to_sym
+      end
+
       raise 'Provide some notes. Ex: coltrane notes C-D-Gb' if notes.empty?
       notes = Coltrane::NoteSet[*notes.split('-')]
-      Coltrane::Cli::Notes.new(notes, on: on, flavor: flavor)
+      Coltrane::Cli::Notes.new(notes)
     end
   end
 
@@ -59,10 +69,17 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Shows the given chord. Ex: coltrane chord Cmaj7 --on piano'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
+    c.option(*@sound_option)
     c.option :notes, '--notes C-D-E', 'finds chords with those notes, provided they are separated by dashes'
-    c.action do |(chords), notes: nil, on: 'text', flavor: 'notes'|
+    c.action do |(chords), notes: nil, on: 'text', flavor: 'notes', sound: nil|
+      Coltrane::Cli.config do |c|
+        c.on     = on.to_sym
+        c.flavor = flavor.to_sym
+        c.sound  = sound
+      end
+
       chords = chords&.split('-')
-      Coltrane::Cli::Chord.new(*chords, notes: notes&.split('-'), on: on, flavor: flavor)
+      Coltrane::Cli::Chord.new(*chords, notes: notes&.split('-'))
     end
   end
 
@@ -71,14 +88,20 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Gives you information about a scale. Ex: coltrane scale natural-minor-Db --on guitar'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
+    c.option(*@sound_option)
     c.option :triads,   '--triads',        'Outputs triads from the scale'
     c.option :sevenths, '--sevenths',      'Outputs seventh chords from the scale'
     c.option :pentads,  '--pentads',       'Outputs pentad chords from the scale'
     c.option :tertians, '--tertians SIZE', 'Outputs all tertian chords from the given size from the scale'
     c.option :chords,   '--chords [SIZE]', 'Outputs all chords from given size from the scale. Leave size empty to retrieve all'
-    c.action do |(scale_str), flavor: 'degrees', on: 'text', **options|
+    c.action do |(scale_str), flavor: 'degrees', on: 'text', sound: false, **options|
+      Coltrane::Cli.config do |c|
+        c.on     = on.to_sym
+        c.flavor = flavor.to_sym
+        c.sound  = sound
+      end
+
       scale = Coltrane::Cli::Scale.parse(scale_str)
-      keyword_args = { flavor: flavor, on: on }
       if options.include?(:triads)
         chords = scale.triads
         Coltrane::Cli::Chord.new(*chords, **keyword_args)
@@ -97,9 +120,9 @@ Mercenary.program(:Coltrane) do |p|
                  else
                    scale.chords(options[:chords])
                  end
-        Coltrane::Cli::Chord.new(*chords, **keyword_args)
+        Coltrane::Cli::Chord.new(*chords)
       else
-        Coltrane::Cli::Scale.new(scale, **keyword_args)
+        Coltrane::Cli::Scale.new(scale)
       end
     end
   end
@@ -109,7 +132,14 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Gives you chords of a progression in a key. Ex: coltrane progression I-IV-iv-V in Am --on guitar'
     c.option(*@instrument_option)
     c.option(*@flavor_option)
-    c.action do |(prog, _, key), on: 'text', flavor: 'notes'|
+    c.option(*@sound_option)
+    c.action do |(prog, _, key), on: 'text', flavor: 'notes', sound: nil|
+      Coltrane::Cli.config do |c|
+        c.on     = on.symbolize
+        c.flavor = flavor.symbolize
+        c.sound  = sound
+      end
+
       possible_method = prog.tr('-', '_')
       progression = if Coltrane::Progression.respond_to?(possible_method)
                       Coltrane::Progression.send(possible_method, key)
@@ -117,7 +147,7 @@ Mercenary.program(:Coltrane) do |p|
                       Coltrane::Progression.new(prog, key: key)
                     end
 
-      Coltrane::Cli::Chord.new(*progression.chords, on: on, flavor: flavor)
+      Coltrane::Cli::Chord.new(*progression.chords)
     end
   end
 
@@ -172,7 +202,7 @@ Mercenary.program(:Coltrane) do |p|
         memo & scale.all_chords.map(&:name)
       end
       raise 'No common chords were found' if chords.empty?
-      Coltrane::Cli::Chord.new(*chords, on: on, flavor: flavor)
+      Coltrane::Cli::Chord.new(*chords)
     end
   end
 
@@ -196,6 +226,7 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Starts interactive mode'
     c.action do
       begin
+        Coltrane::Cli.erase_config
         puts "\n"
         print Paint['coltrane ', '#F88550']
         cmd = gets.chomp

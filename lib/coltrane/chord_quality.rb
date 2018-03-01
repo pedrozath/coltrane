@@ -3,14 +3,15 @@
 module Coltrane
   # It describe the quality of a chord, like maj7 or dim.
   class ChordQuality < IntervalSequence
+    include Qualities
     attr_reader :name
+    # QUALITIES_FILE  = File.expand_path("#{'../' * 3}data/qualities.json", __FILE__)
 
     private
 
     def self.chord_trie
-      trie = YAML.load_file(
-        File.expand_path("#{'../' * 3}data/qualities.yml", __FILE__)
-      )
+      File.expand_path("#{'../' * 3}data/qualities.json", __FILE__)
+      trie = QUALITIES
 
       trie.clone_values from_keys: ['Perfect Unison', 'Major Third'],
                         to_keys: ['Perfect Unison', 'Major Second'],

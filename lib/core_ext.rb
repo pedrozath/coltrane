@@ -2,15 +2,24 @@
 
 # Stolen from Active Support and changed a bit
 # may in the future be substituted by facets version
+class Regexp
+  def match?(*args)
+    !!match(*args)
+  end
+end
+
 class String
   def underscore
     return self unless /[A-Z-]|::/.match?(self)
-    word = to_s.gsub('::', '/')
-    word.gsub!(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
-    word.gsub!(/([a-z\d])([A-Z])/, '\1_\2')
-    word.tr!('- ', '_')
-    word.downcase!
-    word
+    to_s.gsub('::', '/')
+        .gsub(/([A-Z\d]+)([A-Z][a-z])/, '\1_\2')
+        .gsub(/([a-z\d])([A-Z])/, '\1_\2')
+        .tr('- ', '_')
+        .downcase
+  end
+
+  def match?(*args)
+    !!match(*args)
   end
 
   def interval_quality
@@ -22,10 +31,14 @@ class String
       'd' => 'Diminished'
     }[self]
   end
+
+  def symbolize
+    self.underscore.to_sym
+  end
 end
 
 # Here we add some syntax sugar to make the code more understandable later
-class Integer
+class Numeric
   def interval_name
     {
       1   => 'Unison',
@@ -49,11 +62,16 @@ end
 
 # Here we add some methods better work with Tries
 class Hash
+  def dig(*args)
+    args.size > 1 ? self[args.shift].dig(*args) : self[args[0]]
+  end
+
   def clone_values(from_keys: nil,
                    to_keys: nil,
                    suffix: nil,
                    branch_a: nil,
                    branch_b: nil)
+
     branch_a ||= dig(*from_keys)
     if branch_b.nil?
       create_branch!(*to_keys)

@@ -7,7 +7,7 @@ module ColtraneInstruments
       include Comparable
       attr_reader :guitar_notes, :guitar, :free_fingers, :target_chord, :barre
 
-      MAX_FRET_SPAN = 4
+      MAX_FRET_SPAN = 3
 
       def self.find(chord)
         new(chord).fetch_descendant_chords
@@ -27,14 +27,23 @@ module ColtraneInstruments
       end
 
       def <=>(other)
-        other.rank <=> rank
+         rank <=> other.rank
       end
 
       def rank
-         completeness +
-         fullness * 2 +
-         easyness -
-         spreadness
+         +completeness * 10000 +
+         +fullness * 1000 +
+         -spreadness * 100 +
+         +easyness * 1
+      end
+
+      def analysis
+        {
+         completeness: completeness,
+         fullness: fullness,
+         easyness: easyness,
+         spreadness: spreadness
+       }
       end
 
       def spreadness
@@ -42,11 +51,11 @@ module ColtraneInstruments
       end
 
       def completeness
-        target_chord.notes.size.to_f - notes_left.size / target_chord.notes.size
+        (target_chord.notes.size.to_f - notes_left.size) / target_chord.notes.size
       end
 
       def easyness
-        frets.count(0).to_f / guitar.strings.size
+        frets.count(0).to_f / guitar_notes.size
       end
 
       def fullness
@@ -80,8 +89,11 @@ module ColtraneInstruments
       end
 
       def notes_left
-        @notes_left ||= (target_chord.notes - NoteSet[
-                          *guitar_notes.map { |n| n.pitch&.pitch_class }
+        @notes_left ||= (target_chord.notes - Coltrane::NoteSet[
+                          *guitar_notes.map do |n|
+                            next if n.pitch.nil?
+                            n.pitch.pitch_class
+                          end
                         ])
       end
 
@@ -106,7 +118,7 @@ module ColtraneInstruments
       end
 
       def highest_fret
-        non_zero_frets.any? ? non_zero_frets.max : guitar.frets
+        non_zero_frets.max || 0
       end
 
       def fret_range
@@ -118,7 +130,7 @@ module ColtraneInstruments
       end
 
       def highest_possible_fret
-        [(possible_span + highest_fret), guitar.frets].min
+        [(possible_span + (highest_fret == 0 ? guitar.frets : highest_fret)), guitar.frets].min
       end
 
       def possible_span
@@ -126,11 +138,16 @@ module ColtraneInstruments
       end
 
       def fret_expansion_range
-        (lowest_possible_fret..highest_possible_fret).to_a + [0]
+        (lowest_possible_fret..highest_possible_fret).to_a +
+        [(0 unless barre?)].compact
       end
 
       def to_s
         guitar_notes.map { |n| n.fret.nil? ? 'x' : n.fret }.join('-')
+      end
+
+      def voicing
+        Coltrane::Voicing.new(pitches: guitar_notes.map(&:pitch).compact)
       end
 
       private

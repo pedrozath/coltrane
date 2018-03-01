@@ -1,82 +1,53 @@
 # Coltrane
 
-A musical abacus written in ruby.
+A music calculation library/CLI written in Ruby.
 
 ![Coltrane](img/coltrane-logo.png)
 
-More info, story and purpose of the library [here](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
-
-Chat room for discussing the project, answering questions, etc:
-https://gitter.im/coltrane-music/Lobby
+* [How to use this library](https://github.com/pedrozath/coltrane/wiki/Core-music-theory-library).
+* [Why did I wrote this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
+* [Chat room for discussing the project, answering questions, etc.](https://gitter.im/coltrane-music/Lobby)
 
 ## CLI (Command Line Interface)
 
 ![Screenshot](img/using-coltrane.gif)
+![Screenshot](img/guitar-chords.png)
 
-### Installation
+## Features
 
-#### Compiled binary
+* Generate chord progressions for Jazz, Blues, Pop, or custom and see how to play them
+* Seek chords, see their notes and how to play them
+* Seek scales, see their notes and see how to play them
+* Find chords that are common between 2 scales
+* Find scales containing a chord or a set of notes
+* Find possible progressions of a chord sequence
+* All of the above can be seen on guitar, bass, piano or ukelele representations, no sheet music needed
 
-There's an experimental compiled version you can [download here](https://raw.githubusercontent.com/pedrozath/coltrane/master/dist/coltrane). It has been tested only macOS High Sierra so far, but it should work on Linux and Windows as well.
-
-macOS & Linux: You probably will need `chmod +x coltrane` before running it.
-Windows users: Please add the `.exe` extension to it before running it (via command prompt).
-
-#### Ruby command
+## Installation
 
 ```bash
 $ gem install coltrane
 ```
 
-Once you install the gem the CLI is instaled in your system and it's ready to be used.
-
-### Usage
-
-It allows you to query for notes and chords and display them on your favorite instrument. No sheet music reading skills needed. It also allows you to find scales with a chord and find chords shared between two scales (that is actually the main goal when I did this project).
-
-## As a library
-
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'coltrane'
-```
-
-And then execute:
-```sh
-$ bundle
-```
-
-The whole library will be available under the `Coltrane` module. The CLI code won't be imported to your application as default. Here's a quick example on how to use it:
-
-```ruby
-require 'coltrane'
-
-puts Coltrane::Scale.major('C').sevenths.map(&:name)
-# => ["CM7", "Dm7", "Em7", "FM7", "G7", "Am7", "Bm7b5"]
-
-puts Coltrane::Scale.having_chord('CM7').scales.map(&:name)
-# => ["C Major", "G Major", "E Natural Minor", "A Natural Minor", "E Harmonic Minor", "B Flamenco"]
-```
+PS: Once you install the gem the CLI is instaled in your system and it's ready to be used.
 
 ## Changelog
 
-See the changelog [here](CHANGELOG.md)
+[See the changelog](CHANGELOG.md)
 
 ## Contributing
 
-Install the test suite (RSpec) by running good old `bundle` command
+We are looking for contributors. Find me on [our chatroom](https://gitter.im/coltrane-music/Lobby) if you need any kind of information.
 
-Fork the code, make your changes and maybe write a test or two. Then run:
-
-Then run:
-```
-bundle exec rspec spec
-```
-
-Make sure the specs pass and submit a PR.
+### How to contribute
+1. Fork this code
+2. Install the test suite (RSpec) by running good old `bundle` command
+3. Make your changes and maybe write a test or two.
+4. Check if specs pass `bundle exec rspec spec`
+5. Submit a PR.
 
 ## License
 
 The gem is available as open source under the terms of the [MIT License](http://opensource.org/licenses/MIT).
 
+by Pedro Maciel | [twitter](http://twitter.com/pedrozath) | pedro@pedromaciel.com

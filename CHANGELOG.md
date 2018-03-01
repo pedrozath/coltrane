@@ -1,7 +1,33 @@
 # Changelog
 
 ## [Unreleased]
-- Correct Flat/Sharp on scales
+
+- Fix chords so that they generate a barre and a non-barre version and prevent
+  barre chords from picking notes before the barre.
+
+## [2.1.0]
+
+- Correct Flat/Sharp on Diatonic Scales
+
+- Fix chords so that they generate a barre and a non-barre version and prevent
+  barre chords from picking notes before the barre.
+
+### Adds
+
+- Pitches and Voicings. Pitches are a way of expressing notes in a specific
+  octave. Voicings are a way of expressing a chord with the exact pitches
+
+- Introduces a little sound synthesizer (experimental, macOS-only).
+  Use `--sound` to activate it wherever the program outputs chords.
+
+- Introduces some modules classes to provide Guitar Chord finding.
+  `ColtraneInstruments::Guitar::Base.find('C6/9')`
+
+- Introduces DiatonicScale and Key classes.
+
+### Changes
+
+- Guitar Chords are now outputted using the default guitar chord notation
 
 ## [2.0.0]
 

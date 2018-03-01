@@ -9,6 +9,7 @@ group :test, :development do
   gem 'pronto'
   gem 'pronto-flay'
   gem 'pronto-rubocop'
+  gem 'opal-rspec'
 end
 
 group :test do
