@@ -24,6 +24,8 @@ module Coltrane
             [Coltrane::Chord.new(notes: notes)]
           end
 
+        raise BadChordError unless @chords
+
         @chords.each do |chord|
           desc = "#{chord.name} chord:"
           Coltrane::Cli::Notes.new chord.notes, desc: desc
