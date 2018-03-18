@@ -28,6 +28,12 @@ module Coltrane
               'is not available at the moment.'
       end
     end
+
+    class BadScaleError < ColtraneCliError
+      def initialize(msg = nil)
+        super msg || 'Incorrect scale, please specify scale and root separated by `-`. Ex: `coltrane scale major-C'
+      end
+    end
   end
 end
 
