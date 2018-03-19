@@ -222,26 +222,26 @@ Mercenary.program(:Coltrane) do |p|
     end
   end
 
-  p.command(:start) do |c|
-    c.description 'Starts interactive mode'
-    c.action do
-      begin
-        Coltrane::Cli.erase_config
-        puts "\n"
-        print Paint['coltrane ', '#F88550']
-        cmd = gets.chomp
-        return if %w[exit exit q quit stop].include?(cmd)
-        puts "\n"
-        p.go(cmd.split(' '))
-      rescue Exception
-      ensure
-        p.instance_variable_set :'@config', {}
-      end
-      p.execute(['start'], {})
-    end
-  end
+  # p.command(:start) do |c|
+  #   c.description 'Starts interactive mode'
+  #   c.action do
+  #     begin
+  #       Coltrane::Cli.erase_config
+  #       puts "\n"
+  #       print Paint['coltrane ', '#F88550']
+  #       cmd = gets.chomp
+  #       return if %w[exit exit q quit stop].include?(cmd)
+  #       puts "\n"
+  #       p.go(cmd.split(' '))
+  #     rescue Exception
+  #     ensure
+  #       p.instance_variable_set :'@config', {}
+  #     end
+  #     p.execute(['start'], {})
+  #   end
+  # end
 
-  p.default_command(:start)
+  # p.default_command(:start)
 end
 
 # rubocop:enable Metrics/BlockLength
