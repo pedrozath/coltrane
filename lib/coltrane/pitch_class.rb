@@ -24,7 +24,7 @@ module Coltrane
       NOTATION.map { |n| new(n) }
     end
 
-    def initialize(arg=nil, frequency: nil)
+    def initialize(arg = nil, frequency: nil)
       @integer = case arg
                  when String then NOTATION.index(arg)
                  when Frequency then frequency_to_integer(Frequency.new(arg))

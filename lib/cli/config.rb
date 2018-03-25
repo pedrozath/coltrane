@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   module Cli
     class Config
@@ -5,7 +7,7 @@ module Coltrane
         flavor: :notes,
         sound: false,
         on: :text
-      }
+      }.freeze
 
       attr_accessor :flavor, :degrees, :sound
       attr_reader :on
@@ -23,7 +25,6 @@ module Coltrane
               else instrument
               end
       end
-
     end
 
     def self.config

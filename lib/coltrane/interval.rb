@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   class Interval < IntervalClass
     attr_reader :letter_distance, :cents
@@ -35,9 +37,9 @@ module Coltrane
     end
 
     def initialize(arg_1 = nil, arg_2 = nil, ascending: true,
-                                             letter_distance: nil,
-                                             semitones: nil,
-                                             compound: false)
+                   letter_distance: nil,
+                   semitones: nil,
+                   compound: false)
       if arg_1 && !arg_2 # assumes arg_1 is a letter
         @compound = compound
         IntervalClass[arg_1].interval.yield_self do |interval|
@@ -49,8 +51,8 @@ module Coltrane
           @compound = compound
           @cents =
             (arg_1.frequency / arg_2.frequency)
-              .interval_class
-              .cents
+            .interval_class
+            .cents
 
           @letter_distance = calculate_letter_distance arg_1.letter,
                                                        arg_2.letter,
@@ -68,9 +70,9 @@ module Coltrane
         @letter_distance = letter_distance
       else
         raise WrongKeywordsError,
-          '[interval_class_name]' \
-          'Provide: [first_note, second_note] || ' \
-          '[letter_distance:, semitones:]'
+              '[interval_class_name]' \
+              'Provide: [first_note, second_note] || ' \
+              '[letter_distance:, semitones:]'
       end
     end
 
@@ -119,14 +121,14 @@ module Coltrane
 
     def as!(n)
       i = as(n)
-      i if !i&.name&.match?(%r{d|A})
+      i unless i&.name&.match?(/d|A/)
     end
 
-    def as_diminished(n=1)
+    def as_diminished(n = 1)
       as(letter_distance + n)
     end
 
-    def as_augmented(n=1)
+    def as_augmented(n = 1)
       as(letter_distance - n)
     end
 
@@ -138,13 +140,13 @@ module Coltrane
       }.merge(override_args))
     end
 
-    def diminish(n=1)
+    def diminish(n = 1)
       clone(semitones: semitones - n)
     end
 
     alias diminished diminish
 
-    def augment(n=1)
+    def augment(n = 1)
       clone(semitones: semitones + n)
     end
 
@@ -167,13 +169,13 @@ module Coltrane
     def starting_interval # select the closest interval possible to start from
       @starting_interval ||= begin
         IntervalClass.all
-          .select { |i| i.distance == normalized_letter_distance }
-          .sort_by { |i|
-            (cents - i.cents)
-              .yield_self { |d| [(d % 1200), (d % -1200)].min_by(&:abs) }
-              .abs
-          }
-          .first
+                     .select { |i| i.distance == normalized_letter_distance }
+                     .sort_by do |i|
+          (cents - i.cents)
+            .yield_self { |d| [(d % 1200), (d % -1200)].min_by(&:abs) }
+            .abs
+        end
+                     .first
       end
     end
 
@@ -202,6 +204,5 @@ module Coltrane
     all_including_compound_and_altered.each do |interval|
       self.class.define_method(interval.full_name.underscore) { interval.clone }
     end
-
   end
 end

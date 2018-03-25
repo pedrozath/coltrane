@@ -15,7 +15,7 @@ module Coltrane
       %w[P A],
       %w[P],
       %w[m M],
-      %w[m M],
+      %w[m M]
     ].freeze
 
     ALTERATIONS = {
@@ -23,14 +23,14 @@ module Coltrane
       'd' => -1
     }.freeze
 
-    SINGLE_DISTANCES_NAMES = [
-      'Unison',
-      'Second',
-      'Third',
-      'Fourth',
-      'Fifth',
-      'Sixth',
-      'Seventh',
+    SINGLE_DISTANCES_NAMES = %w[
+      Unison
+      Second
+      Third
+      Fourth
+      Fifth
+      Sixth
+      Seventh
     ].freeze
 
     COMPOUND_DISTANCES_NAMES = [
@@ -55,13 +55,12 @@ module Coltrane
     }.freeze
 
     class << self
-
       def distances_names
         DISTANCES_NAMES
       end
 
       def distance_name(n)
-        DISTANCES_NAMES[n-1]
+        DISTANCES_NAMES[n - 1]
       end
 
       def quality_name(q)
@@ -70,9 +69,9 @@ module Coltrane
 
       def names
         @names ||= begin
-          SINGLE_DISTANCES_NAMES.each_with_index.reduce([]) do |i_names, (d, i)|
+          SINGLE_DISTANCES_NAMES.each_with_index.reduce([]) do |i_names, (_d, i)|
             i_names + QUALITY_SEQUENCE[i % 7].reduce([]) do |qs, q|
-              qs + ["#{q}#{i+1}"]
+              qs + ["#{q}#{i + 1}"]
             end
           end
         end
@@ -87,16 +86,16 @@ module Coltrane
       end
 
       def full_names
-        @full_names ||= names.map {|n| expand_name(n) }
+        @full_names ||= names.map { |n| expand_name(n) }
       end
 
       def all
-        @all ||= names.map {|n| IntervalClass[n] }
+        @all ||= names.map { |n| IntervalClass[n] }
       end
 
       def full_names_including_compound
         @full_names_including_compound ||=
-          all_names_including_compound.map {|n| expand_name(n) }
+          all_names_including_compound.map { |n| expand_name(n) }
       end
 
       def split(interval)
@@ -109,11 +108,10 @@ module Coltrane
           case name
           when /AA|dd/ then 'Double '
           when /AAA|ddd/ then 'Triple '
-          else ""
+          else ''
           end
         ) + "#{quality_name(q)} #{distance_name(n.to_i)}"
       end
-
     end
 
     def initialize(arg)
@@ -127,7 +125,7 @@ module Coltrane
             when Numeric then arg
             else
               raise WrongArgumentsError,
-                'Provide: [interval] || [name] || [number of semitones]'
+                    'Provide: [interval] || [name] || [number of semitones]'
             end % 12 * 100
     end
 

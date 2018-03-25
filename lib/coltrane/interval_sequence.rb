@@ -12,9 +12,9 @@ module Coltrane
     def initialize(*intervals, notes: nil, relative_intervals: nil)
       if intervals.any?
         @intervals = if intervals.first.is_a?(Interval)
-          intervals
-        else
-          intervals.map { |i| Interval[i] }
+                       intervals
+                     else
+                       intervals.map { |i| Interval[i] }
         end
 
       elsif notes
@@ -24,26 +24,25 @@ module Coltrane
         @relative_intervals = relative_intervals
         @intervals = intervals_from_relative_intervals(relative_intervals)
       else
-        binding.pry
         raise WrongKeywordsError,
-          'Provide: [notes:] || [intervals:] || [relative_intervals:]'
+              'Provide: [notes:] || [intervals:] || [relative_intervals:]'
       end
     end
 
     Interval.all_including_compound_and_altered.each do |interval|
       # Creates methods such as major_third, returning it if it finds
-      define_method("#{interval.full_name.underscore}") { find(interval) }
+      define_method(interval.full_name.underscore.to_s) { find(interval) }
       # Creates methods such as has_major_third?, returning a boolean
       define_method("has_#{interval.full_name.underscore}?") { has?(interval) }
     end
 
     Interval.distances_names.map(&:underscore).each_with_index do |distance, i|
       # Creates methods such as has_third?, returning a boolean
-      define_method("has_#{distance}?") { !!find_by_distance(i+1) }
+      define_method("has_#{distance}?") { !!find_by_distance(i + 1) }
       # Creates methods such third, returning any third it finds
-      define_method("#{distance}" )     { find_by_distance(i+1) }
+      define_method(distance.to_s) { find_by_distance(i + 1) }
       # Creates methods such third!, returning thirds that arent aug or dim
-      define_method("#{distance}!")     { find_by_distance(i+1, false) }
+      define_method("#{distance}!") { find_by_distance(i + 1, false) }
     end
 
     instance_eval { alias [] new }
@@ -150,7 +149,7 @@ module Coltrane
     end
 
     def intervals_from_notes(notes)
-      notes.map { |n| notes.root - n}.sort_by(&:semitones)
+      notes.map { |n| notes.root - n }.sort_by(&:semitones)
     end
   end
 end

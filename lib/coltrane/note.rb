@@ -92,7 +92,7 @@ module Coltrane
 
     def as(letter)
       a = (Note[letter] - self)
-      alter([a.semitones, -((-a).semitones)].min_by(&:abs))
+      alter([a.semitones, -(-a).semitones].min_by(&:abs))
     end
   end
 end

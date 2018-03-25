@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   class DiatonicScale < Scale
     def initialize(tone, major: true)

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe CircleOfFifths do
   it 'has 84 notes when size is not specified' do
     expect(CircleOfFifths.new.notes.size).to eq(84)

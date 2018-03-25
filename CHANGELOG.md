@@ -7,12 +7,8 @@
 
 ## [2.2.0]
 
-- Intervals were completely refactored according to
-  [#11](https://github.com/pedrozath/coltrane/issues/11) and
-  [#12](https://github.com/pedrozath/coltrane/issues/12). Thanks
-  [@art-of-dom](https://github.com/art-of-dom) for the valuable information.
-  We now have new interval classes and new ways on how to deal with them.
-  Check the wiki for more details!
+- Intervals were completely refactored according to [#11](https://github.com/pedrozath/coltrane/issues/11) and (https://github.com/pedrozath/coltrane/issues/12). Thanks [@art-of-dom](https://github.com/art-of-dom) for the valuable information. We now have new interval classes and new ways on how to deal with them.
+  Check the [wiki](https://github.com/pedrozath/coltrane/wiki) for more details.
 
 ## [2.1.0]
 

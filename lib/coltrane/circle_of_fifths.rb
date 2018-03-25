@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   class CircleOfFifths
     attr_reader :notes
@@ -22,7 +24,7 @@ module Coltrane
              size:  size - 1
     end
 
-    def letters(i=nil)
+    def letters(i = nil)
       i.nil? ? LETTER_SEQUENCE : LETTER_SEQUENCE[i % LETTER_SEQUENCE.size]
     end
   end

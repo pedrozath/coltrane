@@ -2,7 +2,7 @@
 
 module ColtraneInstruments
   module Guitar
-    DEFAULT_TUNING = %w[E2 A2 D3 G3 B3 E4]
+    DEFAULT_TUNING = %w[E2 A2 D3 G3 B3 E4].freeze
     DEFAULT_FRETS = 23
     # A base class for operations involving Guitars
     class Base

@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module ColtraneSynth
   class Synth
     attr_reader :freq, :nominal_rate

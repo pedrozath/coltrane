@@ -23,7 +23,7 @@ class String
   end
 
   def symbolize
-    self.underscore.to_sym
+    underscore.to_sym
   end
 end
 

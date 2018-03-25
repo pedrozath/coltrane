@@ -31,7 +31,7 @@ RSpec.describe Interval do
   end
 
   it 'can return the interval inversion' do
-    inverted_interval = (Interval.new(Note['C'], Note['B'])).inversion
+    inverted_interval = Interval.new(Note['C'], Note['B']).inversion
     expect(inverted_interval.full_name).to eq('Minor Second')
   end
 
@@ -65,9 +65,9 @@ RSpec.describe Interval do
 
   it 'can return all intervals, including the compound ones' do
     expect(Interval.all_including_compound.map(&:name)).to include(*%w[
-      P1 m2 M2 m3 M3 P4 A4 P5 m6 M6 m7 M7
-      P8 m9 M9 m10 M10 P11 A11 P12 m13 M13 m14 M14
-    ])
+                                                                     P1 m2 M2 m3 M3 P4 A4 P5 m6 M6 m7 M7
+                                                                     P8 m9 M9 m10 M10 P11 A11 P12 m13 M13 m14 M14
+                                                                   ])
   end
 
   it 'can augment' do
@@ -82,5 +82,4 @@ RSpec.describe Interval do
   it 'can double diminish' do
     expect(Interval.minor_third.diminish(2).name).to eq('dd3')
   end
-
 end

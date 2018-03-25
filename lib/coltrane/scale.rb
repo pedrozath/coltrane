@@ -1,4 +1,5 @@
-  # frozen_string_literal: true
+# frozen_string_literal: true
+# frozen_string_literal: true
 
 module Coltrane
   # Musical scale creation and manipulation
@@ -11,9 +12,9 @@ module Coltrane
     attr_reader :interval_sequence, :tone
 
     def initialize(*relative_intervals, tone: 'C',
-                                        mode: 1,
-                                        name: nil,
-                                        notes: nil)
+                   mode: 1,
+                   name: nil,
+                   notes: nil)
       @name = name
       if relative_intervals.any? && tone
         @tone              = Note[tone]
@@ -28,7 +29,7 @@ module Coltrane
         @interval_sequence = IntervalSequence.new(relative_intervals: ds)
       else
         raise WrongKeywordsError,
-          '[*relative_intervals, tone: "C", mode: 1] || [notes:]'
+              '[*relative_intervals, tone: "C", mode: 1] || [notes:]'
       end
     end
 
@@ -138,13 +139,13 @@ module Coltrane
         next memo1 unless size.include?(qintervals.size)
         memo1 + scale_rotations.each_with_index
                                .reduce([]) do |memo2, (rot, index)|
-          if (rot & qintervals).size == qintervals.size
-            memo2 + [Chord.new(root_note: degree(index + 1),
-                               quality: ChordQuality.new(name: qname))]
-          else
-            memo2
-          end
-        end
+                  if (rot & qintervals).size == qintervals.size
+                    memo2 + [Chord.new(root_note: degree(index + 1),
+                                       quality: ChordQuality.new(name: qname))]
+                  else
+                    memo2
+                  end
+                end
       end
     end
 

@@ -42,11 +42,11 @@ module Coltrane
     end
 
     # Factories for the diatonic scale
-    def major(note='C')
+    def major(note = 'C')
       DiatonicScale.new(note)
     end
 
-    def minor(note='A')
+    def minor(note = 'A')
       DiatonicScale.new(note, major: false)
     end
 

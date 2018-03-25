@@ -5,7 +5,7 @@ module Coltrane
     # Interfaces commands with the scales functionality
     class Scale
       def self.parse(str)
-        raise BadScaleError unless str && str.include?('-')
+        raise BadScaleError unless str&.include?('-')
         *scale_name, tone = str.split('-')
         Coltrane::Scale.fetch(scale_name.join('_'), tone)
       end
