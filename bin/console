@@ -3,10 +3,14 @@ $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
 require "bundler/setup"
 require "coltrane"
-require "coltrane_instruments"
-# require "coltrane_synth"
+require "coltrane/representation"
+require "coltrane/renderers"
 
 require "pry"
 
 include Coltrane
+include Coltrane::Theory
+include Coltrane::Representation
+include Coltrane::Renderers
+
 Pry.start
