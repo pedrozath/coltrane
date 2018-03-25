@@ -5,6 +5,17 @@
 - Fix chords so that they generate a barre and a non-barre version and prevent
   barre chords from picking notes before the barre.
 
+## [3.0.0]
+
+### Changes
+
+- This is a huge architectural refactor. Hopefully the last big one. All code were redivided into the modules:
+
+  1. Coltrane::Theory concentrates all music theory logic
+  2. Coltrane::Representation contain musical instruments and any other needed musical-related abstract representations.
+  3. Coltrane::Renderers right now contains the TextRenderer which has the ability of rendering Theory Objects, Representation Objects, etc
+  4. Coltrane::Commands are ways of fetching Theory and Representation objects. They also glue Mercenary (the gem used for the CLI) into everything else.
+
 ## [2.2.0]
 
 - Intervals were completely refactored according to [#11](https://github.com/pedrozath/coltrane/issues/11) and (https://github.com/pedrozath/coltrane/issues/12). Thanks [@art-of-dom](https://github.com/art-of-dom) for the valuable information. We now have new interval classes and new ways on how to deal with them.
