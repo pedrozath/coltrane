@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pedrozath/coltrane.svg?branch=master)](https://travis-ci.org/pedrozath/coltrane)
+
 # Coltrane
 
 A music calculation library/CLI written in Ruby.

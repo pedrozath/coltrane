@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Voicing do
   it 'has notes' do
     expect(Voicing['C3', 'A8', 'G4'].notes.names)

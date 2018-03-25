@@ -18,11 +18,11 @@ RSpec.describe Pitch do
   end
 
   it 'can be created by notation' do
-    expect(Pitch.new(note: 'C',  octave: 0 ).integer).to eq(12)
-    expect(Pitch.new(note: 'C#', octave: 0 ).integer).to eq(13)
-    expect(Pitch.new(note: 'A',  octave: 4 ).integer).to eq(69)
+    expect(Pitch.new(note: 'C',  octave: 0).integer).to eq(12)
+    expect(Pitch.new(note: 'C#', octave: 0).integer).to eq(13)
+    expect(Pitch.new(note: 'A',  octave: 4).integer).to eq(69)
     expect(Pitch.new(note: 'D',  octave: 12).integer).to eq(158)
-    expect(Pitch.new(note: 'F',  octave: 3 ).integer).to eq(53)
+    expect(Pitch.new(note: 'F',  octave: 3).integer).to eq(53)
   end
 
   it 'can be created by number' do

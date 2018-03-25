@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe Key do
   it 'can parse and return Keys' do
     expect(Key['A#m'].name).to eq('Natural Minor')

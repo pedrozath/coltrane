@@ -27,7 +27,7 @@ RSpec.describe Frequency do
   end
 
   it 'can return interval in cents' do
-    expect((Frequency[440] / Frequency[880]).cents).to eq(-1200)
-    expect((Frequency[880] / Frequency[440]).cents).to eq(1200)
+    expect((Frequency[440] / Frequency[880]).cents).to eq(1200)
+    expect((Frequency[880] / Frequency[440]).cents).to eq(-1200)
   end
 end

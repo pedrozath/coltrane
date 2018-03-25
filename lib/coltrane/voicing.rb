@@ -1,5 +1,6 @@
-module Coltrane
+# frozen_string_literal: true
 
+module Coltrane
   # This class describes an actual implementation of a Chord, being aware
   # of exact octaves of each pitch and even repeating pitches across octaves.
   class Voicing

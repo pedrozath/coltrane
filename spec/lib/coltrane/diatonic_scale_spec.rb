@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 RSpec.describe DiatonicScale do
   it 'has a relative minor' do
     expect(Scale.major('C').relative_minor.notes.first.name).to eq('A')

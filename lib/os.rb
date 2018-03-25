@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module OS
   class << self
     def windows?
@@ -5,7 +7,7 @@ module OS
     end
 
     def mac?
-     (/darwin/ =~ RUBY_PLATFORM) != nil
+      (/darwin/ =~ RUBY_PLATFORM) != nil
     end
 
     def unix?

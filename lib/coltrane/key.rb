@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 module Coltrane
   class Key < DiatonicScale
     KEY_REGEX = /([A-G][#b]?)([mM]?)/

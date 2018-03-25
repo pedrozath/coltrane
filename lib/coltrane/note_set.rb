@@ -75,11 +75,11 @@ module Coltrane
     end
 
     def alter(alteration)
-      NoteSet[*map {|n| n.alter(alteration)}]
+      NoteSet[*map { |n| n.alter(alteration) }]
     end
 
     def alter_accidentals(alteration)
-      NoteSet[*map {|n| n.alter(alteration) if n.accidental?}]
+      NoteSet[*map { |n| n.alter(alteration) if n.accidental? }]
     end
 
     def interval_sequence

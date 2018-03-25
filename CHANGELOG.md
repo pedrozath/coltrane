@@ -5,6 +5,11 @@
 - Fix chords so that they generate a barre and a non-barre version and prevent
   barre chords from picking notes before the barre.
 
+## [2.2.0]
+
+- Intervals were completely refactored according to [#11](https://github.com/pedrozath/coltrane/issues/11) and (https://github.com/pedrozath/coltrane/issues/12). Thanks [@art-of-dom](https://github.com/art-of-dom) for the valuable information. We now have new interval classes and new ways on how to deal with them.
+  Check the [wiki](https://github.com/pedrozath/coltrane/wiki) for more details.
+
 ## [2.1.0]
 
 - Correct Flat/Sharp on Diatonic Scales

@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 module Coltrane
-
   # This module takes care of adding to progressions knowledge that is more
   # based on common standards and practices.
   module NotableProgressions

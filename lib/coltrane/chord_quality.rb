@@ -27,7 +27,7 @@ module Coltrane
       hash ||= chord_trie
       return quality_names if hash.empty?
       if hash['name']
-        quality_names[hash.delete('name')] = intervals.map { |n| IntervalClass.new(n) }
+        quality_names[hash.delete('name')] = intervals.map { |n| Interval.public_send(n.underscore) }
       end
       hash.reduce(quality_names) do |memo, (interval, values)|
         memo.merge intervals_per_name(hash:  values,
@@ -45,7 +45,7 @@ module Coltrane
         return trie['name']
       end
       interval = given_interval_names.shift
-      new_trie = trie[interval]
+      new_trie = trie[interval.full_name]
       find_chord given_interval_names, last_name: (trie['name'] || last_name),
                                        trie: new_trie
     end
@@ -63,7 +63,7 @@ module Coltrane
     end
 
     def retrieve_chord_intervals(chord_sequence = normal_sequence)
-      ints = IntervalSequence.new(intervals: self)
+      ints = IntervalSequence.new(*self)
       chord_sequence.map do |int_sym|
         next unless interval_name = ints.public_send(int_sym)
         ints.delete_if { |i| i.cents == IntervalClass.new(interval_name).cents }
@@ -91,7 +91,7 @@ module Coltrane
     def initialize(name: nil, notes: nil, bass: nil)
       if name
         @name = bass.nil? ? name : [name, bass].join('/')
-        super(intervals: intervals_from_name(name))
+        super(*intervals_from_name(name))
       elsif notes
         super(notes: notes)
         @name = get_name
