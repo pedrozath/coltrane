@@ -22,16 +22,6 @@ class String
     !!match(*args)
   end
 
-  def interval_quality
-    {
-      'P' => 'Perfect',
-      'm' => 'Minor',
-      'M' => 'Major',
-      'A' => 'Augmented',
-      'd' => 'Diminished'
-    }[self]
-  end
-
   def symbolize
     self.underscore.to_sym
   end
@@ -39,25 +29,6 @@ end
 
 # Here we add some syntax sugar to make the code more understandable later
 class Numeric
-  def interval_name
-    {
-      1   => 'Unison',
-      2   => 'Second',
-      3   => 'Third',
-      4   => 'Fourth',
-      5   => 'Fifth',
-      6   => 'Sixth',
-      7   => 'Seventh',
-      8   => 'Octave',
-      9   => 'Ninth',
-      10  => 'Tenth',
-      11  => 'Eleventh',
-      12  => 'Twelfth',
-      13  => 'Thirteenth',
-      14  => 'Fourteenth',
-      15  => 'Double Octave'
-    }[self % 16]
-  end
 end
 
 # Here we add some methods better work with Tries

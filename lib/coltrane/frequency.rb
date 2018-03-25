@@ -38,7 +38,7 @@ module Coltrane
 
     def /(other)
       case other
-      when Frequency then Interval[1200 * Math.log2(frequency / other.frequency)]
+      when Frequency then FrequencyInterval[1200 * Math.log2(other.frequency / frequency)]
       when Numeric then Frequency[frequency / other]
       end
     end

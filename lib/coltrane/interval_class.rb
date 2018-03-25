@@ -7,85 +7,185 @@ module Coltrane
   #
   # This class in specific still takes into account the order of intervals.
   # C to D is a major second, but D to C is a minor seventh.
-  class IntervalClass < Interval
-    INTERVALS = %w[P1 m2 M2 m3 M3 P4 A4 P5 m6 M6 m7 M7].freeze
+  class IntervalClass < FrequencyInterval
+    QUALITY_SEQUENCE = [
+      %w[P],
+      %w[m M],
+      %w[m M],
+      %w[P A],
+      %w[P],
+      %w[m M],
+      %w[m M],
+    ].freeze
 
-    def self.split(interval)
-      interval.scan(/(\w)(\d\d?)/)[0]
-    end
+    ALTERATIONS = {
+      'A' => +1,
+      'd' => -1
+    }.freeze
 
-    def self.full_name(interval)
-      q, n = split(interval)
-      "#{q.interval_quality} #{n.to_i.interval_name}"
-    end
+    SINGLE_DISTANCES_NAMES = [
+      'Unison',
+      'Second',
+      'Third',
+      'Fourth',
+      'Fifth',
+      'Sixth',
+      'Seventh',
+    ].freeze
 
-    def self.method_missing; end
+    COMPOUND_DISTANCES_NAMES = [
+      'Octave',
+      'Ninth',
+      'Tenth',
+      'Eleventh',
+      'Twelfth',
+      'Thirteenth',
+      'Fourteenth',
+      'Double Octave'
+    ].freeze
 
-    # Create full names and methods such as major_third? minor_seventh?
-    # TODO: It's a mess and it really needs a refactor someday
-    NAMES = INTERVALS.each_with_index.each_with_object({}) do |(interval, index), memo|
-      memo[interval] ||= []
-      2.times do |o|
-        q, i = split(interval)
-        num = o * 7 + i.to_i
-        prev_q = split(INTERVALS[(index - 1) % 12])[0]
-        next_q = split(INTERVALS[(index + 1) % 12])[0]
-        memo[interval] << full_name("#{q}#{num}")
-        memo[interval] << full_name("d#{(num - 1 + 1) % 14 + 1}") if next_q.match? /m|P/
-        next if q == 'A'
-        memo[interval] << full_name("A#{(num - 1 - 1) % 14 + 1}") if prev_q.match? /M|P/
+    DISTANCES_NAMES = (SINGLE_DISTANCES_NAMES + COMPOUND_DISTANCES_NAMES).freeze
+
+    QUALITY_NAMES = {
+      'P' => 'Perfect',
+      'm' => 'Minor',
+      'M' => 'Major',
+      'A' => 'Augmented',
+      'd' => 'Diminished'
+    }.freeze
+
+    class << self
+
+      def distances_names
+        DISTANCES_NAMES
       end
-    end
 
-    ALL_FULL_NAMES = NAMES.values.flatten
+      def distance_name(n)
+        DISTANCES_NAMES[n-1]
+      end
 
-    NAMES.each do |interval_name, full_names|
-      full_names.each do |the_full_name|
-        define_method "#{the_full_name.underscore}?" do
-          name == interval_name
-        end
-        IntervalClass.class.define_method the_full_name.underscore.to_s do
-          IntervalClass.new(interval_name)
+      def quality_name(q)
+        QUALITY_NAMES[q]
+      end
+
+      def names
+        @names ||= begin
+          SINGLE_DISTANCES_NAMES.each_with_index.reduce([]) do |i_names, (d, i)|
+            i_names + QUALITY_SEQUENCE[i % 7].reduce([]) do |qs, q|
+              qs + ["#{q}#{i+1}"]
+            end
+          end
         end
       end
+
+      def compound_names
+        @compound_names ||= all.map(&:compound_name)
+      end
+
+      def all_names_including_compound
+        @all_names_including_compound ||= names + compound_names
+      end
+
+      def full_names
+        @full_names ||= names.map {|n| expand_name(n) }
+      end
+
+      def all
+        @all ||= names.map {|n| IntervalClass[n] }
+      end
+
+      def full_names_including_compound
+        @full_names_including_compound ||=
+          all_names_including_compound.map {|n| expand_name(n) }
+      end
+
+      def split(interval)
+        interval.scan(/(\w)(\d\d?)/)[0]
+      end
+
+      def expand_name(name)
+        q, n = split(name)
+        (
+          case name
+          when /AA|dd/ then 'Double '
+          when /AAA|ddd/ then 'Triple '
+          else ""
+          end
+        ) + "#{quality_name(q)} #{distance_name(n.to_i)}"
+      end
+
     end
 
     def initialize(arg)
       super case arg
-            when Interval then arg.semitones
+            when FrequencyInterval then arg.semitones
             when String
-              INTERVALS.index(arg) || self.class.interval_by_full_name(arg)
+              self.class.names.index(arg) ||
+                self.class.full_names.index(arg) ||
+                self.class.all_names_including_compound.index(arg) ||
+                self.class.full_names_including_compound.index(arg)
             when Numeric then arg
-            else raise WrongArgumentsError
+            else
+              raise WrongArgumentsError,
+                'Provide: [interval] || [name] || [number of semitones]'
             end % 12 * 100
     end
 
-    def self.[](semis)
-      new semis
+    instance_eval { alias [] new }
+
+    def interval
+      Interval.new(letter_distance: distance, semitones: semitones)
     end
 
-    def all_full_names
-      self.class.all_full_names
+    def compound_interval
+      Interval.new(
+        letter_distance: distance,
+        semitones: semitones,
+        compound: true
+      )
     end
 
-    def self.all_full_names
-      ALL_FULL_NAMES
-    end
+    alias compound compound_interval
 
     def ==(other)
-      (cents % 12) == (other.cents % 12)
+      return false unless other.is_a? FrequencyInterval
+      (semitones % 12) == (other.semitones % 12)
     end
 
-    def name
-      INTERVALS[semitones % 12]
+    def alteration
+      name.chars.reduce(0) { |a, s| a + (ALTERATIONS[s] || 0) }
+    end
+
+    def ascending
+      self.class[semitones.abs]
+    end
+
+    def descending
+      self.class[-semitones.abs]
+    end
+
+    def inversion
+      self.class[-semitones % 12]
     end
 
     def full_name
-      self.class.full_name(name)
+      self.class.expand_name(name)
     end
 
-    def full_names
-      NAMES[name]
+    def name
+      self.class.names[semitones % 12]
+    end
+
+    def compound_name
+      "#{quality}#{distance + 7}"
+    end
+
+    def distance
+      self.class.split(name)[1].to_i
+    end
+
+    def quality
+      self.class.split(name)[0]
     end
 
     def +(other)

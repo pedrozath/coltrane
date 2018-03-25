@@ -5,15 +5,15 @@ RSpec.describe Note do
     expect(Note['C'].interval_to('D').semitones).to eq(2)
   end
 
-  # it 'when summed to intervals it returns the corresponding note' do
-  #   expect((Note['C'] + Interval.major_third).name).to eq('E')
-  # end
+  it 'when summed to intervals it returns the corresponding note' do
+    expect((Note['C'] + Interval.major_third).name).to eq('E')
+  end
 
-  # it 'can return intervals by subtraction' do
-  #   expect((Note['D'] - Note['C']).name).to eq('m7')
-  #   expect((Note['B'] - Note['C']).name).to eq('m2')
-  #   expect((Note['C'] - Note['C']).name).to eq('P1')
-  # end
+  it 'can return intervals by subtraction' do
+    expect((Note['D'] - Note['C']).name).to eq('m7')
+    expect((Note['B'] - Note['C']).name).to eq('m2')
+    expect((Note['C'] - Note['C']).name).to eq('P1')
+  end
 
   it 'can be created by name' do
     expect { Note['L'].name } .to raise_error ColtraneError

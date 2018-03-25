@@ -7,58 +7,48 @@ module Coltrane
     attr_reader :intervals
 
     def_delegators :@intervals, :map, :each, :[], :size,
-                   :reduce, :delete, :reject!, :delete_if
+                   :reduce, :delete, :reject!, :delete_if, :detect, :to_a
 
-    IntervalClass.all_full_names.each do |full_name|
-      define_method "has_#{full_name.underscore}?" do
-        !!(intervals.detect { |i| i.public_send("#{full_name.underscore}?") })
-      end
-    end
-
-    (1..15).each do |i|
-      # defines methods like :fifth, :third, eleventh:
-      define_method i.interval_name.underscore do
-        priority = send("#{i.interval_name.underscore}!")
-        return priority unless priority.nil?
-        @intervals.each do |ix|
-          ix.full_names.detect do |ixx|
-            return ixx if ixx.match?(/#{i.interval_name}/)
-          end
+    def initialize(*intervals, notes: nil, relative_intervals: nil)
+      if intervals.any?
+        @intervals = if intervals.first.is_a?(Interval)
+          intervals
+        else
+          intervals.map { |i| Interval[i] }
         end
-        nil
-      end
 
-      define_method "#{i.interval_name.underscore}!" do
-        @intervals.each do |ix|
-          ix.full_names.detect do |ixx|
-            next if ixx.match?(/Diminished|Augmented/)
-            return ixx if ixx.match? /#{i.interval_name}/
-          end
-        end
-        nil
-      end
-
-      # defines methods like :has_fifth?, :has_third?, has_eleventh?:
-      define_method "has_#{i.interval_name.underscore}?" do
-        !!@intervals.detect { |ix| ix.full_name.match(/#{i.interval_name}/) }
-      end
-    end
-
-    def initialize(notes: nil, intervals: nil, distances: nil)
-      if notes
+      elsif notes
         notes = NoteSet[*notes] if notes.is_a?(Array)
         @intervals = intervals_from_notes(notes)
-      elsif intervals
-        @intervals = intervals.map { |i| IntervalClass[i] }
-      elsif distances
-        @distances = distances
-        @intervals = intervals_from_distances(distances)
+      elsif relative_intervals
+        @relative_intervals = relative_intervals
+        @intervals = intervals_from_relative_intervals(relative_intervals)
       else
-        raise 'Provide: [notes:] || [intervals:] || [distances:]'
+        binding.pry
+        raise WrongKeywordsError,
+          'Provide: [notes:] || [intervals:] || [relative_intervals:]'
       end
     end
 
-    def distances
+    Interval.all_including_compound_and_altered.each do |interval|
+      # Creates methods such as major_third, returning it if it finds
+      define_method("#{interval.full_name.underscore}") { find(interval) }
+      # Creates methods such as has_major_third?, returning a boolean
+      define_method("has_#{interval.full_name.underscore}?") { has?(interval) }
+    end
+
+    Interval.distances_names.map(&:underscore).each_with_index do |distance, i|
+      # Creates methods such as has_third?, returning a boolean
+      define_method("has_#{distance}?") { !!find_by_distance(i+1) }
+      # Creates methods such third, returning any third it finds
+      define_method("#{distance}" )     { find_by_distance(i+1) }
+      # Creates methods such third!, returning thirds that arent aug or dim
+      define_method("#{distance}!")     { find_by_distance(i+1, false) }
+    end
+
+    instance_eval { alias [] new }
+
+    def relative_intervals
       intervals_semitones[1..-1].each_with_index.map do |n, i|
         if i.zero?
           n
@@ -72,8 +62,20 @@ module Coltrane
       intervals.map(&:name)
     end
 
-    def has?(interval_name)
-      @intervals.include?(IntervalClass[interval_name])
+    def find(interval)
+      interval.clone if detect { |i| interval == i }
+    end
+
+    def has?(interval)
+      !!find(interval)
+    end
+
+    def find_by_distance(n, accept_altered = true)
+      strategy = (accept_altered ? :as : :as!)
+      map { |interval| interval.send(strategy, n) }
+        .compact
+        .sort_by { |i| i.alteration.abs }
+        .first
     end
 
     alias interval_names names
@@ -87,7 +89,7 @@ module Coltrane
     end
 
     def shift(ammount)
-      IntervalSequence.new(intervals: intervals.map do |i|
+      self.class.new(*intervals.map do |i|
         (i.semitones + ammount) % 12
       end)
     end
@@ -97,7 +99,7 @@ module Coltrane
     end
 
     def inversion(index)
-      IntervalSequence.new(intervals: intervals.rotate(index)).zero_it
+      self.class.new(*intervals.rotate(index)).zero_it
     end
 
     def next_inversion
@@ -109,9 +111,7 @@ module Coltrane
     end
 
     def inversions
-      Array.new(intervals.length) do |index|
-        inversion(index)
-      end
+      Array.new(intervals.length) { |i| inversion(i) }
     end
 
     def intervals_semitones
@@ -143,14 +143,14 @@ module Coltrane
 
     private
 
-    def intervals_from_distances(distances)
-      distances[0..-2].reduce([IntervalClass[0]]) do |memo, d|
+    def intervals_from_relative_intervals(relative_intervals)
+      relative_intervals[0..-2].reduce([Interval[0]]) do |memo, d|
         memo + [memo.last + d]
       end
     end
 
     def intervals_from_notes(notes)
-      notes.map { |n| n - notes.root }.sort_by(&:semitones)
+      notes.map { |n| notes.root - n}.sort_by(&:semitones)
     end
   end
 end

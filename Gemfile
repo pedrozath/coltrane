@@ -7,7 +7,6 @@ group :test, :development do
   gem 'pry-byebug'
   gem 'pry-rescue'
   gem 'pronto'
-  gem 'pronto-flay'
   gem 'pronto-rubocop'
   gem 'opal-rspec'
 end

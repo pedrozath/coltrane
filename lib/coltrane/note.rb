@@ -83,21 +83,15 @@ module Coltrane
     end
 
     def -(other)
-      result = super(other)
-      result.is_a?(Note) ? result.alter(alteration) : result
+      super(other).yield_self { |r| r.is_a?(Note) ? r.alter(alteration) : r }
     end
 
     def +(other)
-      result = super(other)
-      result.is_a?(Note) ? result.alter(alteration) : result
-    end
-
-    def interval_to(note_name)
-      Note[note_name] - self
+      super(other).yield_self { |r| r.is_a?(Note) ? r.alter(alteration) : r }
     end
 
     def as(letter)
-      a = (self - Note[letter])
+      a = (Note[letter] - self)
       alter([a.semitones, -((-a).semitones)].min_by(&:abs))
     end
   end

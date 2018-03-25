@@ -1,4 +1,4 @@
-# frozen_string_literal: true
+  # frozen_string_literal: true
 
 module Coltrane
   # Musical scale creation and manipulation
@@ -10,19 +10,25 @@ module Coltrane
 
     attr_reader :interval_sequence, :tone
 
-    def initialize(*distances, tone: 'C', mode: 1, name: nil, notes: nil)
+    def initialize(*relative_intervals, tone: 'C',
+                                        mode: 1,
+                                        name: nil,
+                                        notes: nil)
       @name = name
-      if distances.any? && tone
+      if relative_intervals.any? && tone
         @tone              = Note[tone]
-        distances          = distances.rotate(mode - 1)
-        @interval_sequence = IntervalSequence.new(distances: distances)
+        relative_intervals = relative_intervals.rotate(mode - 1)
+        @interval_sequence = IntervalSequence.new(
+          relative_intervals: relative_intervals
+        )
       elsif notes
         @notes             = NoteSet[*notes]
         @tone              = @notes.first
-        ds                 = @notes.interval_sequence.distances
-        @interval_sequence = IntervalSequence.new(distances: ds)
+        ds                 = @notes.interval_sequence.relative_intervals
+        @interval_sequence = IntervalSequence.new(relative_intervals: ds)
       else
-        raise WrongKeywordsError, '[*distances, tone: "C", mode: 1] || [notes:]'
+        raise WrongKeywordsError,
+          '[*relative_intervals, tone: "C", mode: 1] || [notes:]'
       end
     end
 
@@ -32,7 +38,7 @@ module Coltrane
 
     def name
       @name = begin
-        is = interval_sequence.distances
+        is = interval_sequence.relative_intervals
         (0...is.size).each do |i|
           if (scale_name = Coltrane::ClassicScales::SCALES.key(is.rotate(i)))
             return scale_name

@@ -16,6 +16,10 @@ module Coltrane
 
     NOTATION = %w[C C# D D# E F F# G G# A A# B].freeze
 
+    def self.all_letters
+      %w[C D E F G A B]
+    end
+
     def self.all
       NOTATION.map { |n| new(n) }
     end
@@ -44,6 +48,24 @@ module Coltrane
 
     def true_notation
       NOTATION[integer]
+    end
+
+    def letter
+      name[0]
+    end
+
+    def ascending_interval_to(other)
+      Interval.new(self, (other.is_a?(PitchClass) ? other : Note.new(other)))
+    end
+
+    alias interval_to ascending_interval_to
+
+    def descending_interval_to(other)
+      Interval.new(
+        self,
+        (other.is_a?(PitchClass) ? other : Note.new(other)),
+        ascending: false
+      )
     end
 
     alias name true_notation
@@ -80,7 +102,7 @@ module Coltrane
       case other
       when Interval   then self.class[integer - other.semitones]
       when Integer    then self.class[integer - other]
-      when PitchClass then IntervalClass[frequency / other.frequency]
+      when PitchClass then Interval.new(self, other)
       when Frequency  then self.class.new(frequency: frequency - other)
       end
     end
