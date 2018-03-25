@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    coltrane (3.0.0)
+    coltrane (2.2.0)
       color (~> 1.8)
       dry-monads (~> 0.4)
       paint (~> 2.0)
