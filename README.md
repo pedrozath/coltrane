@@ -7,7 +7,7 @@ A music calculation library/CLI written in Ruby.
 ![Coltrane](img/coltrane-logo.png)
 
 * [How to use this library](https://github.com/pedrozath/coltrane/wiki/Core-music-theory-library).
-* [Why did I wrote this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
+* [Why did I write this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
 * [Chat room for discussing the project, answering questions, etc.](https://gitter.im/coltrane-music/Lobby)
 
 ## CLI (Command Line Interface)
