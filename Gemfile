@@ -6,7 +6,7 @@ group :test, :development do
   gem 'pry'
   gem 'pry-byebug'
   gem 'pry-rescue'
-  gem 'pronto'
+  # gem 'pronto'
   gem 'pronto-rubocop'
   gem 'opal-rspec'
 end

@@ -29,7 +29,7 @@ module Coltrane
         @chords.each do |chord|
           desc = "#{chord.name} chord:"
           Coltrane::Cli::Notes.new chord.notes, desc: desc
-          ColtraneSynth::Base.play(chord, 1) if Cli.config.sound
+          # ColtraneSynth::Base.play(chord, 1) if Cli.config.sound
         end
       end
     end
