@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    coltrane (2.2.0)
+    coltrane (2.2.1)
       color (~> 1.8)
       dry-monads (~> 0.4)
       paint (~> 2.0)
@@ -121,7 +121,6 @@ DEPENDENCIES
   bundler (~> 1.14)
   coltrane!
   opal-rspec
-  pronto
   pronto-rubocop
   pry
   pry-byebug
