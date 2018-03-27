@@ -7,7 +7,7 @@ require 'color'
 
 require 'coltrane'
 require 'coltrane_instruments'
-require 'coltrane_synth'
+# require 'coltrane_synth'
 
 require 'cli/config'
 require 'cli/errors'

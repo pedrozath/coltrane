@@ -14,7 +14,7 @@ module Coltrane
         target_chord = Coltrane::Chord.new(notes: @notes)
         chords = ColtraneInstruments::Guitar::Base.find_chords(target_chord)
         @chords = chords.sort[-6..-1].reverse
-        @chords.each { |c| ColtraneSynth::Base.play(c.voicing) } if false
+        # @chords.each { |c| ColtraneSynth::Base.play(c.voicing) } if false
       end
 
       def chord_height
