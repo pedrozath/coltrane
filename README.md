@@ -1,6 +1,6 @@
 [![Build Status](https://travis-ci.org/pedrozath/coltrane.svg?branch=master)](https://travis-ci.org/pedrozath/coltrane)
 [![Gem Version](https://badge.fury.io/rb/coltrane.svg)](https://badge.fury.io/rb/coltrane)
-[![Maintainability](https://api.codeclimate.com/v1/badges/a99a88d28ad37a79dbf6/maintainability)](https://codeclimate.com/github/pedrozath/coltrane/maintainability)
+[![Maintainability](https://api.codeclimate.com/v1/badges/e3c8171def8124132380/maintainability)](https://codeclimate.com/github/pedrozath/coltrane/maintainability)
 [![Test Coverage](https://api.codeclimate.com/v1/badges/e3c8171def8124132380/test_coverage)](https://codeclimate.com/github/pedrozath/coltrane/test_coverage)
 
 # Coltrane
