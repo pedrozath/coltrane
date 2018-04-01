@@ -1,10 +1,25 @@
+env:
+  global:
+    - CC_TEST_REPORTER_ID=ef9987fd97eefaf4017a8b88e063e9376b408e93b170ad4610c8fce4370f4be2
+
 language: ruby
 git:
   depth: 1
+
 rvm:
 - 2.5.0
+
+before_script:
+  - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
+  - chmod +x ./cc-test-reporter
+  - ./cc-test-reporter before-build
+
 script:
 - bin/rspec spec
+
+after_script:
+  - ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT
+
 deploy:
   provider: rubygems
   api_key:
@@ -14,4 +29,4 @@ deploy:
     repo: pedrozath/coltrane
 notifications:
   slack:
-    secure: A4qliXrG8AgvMi9skLwfTfGgRxeVRBIBS8O6tIF2k0oLn+i0XRCEPWYnK4Xa1YufgCnMTFlGA144sxsvuf3spBuwCJkOefA7YhJJVhKQTCpmkSq0IPEaF8+KpwESI1W1hBJuEWmCAxwL1Z+tZa7CON2ELyKgHukxEtUTfQsbXMY1eeISRm7a73xi4DlfTM4UEV2Cfd/Rg9cpP4QGsWANowDsaNm33aQ611BIokfVSZtKf7A4IPAthZOrXkGqD0R4FjUxbDUtQEd5gg3tpcPmWrHIxunlvJow/XBXtv+/qDlbo8LzUUxtkElcGjj1g3hsQEZmevoNxZdGW/8/F5DMMLYYQRfph7Ot9Xm6dNYj3rIUcHjNob1qUNb0ON2pko4gcO6HiU8VZ/oQUsUtBBrB7ddf1htXVdO3jHH2josFTCWgFCzPwgxsCuyP71lieDBolyaKFOyWGaWj6cZhqGUfkSosLZNyDoUEWERkImOHyqvi5TQaPVteZvUeCDkD6ZtCTyEjZI8zXdyPKKweBLxRuGMjUgpsA5QEyo3dlIguLe7OYCLWyYYmEcF+2QjYLevEBFNM1rl6tK8VEF6aost0pa6Rq6/VHRNEEKn0ejYTqbiPGljmOiDOwWSCxQWhlJ9tw692wnpLN5/y0Cda40PQ87hi1tXyvcvLrrvETfYfXcU=
+    secure: Z1DrNRL47BvEB/PWyb+EsVlAwVsGapytLGCiyQeTlNBTK7iCfP3N57fkVZDyaMYWJ7oweCk16aTBxljnP6SPNaqQhKWilDXiwnX9s3uWxz06ONgg8TE46hGyplD5fmt/liIxQ/XeJoCA8C6qWJRAc94Y0b42yK23eFbCU3632ISt1wVwipOcuAyCD0TTjQUHRjWT4Zbg6gqytG+U3rsx2+wGUDbu2Nu5r6C90uU0vbmHyhcmf2S7V7is7Kpc24aDhPhBBrP44uWXLEXh8Hgthca95jVm2CoL2GVK+f6W/mAkQugkg0Rz//d8+9M5SJcHQiUBwNIXxfgEQKkVFSuiMcySdG0RFBh9dyPPem3AUWEO9HwNlF+juMkwP+Wavj9eoN3cWNeVJrT00mXaTzmPdxFKxvRKp/NSJQIKI7dzg74oggyzu5BSmTlth2YGgNzEhKbAjOGL+B2ClE5KeR4ZIUsEH7Z/KAoHH4EPERYqec+aSsbLuoAAQiuRIqul+MyZiz0ox/kA1hFVndbDg7avxqZUzBSBZ7f9nMzKxQeUGSJYS3f5XWYpIDCxEiub5LiLMkltaM2AGAzZfFhLYEC96J/HoyF7xxHZNWbEJiv+bLuQGcD8BUCTNfRZM15nQbaKNBpyx/lC0h4kRAGnaGAnfGYCuKHjHPWsSAc8jcmW3Bw=
