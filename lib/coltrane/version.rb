@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 module Coltrane
-  VERSION = '3.0.0.pre'
+  VERSION = '3.0.0.rc1'
 end

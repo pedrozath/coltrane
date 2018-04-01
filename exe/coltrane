@@ -7,7 +7,6 @@ require 'paint'
 require 'color'
 require 'mercenary'
 require 'coltrane/commands'
-require 'pry'
 
 Paint.mode = 0xFFFFFF
 
