@@ -11,7 +11,7 @@ A music calculation library/CLI written in Ruby.
 
 * [How to use this library](https://github.com/pedrozath/coltrane/wiki/Core-music-theory-library).
 * [Why did I write this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
-* [Chat room for discussing the project, answering questions, etc.](https://gitter.im/coltrane-music/Lobby)
+* [Chat room for discussing the project, answering questions, etc.](http://coltrane-ruby.herokuapp.com/)
 
 ## CLI (Command Line Interface)
 
@@ -42,7 +42,7 @@ PS: Once you install the gem the CLI is instaled in your system and it's ready t
 
 ## Contributing
 
-We are looking for contributors. Find me on [our chatroom](https://gitter.im/coltrane-music/Lobby) if you need any kind of information.
+We are looking for contributors. Find me on [our chatroom](http://coltrane-ruby.herokuapp.com/) if you need any kind of information.
 
 ### How to contribute
 1. Fork this code

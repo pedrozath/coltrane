@@ -1,13 +1,14 @@
 module Coltrane
   module Commands
     class Chords < Command
-      attr_reader :chord, :flavor, :on, :preface
+      attr_reader :chord, :flavor, :on, :preface, :voicings
 
       def initialize(chord = nil,
                      flavor: :notes,
                      on: :text,
                      notes: nil,
                      preface: nil,
+                     voicings: 4,
                      **options)
         if chord
           @chord = chord.is_a?(Theory::Chord) ? chord : Theory::Chord.new(name: chord)
@@ -18,9 +19,10 @@ module Coltrane
                 'or coltrane chords --notes C-E-G'
         end
 
-        @flavor  = flavor.to_sym
-        @preface = preface || @chord.name
-        @on      = on.to_sym
+        @flavor   = flavor.to_sym
+        @preface  = preface || @chord.name
+        @on       = on.to_sym
+        @voicings = voicings.to_i
       end
 
       def representation
@@ -31,10 +33,12 @@ module Coltrane
       def on_model
         case on
         when :text              then chord
-        when :guitar            then Representation::Guitar.find_chords(chord).first(6)
-        when :ukulele, :ukelele then Representation::Ukulele.find_chords(chord).first(6)
-        when :bass              then Representation::Bass.find_chords(chord).first(6)
+        when :guitar            then Representation::Guitar.find_chords(chord).first(voicings)
+        when :ukulele, :ukelele then Representation::Ukulele.find_chords(chord).first(voicings)
+        when :bass              then Representation::Bass.find_notes(chord.notes)
         when :piano             then Representation::Piano.find_notes(chord.notes)
+        when :'guitar-frets'    then Representation::Guitar.find_notes(chord.notes)
+        when :'ukulele-frets', :'ukelele-frets' then Representation::Ukulele.find_notes(chord.notes)
         end
       end
 
@@ -48,7 +52,7 @@ module Coltrane
           (
             {
               layout: :horizontal,
-              per_row: 6,
+              per_row: 4,
             } if layout_horizontal?
           )
         ]
@@ -67,8 +71,11 @@ module Coltrane
 
           add_shared_option(:flavor, c)
           add_shared_option(:on, c)
+          add_shared_option(:voicings, c)
           c.action { |(chords), **options|
-            (chords&.split('-') || [nil]).each { |chord| new(chord, **options).render }
+            (chords&.split('-') || [nil]).each { |chord|
+              new(chord, **options).render
+            }
           }
         end
       end
