@@ -3,15 +3,21 @@ module Coltrane
     class Command
       COMMON_OPTIONS = {
         on: [
-          '--on guitar INSTRUMENT',
+          '--on <INSTRUMENT>',
           'Shows the notes on the given instrument/representation type. ' \
           'Can be piano, guitar, ukulele, bass or text'
         ],
 
         flavor: [
-          '--flavor FLAVOR',
+          '--flavor <FLAVOR>',
           'Chooses which additional information to display: ' \
           'marks, notes, intervals or degrees'
+        ],
+
+        voicings: [
+          '--voicings <NUMBER>',
+          'Number of voicings for guitar like instruments. Default is 6' \
+          'provided they are separated by dashes'
         ]
       }
 

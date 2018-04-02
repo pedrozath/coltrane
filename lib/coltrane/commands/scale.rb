@@ -18,10 +18,11 @@ module Coltrane
         program.command(:scale) do |c|
           c.syntax 'scale <root_note> <scale name> [--on <instrument>]'
           c.description 'Gives you information about a scale. Ex: coltrane scale D Natural Minor --on guitar'
-          c.option :tertians, '--tertians SIZE', 'Outputs all tertian chords from the given size from the scale'
+          c.option :tertians, '--tertians <SIZE>', 'Outputs all tertian chords from the given size from the scale'
           c.option :chords,   '--chords [SIZE]', 'Outputs all chords from given size from the scale. Leave size empty to retrieve all'
           add_shared_option(:flavor, c)
           add_shared_option(:on, c)
+          add_shared_option(:voicings, c)
 
           c.action { |scale_notation, **options|
             parse(scale_notation.join(' '))

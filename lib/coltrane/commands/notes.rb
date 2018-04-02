@@ -34,6 +34,7 @@ module Coltrane
           c.alias(:note)
           c.syntax 'notes <notes separated by space> [--on <instrument>]'
           c.description 'Shows the given notes.'
+          add_shared_option(:voicings, c)
           add_shared_option(:flavor, c)
           add_shared_option(:on, c)
           c.action { |(notes), **options| new(notes, **options).render }

@@ -1,18 +1,15 @@
 PATH
   remote: .
   specs:
-    coltrane (3.0.0.rc1)
+    coltrane (3.0.0)
       color (~> 1.8)
       dry-monads (~> 0.4)
+      mercenary (~> 0.3)
       paint (~> 2.0.1)
-      pedrozath-mercenary (~> 0.3)
-      tty-prompt (~> 0.16.0)
 
 GEM
   remote: https://rubygems.org/
   specs:
-    addressable (2.5.2)
-      public_suffix (>= 2.0.2, < 4.0)
     ast (2.3.0)
     byebug (9.1.0)
     coderay (1.1.2)
@@ -27,23 +24,13 @@ GEM
       dry-core (~> 0.3, >= 0.3.3)
       dry-equalizer
     equatable (0.5.0)
-    faraday (0.14.0)
-      multipart-post (>= 1.2, < 3)
-    gitlab (3.6.1)
-      httparty
-      terminal-table
     hike (1.2.3)
     hitimes (1.2.6)
-    httparty (0.16.1)
-      multi_xml (>= 0.5.2)
     interception (0.5)
     json (2.1.0)
+    mercenary (0.3.6)
     method_source (0.9.0)
-    multi_xml (0.6.0)
-    multipart-post (2.0.0)
     necromancer (0.4.0)
-    octokit (4.8.0)
-      sawyer (~> 0.8.0, >= 0.5.3)
     opal (0.10.5)
       hike (~> 1.2)
       sourcemap (~> 0.1.0)
@@ -58,16 +45,7 @@ GEM
     pastel (0.7.2)
       equatable (~> 0.5.0)
       tty-color (~> 0.4.0)
-    pedrozath-mercenary (0.3.6)
     powerpack (0.1.1)
-    pronto (0.6.0)
-      gitlab (~> 3.6, >= 3.4.0)
-      octokit (~> 4.3, >= 4.1.0)
-      rugged (~> 0.24, >= 0.23.0)
-      thor (~> 0.19.0)
-    pronto-rubocop (0.6.2)
-      pronto (~> 0.6.0)
-      rubocop (~> 0.38, >= 0.35.0)
     pry (0.11.3)
       coderay (~> 1.1.0)
       method_source (~> 0.9.0)
@@ -77,7 +55,6 @@ GEM
     pry-rescue (1.4.5)
       interception (>= 0.5)
       pry
-    public_suffix (3.0.2)
     rack (2.0.4)
     rainbow (3.0.0)
     rake (10.5.0)
@@ -102,10 +79,6 @@ GEM
       ruby-progressbar (~> 1.7)
       unicode-display_width (~> 1.0, >= 1.0.1)
     ruby-progressbar (1.9.0)
-    rugged (0.26.0)
-    sawyer (0.8.1)
-      addressable (>= 2.3.5, < 2.6)
-      faraday (~> 0.8, < 1.0)
     simplecov (0.15.1)
       docile (~> 1.1.0)
       json (>= 1.8, < 3)
@@ -115,9 +88,6 @@ GEM
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
-    terminal-table (1.8.0)
-      unicode-display_width (~> 1.1, >= 1.1.1)
-    thor (0.19.4)
     tilt (2.0.8)
     timers (4.1.2)
       hitimes
@@ -144,7 +114,6 @@ DEPENDENCIES
   bundler (~> 1.14)
   coltrane!
   opal-rspec
-  pronto-rubocop
   pry
   pry-byebug
   pry-rescue
@@ -152,6 +121,7 @@ DEPENDENCIES
   rspec
   rubocop
   simplecov
+  tty-prompt
 
 BUNDLED WITH
    1.16.1
