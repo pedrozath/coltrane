@@ -9,10 +9,6 @@ A music calculation library/CLI written in Ruby.
 
 ![Coltrane](img/coltrane-logo.png)
 
-* [How to use this library](https://github.com/pedrozath/coltrane/wiki/Core-music-theory-library).
-* [Why did I write this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
-* [Chat room for discussing the project, answering questions, etc.](http://coltrane-ruby.herokuapp.com/)
-
 ## CLI (Command Line Interface)
 
 ![Screenshot](img/using-coltrane.gif)
@@ -57,12 +53,17 @@ CM:
    ┕━┷━┷━┷━┷━┙    ┕━┷━┷━┷━┷━┙    ┕━┷━┷━┷━┷━┙    ┕━┷━┷━┷━┷━┙
 ```
 
-PS: It looks way better on the terminal, specially on [iTerm](http://iterm2.com)
+PS: It looks way better on the terminal 😒, specially on [iTerm](http://iterm2.com)
 
 ### How to discover a Scale by providing chords
 
+You shall provide chords separated by dashes (`--chords CM7-Dm7-EM`) or notes (`--notes C-Ab-F-G`).
+
+
+For example:
+
 ```sh
-coltrane find-scale --chords E6/9-B
+coltrane find-scale --chords E6/9-BM
 
 Pentatonic Major C(1) C#(3) D(3) D#(1) E(5) F(0) F#(4) G(2) G#(2) A(4) A#(0) B(5)
 Blues Major      C(2) C#(4) D(3) D#(2) E(5) F(1) F#(4) G(2) G#(3) A(4) A#(1) B(5)
@@ -215,7 +216,7 @@ Perhaps this is the most complex operation that Coltrane performs. It searches t
 
 This command us to analyze songs and discover what they have in common, even tho they have different notes.
 
-Let's say we want to find the possible progressions of Red Hot Chili Peppers:
+Let's say we want to find the possible progressions of Red Hot Chili Pepper's Otherside:
 
 ```sh
 coltrane find-progression Am-F-C-G
@@ -236,12 +237,6 @@ iv-I-V-II      in F Blues Major (2 notes out)
 
 PS: Notice that vi-IV-I-V is the well known I-V-vi-IV progression, [used in a lot of songs](http://www.wikiwand.com/en/List_of_songs_containing_the_I–V–vi–IV_progression).
 
-## Any questions? Feature requests? Bugs?
-
-1. Find me on [Twitter](https://twitter.com/pedrozath). I'll be glad to answer.
-2. Open an issue.
-3. Join [our chatroom](http://coltrane-ruby.herokuapp.com/)
-
 ## Installation
 
 ```bash
@@ -250,9 +245,18 @@ $ gem install coltrane
 
 PS: Once you install the gem the CLI is instaled in your system and it's ready to be used.
 
-## Changelog
+## Any questions? Feature requests? Bugs?
 
-[See the changelog](CHANGELOG.md)
+1. Find me on [Twitter](https://twitter.com/pedrozath). I'll be glad to answer.
+2. Open an issue.
+3. Join [our chatroom](http://coltrane-ruby.herokuapp.com/)
+
+## Extra
+
+* [How to use the Core Theory library](https://github.com/pedrozath/coltrane/wiki/Core-music-theory-library).
+* [Why did I write this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
+* [Chat room for discussing the project, answering questions, etc.](http://coltrane-ruby.herokuapp.com/)
+* [See the changelog](CHANGELOG.md)
 
 ## Contributing
 
