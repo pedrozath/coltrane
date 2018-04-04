@@ -37,20 +37,20 @@ RSpec.describe TextRenderer do
     end
   end
 
-  # it_behaves_like 'rendering', "NoteSet['A#', 'Db', 'E', 'F#', 'C']"
-  # it_behaves_like 'rendering', "NoteSet['A#', 'Db', 'E', 'F#', 'C']", flavor: :intervals
-  # it_behaves_like 'rendering', "Chord.new(name: 'Cm7')"
-  # it_behaves_like 'rendering', "Scale.major('C')"
-  # it_behaves_like 'rendering', "Scale.having_notes(NoteSet['C', 'A', 'G'])"
-  # it_behaves_like 'rendering', "Progression.jazz('D#')"
-  # it_behaves_like 'rendering', "Progression.find(*%w[AM DM F#m EM])"
-  # it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])"
-  # it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])", flavor: :intervals
-  # it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])", flavor: :marks
-  # it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])", flavor: :degrees
-  # it_behaves_like 'rendering', "Guitar.find_chords('C6/9').first(6)", layout: :horizontal, per_row: 7
-  # it_behaves_like 'rendering', "Ukulele.find_notes(NoteSet['C', 'A', 'G'])", flavor: :degrees
-  # it_behaves_like 'rendering', "Bass.find_notes(NoteSet['C', 'A', 'G'])", flavor: :degrees
+  it_behaves_like 'rendering', "NoteSet['A#', 'Db', 'E', 'F#', 'C']"
+  it_behaves_like 'rendering', "NoteSet['A#', 'Db', 'E', 'F#', 'C']", flavor: :intervals
+  it_behaves_like 'rendering', "Chord.new(name: 'Cm7')"
+  it_behaves_like 'rendering', "Scale.major('C')"
+  it_behaves_like 'rendering', "Scale.having_notes(NoteSet['C', 'A', 'G'])"
+  it_behaves_like 'rendering', "Progression.jazz('D#')"
+  it_behaves_like 'rendering', "Progression.find(*%w[AM DM F#m EM])"
+  it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])"
+  it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])", flavor: :intervals
+  it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])", flavor: :marks
+  it_behaves_like 'rendering', "Guitar.find_notes(NoteSet['C', 'A', 'G'])", flavor: :degrees
+  it_behaves_like 'rendering', "Guitar.find_chords('C6/9').first(6)", layout: :horizontal, per_row: 7
+  it_behaves_like 'rendering', "Ukulele.find_notes(NoteSet['C', 'A', 'G'])", flavor: :degrees
+  it_behaves_like 'rendering', "Bass.find_notes(NoteSet['C', 'A', 'G'])", flavor: :degrees
   it_behaves_like 'rendering', "Piano.find_notes(NoteSet['C', 'A', 'G'])"
   it_behaves_like 'rendering', "Piano.find_notes(NoteSet['C', 'A', 'G'])", flavor: :intervals
   it_behaves_like 'rendering', "Piano.find_notes(NoteSet['C', 'A', 'G'])", flavor: :degrees
