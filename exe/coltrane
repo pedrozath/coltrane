@@ -26,11 +26,16 @@ Mercenary.program(:Coltrane) do |p|
 
   p.command(:about) do |c|
     c.description 'Shows this screen'
+    c.action { puts p }
+  end
+
+  p.command(:shell) do |c|
+    c.description 'Starts an interactive shell'
     c.action do
-      puts p
+      system File.expand_path('../../bin', __FILE__) + "/coltrane-interactive"
     end
   end
 
-  p.default_command(:about)
+  p.default_command(:shell)
 end
 

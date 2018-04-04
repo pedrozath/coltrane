@@ -65,7 +65,6 @@ module Coltrane
           c.alias(:chord)
           c.syntax 'chords [<chord-name>] [--on <instrument>]'
           c.description 'Shows the given chord. Ex: coltrane chord Cmaj7 --on piano'
-          c.alias(:chords)
           c.option :notes, '--notes C-D-E', 'finds chords with those notes, ' \
                            'provided they are separated by dashes'
 

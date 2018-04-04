@@ -1,0 +1,32 @@
+#!/usr/bin/env ruby
+# frozen_string_literal: true
+
+$LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+
+require 'tty-reader'
+require 'paint'
+
+Class.new do
+  attr_reader :reader
+
+  def initialize
+    @reader = TTY::Reader.new(interrupt: :exit)
+    shell
+  end
+
+  def quit_commands
+    /quit|exit/
+  end
+
+  def command
+    reader.read_line(Paint['coltrane ', '#FF5A00'])
+  end
+
+  def shell
+    command
+    .tap        { |cmd| exit if cmd =~ quit_commands }
+    .yield_self { |cmd| %x{coltrane #{cmd}}}
+    .yield_self { |response| puts ["\n", response, "\n"].join }
+    shell
+  end
+end.new

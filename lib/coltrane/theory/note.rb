@@ -18,7 +18,7 @@ module Coltrane
 
       ALTERATIONS = {
         'b' => -1,
-        '#' => 1
+        '#' => +1
       }.freeze
 
       def initialize(arg)

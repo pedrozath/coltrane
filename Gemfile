@@ -5,7 +5,6 @@ source 'https://rubygems.org'
 group :test, :development do
   gem 'pry'
   gem 'pry-byebug'
-  gem 'pry-rescue'
   gem 'opal-rspec'
 end
 
