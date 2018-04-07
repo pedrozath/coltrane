@@ -1,11 +1,11 @@
 PATH
   remote: .
   specs:
-    coltrane (3.1.0)
+    coltrane (3.1.1)
       color (~> 1.8)
       dry-monads (~> 0.4)
-      mercenary (~> 0.3)
       paint (~> 2.0)
+      pedrozath-mercenary (= 0.3.8)
       tty-reader (~> 0.2)
 
 GEM
@@ -28,7 +28,6 @@ GEM
     hike (1.2.3)
     hitimes (1.2.6)
     json (2.1.0)
-    mercenary (0.3.6)
     method_source (0.9.0)
     necromancer (0.4.0)
     opal (0.10.5)
@@ -45,6 +44,7 @@ GEM
     pastel (0.7.2)
       equatable (~> 0.5.0)
       tty-color (~> 0.4.0)
+    pedrozath-mercenary (0.3.8)
     powerpack (0.1.1)
     pry (0.11.3)
       coderay (~> 1.1.0)

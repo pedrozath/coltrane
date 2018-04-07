@@ -14,8 +14,13 @@ Class.new do
     shell
   end
 
-  def quit_commands
-    /quit|exit/
+  def quit_cmd?(cmd)
+    cmd =~ /quit|exit/
+  end
+
+  def ignored_cmd?(cmd)
+    cmd =~ /shell/ ||
+    cmd.strip == ''
   end
 
   def command
@@ -24,8 +29,9 @@ Class.new do
 
   def shell
     command
-    .tap        { |cmd| exit if cmd =~ quit_commands }
-    .yield_self { |cmd| %x{coltrane #{cmd}}}
+    .tap        { |cmd| exit if quit_cmd?(cmd) }
+    .tap        { |cmd| shell and return if ignored_cmd?(cmd) }
+    .yield_self { |cmd| %x{coltrane #{cmd}} }
     .yield_self { |response| puts ["\n", response, "\n"].join }
     shell
   end

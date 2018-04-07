@@ -2,10 +2,13 @@
 # frozen_string_literal: true
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
+require 'bundler'
+Bundler.require(:default)
 
 require 'paint'
 require 'color'
-require 'mercenary'
+
+require 'pedrozath-mercenary'
 require 'coltrane/commands'
 
 Paint.mode = 0xFFFFFF
@@ -33,6 +36,22 @@ Mercenary.program(:Coltrane) do |p|
     c.description 'Starts an interactive shell'
     c.action do
       system File.expand_path('../../bin', __FILE__) + "/coltrane-interactive"
+    end
+  end
+
+  p.command(:help) do |c|
+    c.description 'May give you some help.'
+    c.syntax 'help <command> [subcommand, sub-subcommand, ...]'
+    c.action do |(*command_path), _options|
+      if command_path.empty?
+        puts p
+      else
+        puts begin
+          command_path.reduce(p) do |memo, key|
+            memo.commands.delete(key.to_sym)
+          end || "\n Sorry, command found."
+        end
+      end
     end
   end
 
