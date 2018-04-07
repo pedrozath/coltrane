@@ -2,8 +2,6 @@
 # frozen_string_literal: true
 
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
-require 'bundler'
-Bundler.require(:default)
 
 require 'paint'
 require 'color'
