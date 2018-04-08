@@ -237,6 +237,10 @@ iv-I-V-II      in F Blues Major (2 notes out)
 
 PS: Notice that vi-IV-I-V is the well known I-V-vi-IV progression, [used in a lot of songs](http://www.wikiwand.com/en/List_of_songs_containing_the_I–V–vi–IV_progression).
 
+### Interactive mode (shell)
+
+Simply type `coltrane` or `coltrane shell` to enable interactive mode. You can then run commands without typing `coltrane ` before, E.G.: `scale D harmonic minor`
+
 ## Installation
 
 ```bash
