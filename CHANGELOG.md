@@ -5,6 +5,11 @@
 - Fix chords so that they generate a barre and a non-barre version and prevent
   barre chords from picking notes before the barre.
 
+## [3.1.3]
+- Several fixes.
+- Interactive mode
+- It's all or nothing! If the terminal doesn't support true color, default to black and white and display message suggesting some cool terminal apps
+
 ## [3.0.0]
 
 ### Changes

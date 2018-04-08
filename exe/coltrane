@@ -9,7 +9,14 @@ require 'color'
 require 'pedrozath-mercenary'
 require 'coltrane/commands'
 
-Paint.mode = 0xFFFFFF
+if ENV['COLORTERM'] == 'truecolor'
+  Paint.mode = 0xFFFFFF
+else
+  Paint.mode = 0
+  puts "This terminal doesn't seem to support true color. " \
+       "Try something like iTerm2 (for macOS), VTE or Konsole (for linux) or Hyper" \
+       " (for Windows) and you'll see the true magic!"
+end
 
 Mercenary.program(:Coltrane) do |p|
   p.version Coltrane::VERSION
