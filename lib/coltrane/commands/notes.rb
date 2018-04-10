@@ -21,12 +21,16 @@ module Coltrane
 
       def on_model
         case on.to_sym
-        when :text              then notes
+        when /custom_guitar/    then custom_guitar_notes
         when :guitar            then Representation::Guitar.find_notes(notes)
         when :ukulele, :ukelele then Representation::Ukulele.find_notes(notes)
         when :bass              then Representation::Bass.find_notes(notes)
         when :piano             then Representation::Piano.find_notes(notes)
         end
+      end
+
+      def custom_guitar_notes
+        Representation::Guitar::NoteSet.new(notes, guitar: custom_guitar)
       end
 
       def self.mercenary_init(program)

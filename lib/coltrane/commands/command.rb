@@ -5,7 +5,9 @@ module Coltrane
         on: [
           '--on <INSTRUMENT>',
           'Shows the notes on the given instrument/representation type. ' \
-          'Can be piano, guitar, ukulele, bass or text'
+          'Can be text, piano, guitar, ukulele, bass.' \
+          'You can also provide a custom guitar using the following format:' \
+          '--on custom_guitar=D2-A3-D3-B3-C3'
         ],
 
         flavor: [
@@ -20,6 +22,15 @@ module Coltrane
           'provided they are separated by dashes'
         ]
       }
+
+      def custom_guitar
+        on
+        .to_s
+        .split('=')
+        .fetch(1)
+        .split('-')
+        .yield_self { |tuning| Representation::Guitar.new(tuning: tuning) }
+      end
 
       def render
         puts "\n" + Renderers::TextRenderer.render(

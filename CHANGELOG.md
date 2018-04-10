@@ -5,6 +5,9 @@
 - Fix chords so that they generate a barre and a non-barre version and prevent
   barre chords from picking notes before the barre.
 
+## [3.2.0]
+- Adds custom_guitar and custom_guitar_frets
+
 ## [3.1.3]
 - Several fixes.
 - Interactive mode
