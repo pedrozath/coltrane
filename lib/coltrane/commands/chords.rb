@@ -32,18 +32,28 @@ module Coltrane
 
       def on_model
         case on
-        when :text              then chord
-        when :guitar            then Representation::Guitar.find_chords(chord).first(voicings)
-        when :ukulele, :ukelele then Representation::Ukulele.find_chords(chord).first(voicings)
-        when :bass              then Representation::Bass.find_notes(chord.notes)
-        when :piano             then Representation::Piano.find_notes(chord.notes)
-        when :'guitar-frets'    then Representation::Guitar.find_notes(chord.notes)
-        when :'ukulele-frets', :'ukelele-frets' then Representation::Ukulele.find_notes(chord.notes)
+        when :text                  then chord
+        when :guitar                then Representation::Guitar.find_chords(chord).first(voicings)
+        when :ukulele, :ukelele     then Representation::Ukulele.find_chords(chord).first(voicings)
+        when :bass                  then Representation::Bass.find_notes(chord.notes)
+        when :piano                 then Representation::Piano.find_notes(chord.notes)
+        when :'guitar-frets'        then Representation::Guitar.find_notes(chord.notes)
+        when :'ukulele-frets',      :'ukelele-frets' then Representation::Ukulele.find_notes(chord.notes)
+        when /custom_guitar_frets/  then custom_guitar_notes
+        when /custom_guitar/        then custom_guitar_chords.first(voicings)
         end
       end
 
+      def custom_guitar_notes
+        Representation::Guitar::NoteSet.new(chord.notes, guitar: custom_guitar)
+      end
+
+      def custom_guitar_chords
+        Representation::Guitar::Chord.find(chord, guitar: custom_guitar)
+      end
+
       def layout_horizontal?
-        [:guitar, :ukulele, :ukelele, :bass, :piano].include?(on)
+        on.to_s =~ /guitar|ukulele|ukelele|bass|piano/
       end
 
       def renderer_options
