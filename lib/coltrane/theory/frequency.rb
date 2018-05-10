@@ -3,10 +3,15 @@
 module Coltrane
   module Theory
     class Frequency
+      include Comparable
       attr_reader :frequency
 
       def initialize(frequency)
         @frequency = frequency.to_f
+      end
+
+      def <=>(other)
+        to_f <=> other.to_f
       end
 
       class << self
