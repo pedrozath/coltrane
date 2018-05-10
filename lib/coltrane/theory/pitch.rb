@@ -4,6 +4,7 @@ module Coltrane
   module Theory
     # It describes a pitch, like E4 or Bb5. It's like a note, but it has an octave
     class Pitch
+      include Comparable
       attr_reader :integer
 
       def initialize(notation_arg = nil,
@@ -27,6 +28,10 @@ module Coltrane
 
       def self.[](*args)
         new *args
+      end
+
+      def <=>(other)
+        integer <=> other.integer
       end
 
       def scientific_notation

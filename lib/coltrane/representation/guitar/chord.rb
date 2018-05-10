@@ -39,19 +39,19 @@ module Coltrane
         end
 
         def rank
-          +completeness * 10_000 +
-          +fullness     * 1000 +
-          -spreadness   * 100 +
-          +easyness     * 1
+          +completeness  * 10_000 +
+          +fullness      * 1_000 +
+          -spreadness    * 10 +
+          -discontinuity * 1 +
+          +easyness      * 1
         end
 
         def analysis
-          {
-            completeness: completeness,
-            fullness:     fullness,
-            easyness:     easyness,
-            spreadness:   spreadness
-          }
+          %i[completeness discontinuity fullness spreadness easyness]
+          .reduce({}) do |output, criteria|
+            output.merge(criteria => send(criteria).round(2))
+          end
+          .merge(rank: rank.round(4))
         end
 
         def spreadness
@@ -68,6 +68,10 @@ module Coltrane
 
         def fullness
           (guitar.strings.size.to_f - frets.count(nil)) / guitar.strings.size
+        end
+
+        def discontinuity
+          voicing.discontinuity
         end
 
         def barre?
@@ -153,12 +157,14 @@ module Coltrane
             [(0 unless barre?)].compact
         end
 
-        def to_s
-          guitar_notes.map { |n| n.fret.nil? ? 'x' : n.fret }.join('-')
+        def to_s(debug = false)
+          guitar_notes.map {
+            |n| n.fret.nil? ? 'x' : n.fret
+          }.join('-') + (debug ? ' ' + analysis.to_s : '')
         end
 
         def voicing
-          Coltrane::Voicing.new(pitches: guitar_notes.map(&:pitch).compact)
+          Theory::Voicing.new(pitches: guitar_notes.map(&:pitch).compact)
         end
 
         private
