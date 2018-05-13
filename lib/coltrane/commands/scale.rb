@@ -35,8 +35,7 @@ module Coltrane
                 scale.chords(options[:chords].to_i)
                 .each { |chord| Commands::Chords.new(chord, **options).render }
               else
-                scale.notes
-                .yield_self {|notes| Commands::Notes.new(notes, **options.merge(preface: scale.full_name)).render }
+                Commands::Notes.new(scale.notes, **options.merge(preface: scale.full_name)).render
               end
             }
           }
