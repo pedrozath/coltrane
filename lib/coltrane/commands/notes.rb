@@ -22,6 +22,7 @@ module Coltrane
       def on_model
         case on.to_sym
         when /custom_guitar/    then custom_guitar_notes
+        when :text              then notes
         when :guitar            then Representation::Guitar.find_notes(notes)
         when :ukulele, :ukelele then Representation::Ukulele.find_notes(notes)
         when :bass              then Representation::Bass.find_notes(notes)
