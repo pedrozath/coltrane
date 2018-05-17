@@ -98,10 +98,29 @@ RSpec.describe Scale do
   end
 
   it 'can return the greek modes' do
-    # expect(Scale.ionian('C').notes.names).to      include('C', 'D', 'E', 'F', 'G', 'A', 'B')
-    # expect(Scale.locrian('F').notes.names).to     include("E", "F", "G", "A", "Bb", "C", "D")
-    # expect(Scale.mixolydian('D#').notes.names).to include("A#", "B#", "C##", "D#", "E#", "F##", "G#")
-    # expect(Scale.aeolian('A#').notes.names).to    include("F##", "G##", "A#", "B#", "C##", "D#", "E#")
-    # expect(Scale.ionian('B').notes.names).to      include('B', 'C#', 'D#', 'E', 'F#', 'G#', 'A#')
+    expect(Scale.ionian('C').notes.names).to     eq %w[C D E F G A B]
+    expect(Scale.dorian('D').notes.names).to     eq %w[D E F G A B C]
+    expect(Scale.phrygian('E').notes.names).to   eq %w[E F G A B C D]
+    expect(Scale.lydian('F').notes.names).to     eq %w[F G A B C D E]
+    expect(Scale.mixolydian('G').notes.names).to eq %w[G A B C D E F]
+    expect(Scale.aeolian('A').notes.names).to    eq %w[A B C D E F G]
+    expect(Scale.locrian('B').notes.names).to    eq %w[B C D E F G A]
+
+    expect(Scale.ionian('D').notes.map(&:letter)).to eq %w[D E F G A B C]
+
+    letters = %w[C D E F G A B]
+    %i[ionian dorian phrygian lydian mixolydian aeolian locrian].each do |mode|
+      letters.each_with_index do |letter, index|
+        expect(Scale.public_send(mode, letter).notes.map(&:letter))
+        .to eq(letters.rotate(index)), -> {
+          <<~ERROR
+            failed on #{letter} #{mode}
+            expected:   #{letters.rotate(index)}
+            got:        #{Scale.public_send(mode, letter).notes.map(&:letter)}
+            full_notes: #{Scale.public_send(mode, letter).notes.names}
+          ERROR
+        }
+      end
+    end
   end
 end

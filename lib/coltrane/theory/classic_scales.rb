@@ -16,16 +16,6 @@ module Coltrane
         'Chromatic'        => [1] * 12
       }.freeze
 
-      GREEK_MODES = %w[
-        Ionian
-        Dorian
-        Phrygian
-        Lydian
-        Mixolydian
-        Aeolian
-        Locrian
-      ].freeze
-
       # Creates factories for scales
       SCALES.each do |name, distances|
         define_method name.underscore do |tone = 'C', mode = 1|
@@ -34,13 +24,11 @@ module Coltrane
       end
 
       # Creates factories for Greek Modes
-      GREEK_MODES.each_with_index do |mode, index|
-        mode_name = mode
-        mode_n = index + 1
-        define_method mode.underscore do |tone = 'C'|
-          new(notes: DiatonicScale.new(tone).notes.rotate(index))
+      class_eval(GreekMode::MODES.each_with_index.reduce('') { |code, (mode, index)| code + <<-RUBY }, __FILE__, __LINE__ + 1)
+        def #{mode.underscore}(tone = 'C')
+          GreekMode.new(:#{mode.underscore.to_sym}, tone)
         end
-      end
+      RUBY
 
       # Factories for the diatonic scale
       def major(note = 'C')
@@ -51,10 +39,10 @@ module Coltrane
         DiatonicScale.new(note, major: false)
       end
 
-      alias diatonic major
+      alias diatonic      major
       alias natural_minor minor
-      alias pentatonic pentatonic_major
-      alias blues blues_major
+      alias pentatonic    pentatonic_major
+      alias blues         blues_major
 
       def known_scales
         SCALES.keys + ['Major', 'Natural Minor']

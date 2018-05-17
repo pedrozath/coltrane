@@ -45,7 +45,7 @@ module Coltrane
         @name ||= begin
           is = interval_sequence.relative_intervals
           (0...is.size).each do |i|
-            if (scale_name = ::ClassicScales::SCALES.key(is.rotate(i)))
+            if (scale_name = ClassicScales::SCALES.key(is.rotate(i)))
               return scale_name
             end
           end

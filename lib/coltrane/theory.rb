@@ -42,6 +42,7 @@ module Coltrane
     autoload :ScaleSet,               'coltrane/theory/scale_set'
     autoload :CircleOfFifths,         'coltrane/theory/circle_of_fifths'
     autoload :DiatonicScale,          'coltrane/theory/diatonic_scale'
+    autoload :GreekMode,              'coltrane/theory/greek_mode'
     autoload :Key,                    'coltrane/theory/key'
 
     autoload :NotableProgressions,    'coltrane/theory/notable_progressions'
