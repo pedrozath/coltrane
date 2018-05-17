@@ -5,6 +5,9 @@
 - Fix chords so that they generate a barre and a non-barre version and prevent
   barre chords from picking notes before the barre.
 
+## [3.3.3]
+- Fixes a bug in greek modes for accidental notes
+
 ## [3.3.2]
 - Fixes greek modes so now they output correct sharps/flats
 - Adds a coherence criteria for picking best guitar chords (based on distance between freqs.)

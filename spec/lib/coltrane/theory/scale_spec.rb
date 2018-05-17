@@ -105,7 +105,7 @@ RSpec.describe Scale do
     expect(Scale.mixolydian('G').notes.names).to eq %w[G A B C D E F]
     expect(Scale.aeolian('A').notes.names).to    eq %w[A B C D E F G]
     expect(Scale.locrian('B').notes.names).to    eq %w[B C D E F G A]
-
+    expect(Scale.ionian('C#').notes.map(&:letter)).to eq %w[C D E F G A B]
     expect(Scale.ionian('D').notes.map(&:letter)).to eq %w[D E F G A B C]
 
     letters = %w[C D E F G A B]

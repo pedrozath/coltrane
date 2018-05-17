@@ -18,8 +18,7 @@ module Coltrane
       def initialize(mode, tone)
         super name: mode.capitalize, notes: begin
           @mode = mode.to_s
-          @tone = tone
-          # binding.pry
+          @tone = Note[tone]
           base_major_notes
           .rotate(mode_index)
           .zip(letter_sequence)
@@ -30,7 +29,7 @@ module Coltrane
       private
 
       def letter_sequence
-        LETTER_SEQUENCE.yield_self { |seq| seq.rotate(seq.index(tone))}
+        LETTER_SEQUENCE.yield_self { |seq| seq.rotate(seq.index(tone.letter))}
       end
 
       def mode_index
