@@ -17,6 +17,32 @@ module Coltrane
           .reverse
         end
 
+        def self.find_by_notation(guitar, chord_notation)
+          chord_notation
+          .split('-')
+          .map
+          .with_index do |n, i|
+            next if n == 'x'
+            n = Guitar::Note.new(guitar.strings[i], n.to_i).pitch.pitch_class
+          end
+          .yield_self do |notes|
+            notes
+            .map
+            .with_index do |note, index|
+              begin
+                Theory::Chord.new(notes: notes.rotate(index))
+              rescue Theory::ChordNotFoundError
+                next
+              end
+            end
+            .compact
+            .yield_self do |chords|
+              raise(Theory::ChordNotFoundError) if chords.empty?
+              chords.compact.uniq &:name
+            end
+          end
+        end
+
         def initialize(target_chord,
                        guitar_notes: [],
                        free_fingers: 4,

@@ -76,16 +76,16 @@ module Coltrane
 
       def get_name
         find_chord(retrieve_chord_intervals.compact) ||
-          find_chord(retrieve_chord_intervals(sus2_sequence).compact) ||
-          find_chord(retrieve_chord_intervals(sus4_sequence).compact) ||
-          raise(ChordNotFoundError)
+        find_chord(retrieve_chord_intervals(sus2_sequence).compact) ||
+        find_chord(retrieve_chord_intervals(sus4_sequence).compact) ||
+        raise(ChordNotFoundError)
       end
 
       def suspension_type
         if has_major_second?
           'sus2'
-        else has_fourth?
-             'sus4'
+        elsif has_fourth?
+          'sus4'
         end
       end
 

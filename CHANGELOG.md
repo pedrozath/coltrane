@@ -5,6 +5,9 @@
 - Fix chords so that they generate a barre and a non-barre version and prevent
   barre chords from picking notes before the barre.
 
+## [3.4.0]
+- Adds `find-guitar-chord` command. It allows discovering a guitar chord name.
+
 ## [3.3.3]
 - Fixes a bug in greek modes for accidental notes
 
