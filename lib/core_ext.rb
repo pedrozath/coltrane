@@ -33,10 +33,6 @@ end
 
 # Here we add some methods better work with Tries
 class Hash
-  def dig(*args)
-    args.size > 1 ? self[args.shift].dig(*args) : self[args[0]]
-  end
-
   def clone_values(from_keys: nil,
                    to_keys: nil,
                    suffix: nil,
