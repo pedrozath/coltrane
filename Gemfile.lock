@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    coltrane (3.4.1)
+    coltrane (3.4.2)
       color (~> 1.8)
       dry-monads (~> 0.4)
       paint (~> 2.0)
@@ -120,4 +120,4 @@ DEPENDENCIES
   tty-prompt
 
 BUNDLED WITH
-   1.16.1
+   1.16.4

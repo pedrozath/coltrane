@@ -17,7 +17,7 @@ module Coltrane
         end
 
         def render_notes
-          guitar_notes.strings.map.with_index.map do |string, str_i|
+          guitar_notes.strings.reverse.map.with_index.map do |string, str_i|
             Array.new(frets + 2) do |i|
               if i.zero?
                 Paint[
