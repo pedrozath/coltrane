@@ -5,8 +5,7 @@ module Coltrane
         alias chord model
 
         def render
-          "#{chord.name}: ".ljust(5) +
-          TextRenderer.render(chord.notes, **options)
+          "#{chord.name}: ".ljust(5) + TextRenderer.render(chord.notes)
         end
       end
     end

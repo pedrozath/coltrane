@@ -5,6 +5,9 @@
 - Fix chords so that they generate a barre and a non-barre version and prevent
   barre chords from picking notes before the barre.
 
+## [4.0.0]
+- Includes totally revamped, easy to use command line interface.
+
 ## [3.4.2]
 - Fixes guitar strings rendering order (#41)
 

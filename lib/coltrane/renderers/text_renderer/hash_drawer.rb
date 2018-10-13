@@ -5,6 +5,7 @@ module Coltrane
         alias hash model
 
         def render
+          options = hash.delete(:options) || {}
           hash.map { |k, v|
             "#{k}: \n\n" +
             TextRenderer.render(v, **options)

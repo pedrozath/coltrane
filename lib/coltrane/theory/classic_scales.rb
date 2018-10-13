@@ -45,7 +45,7 @@ module Coltrane
       alias blues         blues_major
 
       def known_scales
-        SCALES.keys + ['Major', 'Natural Minor']
+        ['Major', 'Natural Minor'] + SCALES.keys
       end
 
       # List of scales appropriate for search

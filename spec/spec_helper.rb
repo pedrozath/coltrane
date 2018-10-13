@@ -13,9 +13,11 @@ require 'tty-prompt'
 require 'coltrane'
 require 'coltrane/representation'
 require 'coltrane/renderers'
+require 'coltrane/commands'
 
 include Coltrane::Theory
 include Coltrane::Representation
 include Coltrane::Renderers
+include Coltrane
 
 RSpec.configure

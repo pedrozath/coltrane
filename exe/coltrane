@@ -1,65 +1,101 @@
 #!/usr/bin/env ruby
 # frozen_string_literal: true
-
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
-require 'paint'
-require 'color'
+$debug = require 'pry'
+require 'coltrane/ui'
 
-require 'pedrozath-mercenary'
-require 'coltrane/commands'
-
-if ENV['COLORTERM'] == 'truecolor'
-  Paint.mode = 0xFFFFFF
-else
-  Paint.mode = 0
-  puts "This terminal doesn't seem to support true color. " \
-       "Try something like iTerm2 (for macOS), VTE or Konsole (for linux) or Hyper" \
-       " (for Windows) and you'll see the true magic!"
+def debugger
+  binding.pry unless $debug
 end
 
-Mercenary.program(:Coltrane) do |p|
-  p.version Coltrane::VERSION
-  p.description <<~DESC
-    A music querying interface
-    by Pedro Maciel (pedro@pedromaciel.com)
+module Coltrane
+  module Cli
+    class App
+      attr_reader :router
 
-    Check the chat room for project help/discussion/contribution: https://coltrane-ruby.herokuapp.com
-  DESC
-  p.syntax 'coltrane <subcommand> [options]'
-
-  Coltrane::Commands::Command.subclasses.each do |command|
-    command.mercenary_init(p)
-  end
-
-  p.command(:about) do |c|
-    c.description 'Shows this screen'
-    c.action { puts p }
-  end
-
-  p.command(:shell) do |c|
-    c.description 'Starts an interactive shell'
-    c.action do
-      system File.expand_path('../../bin', __FILE__) + "/coltrane-interactive"
-    end
-  end
-
-  p.command(:help) do |c|
-    c.description 'May give you some help.'
-    c.syntax 'help <command> [subcommand, sub-subcommand, ...]'
-    c.action do |(*command_path), _options|
-      if command_path.empty?
-        puts p
-      else
-        puts begin
-          command_path.reduce(p) do |memo, key|
-            memo.commands.delete(key.to_sym)
-          end || "\n Sorry, command found."
+      def self.start(initial_route)
+        if ENV['COLORTERM'] == 'truecolor'
+          Paint.mode = 0xFFFFFF
+        else
+          Paint.mode = 0
+          puts "This terminal doesn't seem to support true color. " \
+               "Try something like iTerm2 (for macOS), VTE or Konsole (for linux) or Hyper" \
+               " (for Windows) and you'll see the true magic!"
         end
+
+        path, params = initial_route.split(' ').each_with_object([nil, {}]) do |segment, memo|
+          if segment =~ /:/
+            key, value = segment.split(':')
+            memo[1].merge!([[key.to_sym, value.gsub('-', ' ')]].to_h)
+          else
+            memo[0] = [memo[0], segment].compact.join(' ')
+          end
+        end
+
+        response = {path: (path || ''), **params}
+        loop { response = app.flow(**response) }
+      end
+
+      def self.app
+        @app ||= new
+      end
+
+      def initialize
+        @router = Router.new
+      end
+
+      def ask_questions(questions)
+        questions.map { |name, question| [name, ask_question(question)] }.to_h
+      end
+
+      def ask_question(question)
+        CLI::UI::Prompt.ask(question[:statement], options: question[:options])
+      end
+
+      def navigation(params)
+        return {} if params.empty?
+        CLI::UI::Prompt.ask('What to do now?') do |h|
+          params.each do |key, _value|
+            h.option("Different #{key}") { params[key] = nil }
+          end
+          h.option("Go back") { params[:path] = '' }
+        end
+        params
+      end
+
+      def output(response)
+        return unless response[:content]
+        puts [
+          nil,
+          "-> coltrane #{router.url}",
+          nil,
+          response[:content],
+          nil
+        ]
+      end
+
+      def flow(response)
+        raise 'Response is empty' unless response
+        output(response)
+        response.delete(:content)
+        questions = response&.delete(:questions) || {}
+        response.merge!(navigation(response)) unless response.has_key?(:path) || questions.any?
+        response.merge!(ask_questions(questions)) if questions.any?
+        exit if response[:path] == 'exit'
+        router.get(**response.compact)
+      rescue => e
+        response.delete(:path)
+        puts e
+        puts e.backtrace if $debug
+        retry
+      end
+
+      def exit
+        Kernel.exit(0)
       end
     end
   end
-
-  p.default_command(:shell)
 end
 
+Coltrane::Cli::App.start(ARGV.join(' '))
