@@ -1,5 +1,5 @@
 module Coltrane
-  module Cli
+  module UI
     module Views
       class FindChordByNotes < View
         questions({

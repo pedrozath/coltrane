@@ -1,5 +1,5 @@
 module Coltrane
-  module Cli
+  module UI
     module Views
       class ShowProgression < View
         questions({
@@ -13,13 +13,11 @@ module Coltrane
             options: Commands::AvailableChordRepresentations.run
           },
 
-          key: {
-            statement: 'What key? (Ex: C; or Am)'
-          }
+          root: { statement: 'Start at which note? (Ex: C; D#; Fb)' }
         })
 
         def render
-          chords = Commands::GetChordsFromNotableProgression.run(*params.values_at(:progression, :key))
+          chords = Commands::GetChordsFromNotableProgression.run(*params.values_at(:progression, :root))
           Commands::GetRepresentationChords.run(params[:representation], chords)
         end
       end

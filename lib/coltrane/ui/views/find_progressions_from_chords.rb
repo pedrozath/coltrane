@@ -1,5 +1,5 @@
 module Coltrane
-  module Cli
+  module UI
     module Views
       class FindProgressionsFromChords < View
         questions chords: { statement: 'Type the chords? (Ex: CM EM GM)' }

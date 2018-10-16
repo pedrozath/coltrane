@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    coltrane (4.0.0)
+    coltrane (4.0.3)
       activesupport (> 5.2)
       cli-ui (~> 1.1)
       color (~> 1.8)

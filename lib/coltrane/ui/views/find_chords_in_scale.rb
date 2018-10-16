@@ -1,7 +1,7 @@
 require 'coltrane/ui/views/show_scale'
 
 module Coltrane
-  module Cli
+  module UI
     module Views
       class FindChordsInScale < ShowScale
         questions({

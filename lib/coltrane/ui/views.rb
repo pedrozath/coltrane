@@ -1,2 +1,4 @@
 require 'coltrane/ui/views/view'
-Dir["#{Dir.pwd}/lib/coltrane/ui/views/*"].map { |f| require(f) }
+Dir[File.expand_path('../views/*', __FILE__)].map do |f|
+  require(f)
+end

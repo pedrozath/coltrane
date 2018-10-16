@@ -1,5 +1,5 @@
 module Coltrane
-  module Cli
+  module UI
     class Router
 
       class Route
@@ -51,9 +51,9 @@ module Coltrane
         @routes  = []
         @history = History.new
 
-        draw_route '', to: Coltrane::Cli::Views::Index
+        draw_route '', to: Coltrane::UI::Views::Index
         Views.constants.each do |view|
-          draw_route view.to_s.underscore.humanize.downcase, to: "Coltrane::Cli::Views::#{view}".constantize
+          draw_route view.to_s.underscore.humanize.downcase, to: "Coltrane::UI::Views::#{view}".constantize
         end
       end
 

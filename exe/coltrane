@@ -2,15 +2,10 @@
 # frozen_string_literal: true
 $LOAD_PATH.unshift(File.expand_path('../../lib', __FILE__))
 
-$debug = require 'pry'
 require 'coltrane/ui'
 
-def debugger
-  binding.pry unless $debug
-end
-
 module Coltrane
-  module Cli
+  module UI
     class App
       attr_reader :router
 
@@ -87,7 +82,6 @@ module Coltrane
       rescue => e
         response.delete(:path)
         puts e
-        puts e.backtrace if $debug
         retry
       end
 
@@ -98,4 +92,4 @@ module Coltrane
   end
 end
 
-Coltrane::Cli::App.start(ARGV.join(' '))
+Coltrane::UI::App.start(ARGV.join(' '))
