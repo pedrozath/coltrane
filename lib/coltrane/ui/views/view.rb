@@ -12,6 +12,7 @@ module Coltrane
 
           def questions(question_data)
             @questions.merge!(question_data)
+            @questions.compact!
           end
 
           def set_path(value)

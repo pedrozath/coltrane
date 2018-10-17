@@ -18,7 +18,9 @@ module Coltrane
           chord_representation: {
             statement: 'How do you wanna see this',
             options: Commands::AvailableChordRepresentations.run
-          }
+          },
+
+          representation: nil
         })
         def render
           scale = Commands::GetClassicScale.run(*params.values_at(:scale, :tone))
