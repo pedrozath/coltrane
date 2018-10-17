@@ -1,7 +1,6 @@
 module Coltrane
   module UI
     class Router
-
       class Route
         attr_reader :path, :view, :last
         attr_accessor :params

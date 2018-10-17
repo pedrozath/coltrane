@@ -77,7 +77,7 @@ module Coltrane
             memo +
               if chord.guitar_notes.select do |n|
                 n.string == s && n.fret == 0 end.any?
-                highlight '⬤ '
+                highlight '• '
               elsif chord.guitar_notes.select { |n| n.string == s && n.fret.nil? }.any?
                 alt 'x '
               else
@@ -87,7 +87,7 @@ module Coltrane
         end
 
         def render_note(found)
-          found ? highlight('⬤') : base_color('│')
+          found ? highlight('•') : base_color('│')
         end
       end
     end

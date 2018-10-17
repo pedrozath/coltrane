@@ -40,7 +40,7 @@ module Coltrane
           when :intervals then (note_set.root - note).name
           when :marks then '◼ '
           when :degrees then note_set.notes.degree(note).to_s.rjust(2, '0')
-          when :notes then note.pretty_name.to_s.ljust(2, "\u266E")
+          when :notes then note.pretty_name.to_s.ljust(2, " ")
           end
         end
       end
