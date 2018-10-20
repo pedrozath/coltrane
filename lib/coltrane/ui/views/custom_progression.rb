@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class CustomProgression < View
+      class CustomProgression < BaseView
         questions({
           progression_notation: {
             statement: 'What is the progression? (Ex: I-vi-IV-V)'

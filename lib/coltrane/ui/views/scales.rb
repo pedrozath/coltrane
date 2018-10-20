@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class Scales < View
+      class Scales < BaseView
         questions({
           path: {
             statement: 'What do you need?',

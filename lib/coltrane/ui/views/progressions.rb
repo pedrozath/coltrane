@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class Progressions < View
+      class Progressions < BaseView
         questions({
           path: {
             statement: 'What do you need?',

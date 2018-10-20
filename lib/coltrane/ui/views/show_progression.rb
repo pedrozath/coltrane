@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class ShowProgression < View
+      class ShowProgression < BaseView
         questions({
           progression: {
             statement: 'What is the progression?',

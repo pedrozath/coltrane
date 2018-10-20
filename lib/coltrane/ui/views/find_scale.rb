@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class FindScale < View
+      class FindScale < BaseView
         questions({
           path: {
             statement: 'How do you wanna search',

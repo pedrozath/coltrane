@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class FindProgressionsFromChords < View
+      class FindProgressionsFromChords < BaseView
         questions chords: { statement: 'Type the chords? (Ex: CM EM GM)' }
 
         def render

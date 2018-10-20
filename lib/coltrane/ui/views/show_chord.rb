@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class ShowChord < View
+      class ShowChord < BaseView
         questions({
           chord: { statement: 'Which chord?' },
           chord_representation: {

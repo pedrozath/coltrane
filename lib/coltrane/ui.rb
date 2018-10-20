@@ -1,9 +1,8 @@
-require 'active_support/inflector'
 require 'paint'
 require 'color'
-require 'cli/ui' # shopify cli
 
-require 'coltrane'
+require 'gambiarra'
 require 'coltrane/commands'
-require 'coltrane/ui/views'
-require 'coltrane/ui/router'
+
+require File.expand_path('../ui/base_view', __FILE__)
+views = Dir[File.expand_path('../ui/views/*', __FILE__)].map { |view| require(view) }

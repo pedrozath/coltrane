@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class FindScaleByChords < View
+      class FindScaleByChords < BaseView
         questions({
           chords: { statement: 'Which Chords?' }
         })

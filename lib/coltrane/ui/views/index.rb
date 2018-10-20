@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class Index < View
+      class Index < BaseView
         questions({
           path: {
             statement: "Welcome to Coltrane #{Coltrane::VERSION}",

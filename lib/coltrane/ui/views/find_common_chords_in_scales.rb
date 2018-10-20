@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class FindCommonChordsInScales < View
+      class FindCommonChordsInScales < BaseView
         questions({
           first_scale: {
             statement: 'Choose the first scale',

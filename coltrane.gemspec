@@ -33,9 +33,9 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_runtime_dependency 'dry-monads',  '~> 0.4'
+  spec.add_runtime_dependency 'gambiarra',   '~> 0'
   spec.add_runtime_dependency 'paint',       '~> 2.0'
   spec.add_runtime_dependency 'color',       '~> 1.8'
-  spec.add_runtime_dependency 'cli-ui',      '~> 1.1'
   spec.add_runtime_dependency 'activesupport', '> 5.2'
   spec.add_development_dependency "bundler",   '~> 1.14'
   spec.add_development_dependency "rake",      '~> 10.0'

@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class Notes < View
+      class Notes < BaseView
         questions({
           notes: { statement: 'Which notes?' } ,
           representation: {

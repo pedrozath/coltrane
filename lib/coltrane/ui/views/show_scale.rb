@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class ShowScale < View
+      class ShowScale < BaseView
         questions({
           scale: {
             statement: 'Which Scale?',

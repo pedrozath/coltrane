@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class Chords < View
+      class Chords < BaseView
         questions({
           path: {
             statement: 'What do you need',

@@ -1,7 +1,7 @@
 module Coltrane
   module UI
     module Views
-      class FindScaleByNotes < View
+      class FindScaleByNotes < BaseView
         questions({
           notes: { statement: 'Which Notes?' }
         })
