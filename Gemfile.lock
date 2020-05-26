@@ -11,17 +11,18 @@ PATH
 GEM
   remote: https://rubygems.org/
   specs:
-    activesupport (5.2.1)
+    activesupport (6.0.3.1)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (>= 0.7, < 2)
       minitest (~> 5.1)
       tzinfo (~> 1.1)
+      zeitwerk (~> 2.2, >= 2.2.2)
     ast (2.4.0)
     byebug (10.0.2)
     cli-ui (1.1.4)
     coderay (1.1.2)
     color (1.8)
-    concurrent-ruby (1.0.5)
+    concurrent-ruby (1.1.6)
     diff-lcs (1.3)
     docile (1.3.0)
     dry-core (0.4.7)
@@ -37,11 +38,11 @@ GEM
       thor (= 0.20)
     hike (1.2.3)
     hitimes (1.2.6)
-    i18n (1.1.1)
+    i18n (1.8.2)
       concurrent-ruby (~> 1.0)
     json (2.1.0)
     method_source (0.9.0)
-    minitest (5.11.3)
+    minitest (5.14.1)
     necromancer (0.4.0)
     opal (0.10.5)
       hike (~> 1.2)
@@ -115,10 +116,11 @@ GEM
       tty-screen (~> 0.6.4)
       wisper (~> 2.0.0)
     tty-screen (0.6.4)
-    tzinfo (1.2.5)
+    tzinfo (1.2.7)
       thread_safe (~> 0.1)
     unicode-display_width (1.3.0)
     wisper (2.0.0)
+    zeitwerk (2.3.0)
 
 PLATFORMS
   ruby
