@@ -64,7 +64,7 @@ GEM
     pry-byebug (3.6.0)
       byebug (~> 10.0)
       pry (~> 0.10)
-    rack (2.0.4)
+    rack (2.2.3)
     rainbow (3.0.0)
     rake (10.5.0)
     rspec (3.7.0)
