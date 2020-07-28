@@ -40,7 +40,7 @@ GEM
     hitimes (1.2.6)
     i18n (1.8.2)
       concurrent-ruby (~> 1.0)
-    json (2.1.0)
+    json (2.3.1)
     method_source (0.9.0)
     minitest (5.14.1)
     necromancer (0.4.0)
