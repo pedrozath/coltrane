@@ -133,7 +133,7 @@ module Coltrane
       end
 
       def clone(override_args = {})
-        self.class.new({
+        self.class.new(**{
           semitones: semitones,
           letter_distance: letter_distance,
           compound: compound?
