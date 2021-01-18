@@ -7,7 +7,7 @@ git:
   depth: 1
 
 rvm:
-- 2.5.0
+- 3.0.0
 
 before_script:
   - curl -L https://codeclimate.com/downloads/test-reporter/test-reporter-latest-linux-amd64 > ./cc-test-reporter
