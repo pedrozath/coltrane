@@ -61,7 +61,7 @@ GEM
       pry (~> 0.13.0)
     rack (2.2.3)
     rainbow (3.0.0)
-    rake (10.5.0)
+    rake (13.0.3)
     regexp_parser (2.0.3)
     rexml (3.2.4)
     rspec (3.10.0)
@@ -126,7 +126,7 @@ DEPENDENCIES
   opal-rspec
   pry
   pry-byebug
-  rake (~> 10.0)
+  rake (~> 13.0)
   rspec
   rubocop
   simplecov
