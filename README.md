@@ -247,7 +247,7 @@ Simply type `coltrane` or `coltrane shell` to enable interactive mode. You can t
 $ gem install coltrane
 ```
 
-PS: Once you install the gem the CLI is instaled in your system and it's ready to be used.
+PS: Once you install the gem the CLI is installed in your system and it's ready to be used.
 
 ## Any questions? Feature requests? Bugs?
 
