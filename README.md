@@ -28,7 +28,7 @@ A music calculation library/CLI written in Ruby.
 ### How to discover a chord name using the notes
 
 ```sh
-coltrane chords --notes C-E-G
+coltrane find chord by notes notes:C-E-G
 
 CM:  C E G
 
@@ -37,7 +37,7 @@ CM:  C E G
 To see it on guitar:
 
 ```sh
-coltrane chords --notes C-E-G --on guitar
+coltrane show chord chord:CM7 chord_representation:Guitar
 
 CM:
 
