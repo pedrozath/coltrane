@@ -88,9 +88,9 @@ module Coltrane
         intervals[x]
       end
 
-      def shift(ammount)
+      def shift(amount)
         self.class.new(*intervals.map do |i|
-          (i.semitones + ammount) % 12
+          (i.semitones + amount) % 12
         end)
       end
 
