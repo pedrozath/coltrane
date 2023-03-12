@@ -258,7 +258,7 @@ PS: Once you install the gem the CLI is instaled in your system and it's ready t
 ## Extra
 
 * [How to use the Core Theory library](https://github.com/pedrozath/coltrane/wiki/Core-music-theory-library).
-* [Why did I write this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227).
+* [Why did I write this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227). ([Archive link](https://web.archive.org/web/20170714063625/https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227))
 * [Chat room for discussing the project, answering questions, etc.](http://coltrane-ruby.herokuapp.com/)
 * [See the changelog](CHANGELOG.md)
 
