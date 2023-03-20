@@ -90,6 +90,7 @@ module Coltrane
         chord_name, bass = name.match?(/\/9/) ? [name, nil] : name.split('/')
         chord_regex = /([A-Z](?:#|b)?)(.*)/
         _, root_name, quality_name = chord_name.match(chord_regex).to_a
+        raise ChordNotFoundError if [root_name, quality_name].include?(nil)
         root    = Note[root_name]
         quality = ChordQuality.new(name: quality_name, bass: bass)
         notes   = quality.notes_for(root)
