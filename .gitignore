@@ -1,3 +1,6 @@
 coverage
 cache
 pkg
+
+#MacOS Files
+.DS_Store
