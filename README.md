@@ -63,7 +63,7 @@ You shall provide chords separated by dashes (`--chords CM7-Dm7-EM`) or notes (`
 For example:
 
 ```sh
-coltrane find-scale --chords E6/9-BM
+coltrane find scale by chords chords:E6/9-BM
 
 Pentatonic Major C(1) C#(3) D(3) D#(1) E(5) F(0) F#(4) G(2) G#(2) A(4) A#(0) B(5)
 Blues Major      C(2) C#(4) D(3) D#(2) E(5) F(1) F#(4) G(2) G#(3) A(4) A#(1) B(5)
@@ -84,7 +84,7 @@ When on terminal, the command above will highlight the Scales that have all need
 You may use this command to find a chord that may serve as bridge to a different scale/key (i.e. modulation). Coltrane offers you a command to find common chords shared between both keys/scales. Here is how you use it. Say you wanna transition from C Major to D Natural Minor.
 
 ```sh
-coltrane common-chords C Major, D Natural Minor
+coltrane find common chords in scales
 
 Dm:  D F A
 Am:  A C E
@@ -100,11 +100,9 @@ C6/9(add11): C E G A D F
 [...]
 ```
 
-You can, whenever it fits, add an `--on <instrument>` to see the output in a graphical representation:
+You can also see the output in a graphical representation:
 
 ```sh
-coltrane common-chords C Major, D Natural Minor --on piano
-
 Dm:
 
 ┌─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─╥─┬─┬┬─┬─╥─┬─┬┬─┬┬─┬─┐
@@ -173,7 +171,7 @@ You can say Jazz, Pop, Blues, etc.
 You can also generate progressions in a custom way, using roman numerals:
 
 ```sh
-coltrane progression I-vi-V-iidim in D
+coltrane custom progression progression_notation:I-vi-V-iidim representation:Text key:D
 ```
 
 ### Generate fretboard sheets for improvising
@@ -182,7 +180,7 @@ Sometimes you wanna see the scale on guitar for improvising:
 
 ```sh
 
-coltrane scale F pentatonic --on guitar
+coltrane show scale scale:Pentatonic-Major tone:F
 
 F Pentatonic Major:
 
@@ -196,10 +194,6 @@ E -- | F  -- G  -- A  -- -- C  -- D  -- -- F  -- G  -- A  -- -- C  -- D  --
              03    05    07    09       12       15    17    19
 ```
 
-The same work for `--on piano`, `--on bass`, `-- on ukulele`, etc.
-
-You can also see the chords by typing `--tertians <size>` or `--chords [size]`. `--tertians` will give you chords by sequential thirds while `--chords` will give you all chords with supplied size (or simply all if empty).
-
 ProTip: You can force the guitar frets visualization for chords too using the `--on guitar_frets` option.
 
 ### Finding the progression of a chord sequence
@@ -211,7 +205,7 @@ This command us to analyze songs and discover what they have in common, even tho
 Let's say we want to find the possible progressions of Red Hot Chili Pepper's Otherside:
 
 ```sh
-coltrane find-progression Am-F-C-G
+coltrane find progressions from chords chords:Am-F-C-G
 
 i-VI-III-VII   in A Natural Minor (0 notes out)
 vi-IV-I-V      in C Major (0 notes out)
@@ -250,13 +244,10 @@ PS: Once you install the gem the CLI is installed in your system and it's ready 
 ## Extra
 
 * [How to use the Core Theory library](https://github.com/pedrozath/coltrane/wiki/Core-music-theory-library).
-* [Why did I write this library](https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227). ([Archive link](https://web.archive.org/web/20170714063625/https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227))
-* [Chat room for discussing the project, answering questions, etc.](http://coltrane-ruby.herokuapp.com/)
+* [Why did I write this library](https://web.archive.org/web/20170714063625/https://medium.com/@pedrozath/so-i-wrote-a-library-to-help-me-compose-music-ddb4ae7c8227)
 * [See the changelog](CHANGELOG.md)
 
 ## Contributing
-
-We are looking for contributors. Find me on [our chatroom](http://coltrane-ruby.herokuapp.com/) if you need any kind of information.
 
 ### How to contribute
 1. Fork this code
