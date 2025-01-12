@@ -228,12 +228,15 @@ PS: Notice that vi-IV-I-V is the well known I-V-vi-IV progression, [used in a lo
 Simply type `coltrane` or `coltrane shell` to enable interactive mode. You can then run commands without typing `coltrane ` before, E.G.: `scale D harmonic minor`
 
 ## Installation
+Installation is done through the [RubyGems](https://rubygems.org/) package manager:
 
 ```bash
-$ gem install coltrane
+gem install coltrane
 ```
+> [!NOTE]
+> RubyGems comes packaged with the standard Ruby installation. You can find instructions on how to install Ruby [here](https://www.ruby-lang.org/en/documentation/installation/).
 
-PS: Once you install the gem the CLI is installed in your system and it's ready to be used.
+Once you install the gem, the CLI is installed in your system and it's ready to be used.
 
 ## Any questions? Feature requests? Bugs?
 
