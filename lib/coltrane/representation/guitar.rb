@@ -26,6 +26,22 @@ module Coltrane
         Guitar::Chord.find_by_notation(new, chord_notation)
       end
 
+      def find_chords(target_chord)
+        unless target_chord.is_a?(Theory::Chord)
+          target_chord = Theory::Chord.new(name: target_chord)
+        end
+
+        Guitar::Chord.find(target_chord, guitar: self)
+      end
+
+      def find_notes(notes)
+        Guitar::NoteSet.new(notes, guitar: self)
+      end
+
+      def find_chord_by_notation(chord_notation)
+        Guitar::Chord.find_by_notation(self, chord_notation)
+      end
+
       def initialize(tuning: nil, frets: nil, special_frets: nil)
         @tuning        = tuning        || %w[E2 A2 D3 G3 B3 E4]
         @special_frets = special_frets || [3, 5, 7, 9, 12, 15, 17, 19]
